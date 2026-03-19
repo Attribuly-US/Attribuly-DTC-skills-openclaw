@@ -25,45 +25,45 @@ This folder contains AllyClaw skill documents for OpenClaw-based AI marketing wo
 - `customer_journey_analysis`
 - `ltv_analysis`
 
-See [SKILL_REGISTRY.md](file:///Users/alex/Documents/trae_projects/attribuly/outreach-performance/openclaw-config/skills/SKILL_REGISTRY.md) for triggers and usage mapping.
+See [SKILL_REGISTRY.md](SKILL_REGISTRY.md) for triggers and usage mapping.
 
-## Install Into Your OpenClaw Instance
+## 🛠 How to Install Skills into Your OpenClaw Instance
 
-These skills are stored in this GitHub repo under `openclaw-config/skills/`. To install them into your own OpenClaw instance, copy the `.md` skill files into your instance’s `openclaw-config/skills/` directory.
+There are two primary ways to install these Attribuly skills into your own OpenClaw environment. Choose the method that best fits your workflow.
 
-### One-Command Install (Recommended)
-Run this from the root of your OpenClaw instance (the project that contains `openclaw-config/`):
+### Method 1: Manual Copy (Quickest)
+If you just want to grab a few skills and start using them immediately:
 
-```bash
-rm -rf /tmp/attribuly-skills \
-  && git clone --depth 1 https://github.com/Alexchulee/Attribuly.git /tmp/attribuly-skills \
-  && mkdir -p ./openclaw-config/skills \
-  && rsync -av /tmp/attribuly-skills/openclaw-config/skills/*.md ./openclaw-config/skills/
-```
+1. **Locate your OpenClaw configuration directory**: Find the `openclaw-config/skills/` folder in your OpenClaw project root.
+2. **Download the skills**: Download the specific `.md` files you need from this repository (e.g., `google_ads_performance.md`, `budget_optimization.md`).
+3. **Copy to OpenClaw**: Place the downloaded `.md` files directly into your `openclaw-config/skills/` directory.
+4. **Reload OpenClaw**: Restart your OpenClaw instance or trigger a skill reload to make the new skills available.
 
-### Install as a Git Submodule (Keeps Updates Easy)
-Run this from the root of your OpenClaw instance:
+### Method 2: Git Submodule (Recommended for Easy Updates)
+If you want to keep your skills up-to-date with the latest improvements from this repository, adding it as a Git submodule is the best approach.
 
-```bash
-git submodule add https://github.com/Alexchulee/Attribuly.git vendor/attribuly \
-  && mkdir -p ./openclaw-config/skills \
-  && rsync -av vendor/attribuly/openclaw-config/skills/*.md ./openclaw-config/skills/
-```
+1. Navigate to the root of your OpenClaw instance in your terminal.
+2. Add this repository as a submodule:
+   ```bash
+   git submodule add https://github.com/Alexchulee/Attribuly.git vendor/attribuly
+   ```
+3. Create the skills directory if it doesn't already exist:
+   ```bash
+   mkdir -p ./openclaw-config/skills
+   ```
+4. Sync the skills into your active configuration:
+   ```bash
+   rsync -av vendor/attribuly/*.md ./openclaw-config/skills/
+   ```
 
-To pull future updates:
-
+**How to pull future updates:**
+To ensure you always have the latest skill logic, you can easily pull updates and re-sync them:
 ```bash
 git submodule update --remote --merge
-rsync -av vendor/attribuly/openclaw-config/skills/*.md ./openclaw-config/skills/
+rsync -av vendor/attribuly/*.md ./openclaw-config/skills/
 ```
 
-## Publish to Clawhub (Optional)
+*(Tip: You can add the rsync command to your build or deployment script to automate updates!)*
 
-If you’re publishing each skill to Clawhub, use the folder-per-skill layout under:
-- `openclaw-config/skills_publish/`
-
-Then run:
-
-```bash
-./publish_to_clawhub.sh
-```
+### Post-Installation
+Once the `.md` files are successfully placed in your `openclaw-config/skills/` directory, check the [SKILL_REGISTRY.md](SKILL_REGISTRY.md) for details on the specific triggers and required contexts to use each skill effectively.
