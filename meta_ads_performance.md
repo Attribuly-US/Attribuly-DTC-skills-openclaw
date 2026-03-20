@@ -590,40 +590,258 @@ ASC campaigns require special attention with Attribuly metrics:
 
 ---
 
-## Missing Data Advisory
+## Complete Data Retrieval Workflow
 
-### Data Currently Available ✅
-- Campaign, Ad Set, Ad level performance
-- Attribuly-attributed conversions and revenue
-- Platform-reported conversions and revenue
-- New customer metrics (ncROAS, new_order_conversion_value)
-- Outbound clicks and CTR (Meta-specific)
-- View-through conversions and ROAS
-- Profit and margin calculations
+### Step 0: Discover Connected Meta Ad Accounts
+Before querying Meta Ads data, retrieve the connected account ID.
 
-### Data NOT Available (Recommend Adding) ⚠️
-| Missing Data | Impact | Recommendation |
-|--------------|--------|----------------|
-| **Frequency** | Cannot accurately detect ad fatigue | Add frequency data from Meta API |
-| **Reach** | Cannot calculate true audience saturation | Add reach data |
-| **Video Metrics** | Cannot analyze video performance (ThruPlay, Hook Rate, Hold Rate) | Add video engagement data |
-| **Placement Breakdown** | Cannot optimize by placement (Feed, Stories, Reels) | Add placement data |
-| **Device Breakdown** | Cannot optimize by device | Add device segmentation |
-| **Age/Gender Breakdown** | Cannot analyze demographic performance | Add demographic data |
-| **Audience Segment Performance** | Cannot compare Lookalike vs Interest | Add audience breakdown |
-| **Creative Asset Performance** | Cannot identify winning images/videos | Add asset-level data |
-| **Landing Page URL** | Cannot analyze LP performance by ad | Add destination URL data |
-| **Ad Format** | Cannot compare carousel vs single image vs video | Add format data |
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "platform_type": "facebook"
+  }'
+```
 
-### Priority Data to Add
-1. **Frequency** — Critical for detecting creative fatigue
-2. **Video Metrics (ThruPlay, Hook Rate)** — Critical for video ad optimization
-3. **Placement Breakdown** — Important for budget allocation
-4. **Audience Segment Performance** — Important for audience strategy
+**Response:**
+```json
+{
+  "code": 1,
+  "message": "Service succeed",
+  "data": {
+    "records": [
+      {
+        "account_id": "act_123456789",
+        "name": "My Store - Meta Ads",
+        "platform_type": "facebook",
+        "currency": "USD",
+        "connected": 1
+      }
+    ]
+  }
+}
+```
+
+**Extract `account_id`** (e.g., `act_123456789`) for use in subsequent queries.
 
 ---
 
-## Example API Calls
+## Enhanced Data APIs (Now Available)
+
+### 1. Frequency & Reach (Creative Fatigue Detection)
+**Purpose:** Detect ad fatigue and audience saturation. Critical for Meta optimization.
+
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "act_123456789",
+    "level": "ad",
+    "fields": ["campaign_name", "campaign_id", "adset_name", "adset_id", "ad_name", "ad_id", "impressions", "reach", "frequency", "spend", "clicks", "cpm", "cpc", "ctr"],
+    "time_range": {
+      "since": "2025-03-10",
+      "until": "2025-03-17"
+    }
+  }'
+```
+
+**Key Fields:**
+| Field | Description |
+|-------|-------------|
+| `reach` | Unique users who saw the ad |
+| `frequency` | Average times each person saw the ad (impressions/reach) |
+
+**Frequency Thresholds for Fatigue Detection:**
+| Frequency | Status | Action |
+|-----------|--------|--------|
+| 1-2 | ✅ Healthy | Continue |
+| 2-3 | 🟡 Monitor | Watch for CTR decline |
+| 3-5 | 🟠 Warning | Consider refreshing creative |
+| >5 | 🔴 Fatigued | Pause or replace creative |
+
+### 2. Video Metrics (ThruPlay, Hook Rate, Hold Rate)
+**Purpose:** Analyze video ad performance. Calculate Hook Rate and Hold Rate.
+
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "act_123456789",
+    "level": "ad",
+    "fields": ["ad_name", "ad_id", "impressions", "reach", "video_play_actions", "video_p25_watched_actions", "video_p50_watched_actions", "video_p75_watched_actions", "video_p95_watched_actions", "video_p100_watched_actions", "video_thruplay_watched_actions", "video_avg_time_watched_actions", "video_continuous_2_sec_watched_actions", "video_30_sec_watched_actions"],
+    "time_range": {
+      "since": "2025-03-10",
+      "until": "2025-03-17"
+    }
+  }'
+```
+
+**Calculated Metrics:**
+| Metric | Formula | Benchmark |
+|--------|---------|-----------|
+| **Hook Rate** | `video_continuous_2_sec_watched / impressions × 100` | 20-25% good, >30% excellent |
+| **Hold Rate** | `video_thruplay / video_play_actions × 100` | 40-50% good, >50% excellent |
+| **ThruPlay Rate** | `video_thruplay / impressions × 100` | Varies by video length |
+
+### 3. Placement Breakdown
+**Purpose:** Optimize budget allocation across placements (Feed, Stories, Reels).
+
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "act_123456789",
+    "level": "ad",
+    "fields": ["campaign_name", "adset_name", "ad_name", "impressions", "reach", "clicks", "spend", "cpm", "ctr", "conversions", "cost_per_conversion"],
+    "breakdowns": ["publisher_platform", "platform_position"],
+    "time_range": {
+      "since": "2025-03-10",
+      "until": "2025-03-17"
+    }
+  }'
+```
+
+**Placement Values:**
+| Platform | Positions |
+|----------|-----------|
+| `facebook` | feed, story, reels, marketplace, video_feeds, right_hand_column |
+| `instagram` | feed, story, reels, explore |
+| `messenger` | inbox, story |
+| `audience_network` | classic, rewarded_video |
+
+### 4. Demographic Breakdown (Age, Gender)
+**Purpose:** Analyze performance by age and gender to optimize targeting.
+
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "act_123456789",
+    "level": "ad",
+    "fields": ["campaign_name", "adset_name", "ad_name", "impressions", "reach", "clicks", "spend", "conversions", "cost_per_conversion"],
+    "breakdowns": ["age", "gender"],
+    "time_range": {
+      "since": "2025-03-10",
+      "until": "2025-03-17"
+    }
+  }'
+```
+
+**Age Buckets:** `13-17`, `18-24`, `25-34`, `35-44`, `45-54`, `55-64`, `65+`
+**Gender Values:** `male`, `female`, `unknown`
+
+**Note:** When using `age` or `gender` breakdowns with `reach`, data is limited to 13 months (394 days).
+
+### 5. Device Breakdown
+**Purpose:** Optimize by device type (mobile, desktop, tablet).
+
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "act_123456789",
+    "level": "ad",
+    "fields": ["campaign_name", "adset_name", "ad_name", "impressions", "clicks", "spend", "conversions"],
+    "breakdowns": ["impression_device"],
+    "time_range": {
+      "since": "2025-03-10",
+      "until": "2025-03-17"
+    }
+  }'
+```
+
+**Device Values:** `desktop`, `iphone`, `ipad`, `android_smartphone`, `android_tablet`, `other`
+
+---
+
+## Error Handling & Logging
+
+### Validate API Response
+```javascript
+function validateMetaQueryResponse(response) {
+  console.log(JSON.stringify({
+    timestamp: new Date().toISOString(),
+    level: 'DEBUG',
+    skill: 'meta_ads_performance',
+    action: 'validate_response',
+    response_code: response.code
+  }));
+
+  if (response.code !== 1) {
+    console.error(JSON.stringify({
+      timestamp: new Date().toISOString(),
+      level: 'ERROR',
+      skill: 'meta_ads_performance',
+      action: 'api_error',
+      error: response.message
+    }));
+    return { success: false, error: response.message };
+  }
+
+  if (!response.data || response.data.length === 0) {
+    console.warn(JSON.stringify({
+      timestamp: new Date().toISOString(),
+      level: 'WARN',
+      skill: 'meta_ads_performance',
+      action: 'empty_results',
+      message: 'No data returned from Meta API'
+    }));
+    return { success: true, data: [] };
+  }
+
+  console.log(JSON.stringify({
+    timestamp: new Date().toISOString(),
+    level: 'INFO',
+    skill: 'meta_ads_performance',
+    action: 'query_success',
+    result_count: response.data.length
+  }));
+
+  return { success: true, data: response.data };
+}
+```
+
+### Rate Limiting
+| API | Limit | Recommendation |
+|-----|-------|----------------|
+| Meta Query API | 200 calls per hour per ad account | Batch requests, use async reports for large data |
+| Meta Query API | 4,800 calls per day per ad account | Plan daily query budget |
+| Attribuly APIs | 100 requests per minute | Cache results, avoid redundant calls |
+
+### Retry Strategy
+```javascript
+async function queryWithRetry(queryFn, maxRetries = 3) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const result = await queryFn();
+      if (result.success) return result;
+      
+      if (attempt < maxRetries - 1) {
+        const delay = Math.pow(2, attempt) * 1000;
+        console.log(`[RETRY] Attempt ${attempt + 1} failed, retrying in ${delay}ms...`);
+        await new Promise(r => setTimeout(r, delay));
+      }
+    } catch (error) {
+      if (error.code === 429) {
+        console.warn('[RATE_LIMIT] Meta API rate limit hit, backing off...');
+        await new Promise(r => setTimeout(r, 60000)); // Wait 1 minute
+        continue;
+      }
+      if (attempt === maxRetries - 1) throw error;
+    }
+  }
+}
+```
+
+---
+
+## Standard Attribuly API Calls
 
 ### Get Meta Campaign Performance (Current Period)
 ```bash

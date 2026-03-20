@@ -509,37 +509,216 @@ PMax campaigns require special attention with Attribuly metrics:
 
 ---
 
-## Missing Data Advisory
+## Complete Data Retrieval Workflow
 
-### Data Currently Available ✅
-- Campaign, Ad Set, Ad level performance
-- Attribuly-attributed conversions and revenue
-- Platform-reported conversions and revenue
-- New customer metrics (ncROAS, new_order_conversion_value)
-- Profit and margin calculations
+### Step 0: Discover Connected Google Ads Accounts
+Before querying Google Ads data, retrieve the connected account ID.
 
-### Data NOT Available (Recommend Adding) ⚠️
-| Missing Data | Impact | Recommendation |
-|--------------|--------|----------------|
-| **Quality Score** | Cannot diagnose CPC issues | Integrate Google Ads API for QS data |
-| **Search Terms** | Cannot identify wasted spend on irrelevant queries | Add search term report API |
-| **Impression Share** | Cannot identify lost opportunity | Add auction insights data |
-| **Device Breakdown** | Cannot optimize by device | Add device segmentation |
-| **Geographic Data** | Cannot identify regional performance | Add geo breakdown |
-| **Hour/Day Parting** | Cannot optimize ad scheduling | Add time-based data |
-| **Audience Segments** | Cannot analyze audience performance | Add audience data |
-| **Asset Performance (PMax)** | Cannot identify winning assets | Add asset-level reporting |
-| **Keyword-Level Data** | Cannot optimize bids at keyword level | Add keyword report |
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "platform_type": "google"
+  }'
+```
 
-### Priority Data to Add
-1. **Search Terms Report** — Critical for identifying wasted spend
-2. **Quality Score** — Critical for diagnosing CPC issues
-3. **Keyword-Level Data** — Important for bid optimization
-4. **Asset Performance** — Important for PMax optimization
+**Response:**
+```json
+{
+  "code": 1,
+  "message": "Service succeed",
+  "data": {
+    "records": [
+      {
+        "account_id": "6622546829",
+        "name": "My Store - Google Ads",
+        "platform_type": "google",
+        "currency": "USD",
+        "connected": 1
+      }
+    ]
+  }
+}
+```
+
+**Extract `account_id`** (e.g., `6622546829`) for use in subsequent queries.
 
 ---
 
-## Example API Calls
+## Enhanced Data APIs (Now Available)
+
+### 1. Search Terms Report
+**Purpose:** Identify actual search queries triggering your ads. Critical for finding wasted spend.
+
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "6622546829",
+    "gaql": "SELECT search_term_view.search_term, search_term_view.status, campaign.name, campaign.id, ad_group.name, ad_group.id, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.conversions_value, metrics.ctr, metrics.average_cpc FROM search_term_view WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-17'\'' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC LIMIT 100"
+  }'
+```
+
+**Key Fields:**
+| Field | Description |
+|-------|-------------|
+| `searchTermView.searchTerm` | The actual search query |
+| `searchTermView.status` | ADDED, EXCLUDED, NONE |
+| `metrics.costMicros` | Cost in micros (÷ 1,000,000 for actual cost) |
+
+**Important:** Google does NOT disclose ~50% of search terms (shown as "(other)").
+
+### 2. Quality Score & Keyword Data
+**Purpose:** Diagnose why CPC is high or ads aren't showing.
+
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "6622546829",
+    "gaql": "SELECT ad_group_criterion.keyword.text, ad_group_criterion.keyword.match_type, ad_group_criterion.quality_info.quality_score, ad_group_criterion.quality_info.creative_quality_score, ad_group_criterion.quality_info.post_click_quality_score, ad_group_criterion.quality_info.search_predicted_ctr, campaign.name, ad_group.name, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.average_cpc FROM keyword_view WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-17'\'' AND ad_group_criterion.status = '\''ENABLED'\'' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC LIMIT 100"
+  }'
+```
+
+**Quality Score Components:**
+| Component | Values | Impact |
+|-----------|--------|--------|
+| Expected CTR | BELOW_AVERAGE, AVERAGE, ABOVE_AVERAGE | Ad relevance |
+| Ad Relevance | BELOW_AVERAGE, AVERAGE, ABOVE_AVERAGE | Keyword-ad match |
+| Landing Page Exp. | BELOW_AVERAGE, AVERAGE, ABOVE_AVERAGE | Page quality |
+
+### 3. Impression Share Metrics
+**Purpose:** Identify lost opportunity due to budget or rank.
+
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "6622546829",
+    "gaql": "SELECT campaign.name, campaign.id, metrics.search_impression_share, metrics.search_budget_lost_impression_share, metrics.search_rank_lost_impression_share, metrics.search_absolute_top_impression_share, metrics.search_top_impression_share, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions FROM campaign WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-17'\'' AND campaign.advertising_channel_type = '\''SEARCH'\'' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC"
+  }'
+```
+
+**Interpretation Guide:**
+| Metric | Good | Warning | Critical |
+|--------|------|---------|----------|
+| Search IS | >80% | 50-80% | <50% |
+| Budget Lost IS | <10% | 10-30% | >30% |
+| Rank Lost IS | <20% | 20-40% | >40% |
+
+### 4. Device Breakdown
+**Purpose:** Optimize bids by device type.
+
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "6622546829",
+    "gaql": "SELECT campaign.name, campaign.id, segments.device, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.conversions_value, metrics.ctr, metrics.average_cpc FROM campaign WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-17'\'' AND metrics.impressions > 0 ORDER BY campaign.id, segments.device"
+  }'
+```
+
+**Device Values:** `MOBILE`, `DESKTOP`, `TABLET`, `CONNECTED_TV`, `OTHER`
+
+### 5. PMax Asset Performance
+**Purpose:** Identify winning assets in Performance Max campaigns.
+
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "6622546829",
+    "gaql": "SELECT asset_group.name, asset_group.id, asset_group_asset.asset, asset_group_asset.field_type, asset_group_asset.performance_label, asset_group_asset.status, campaign.name, campaign.id FROM asset_group_asset WHERE campaign.advertising_channel_type = '\''PERFORMANCE_MAX'\'' AND asset_group_asset.status = '\''ENABLED'\''"
+  }'
+```
+
+**Performance Labels:** `PENDING`, `LOW`, `GOOD`, `BEST`
+
+---
+
+## Error Handling & Logging
+
+### Validate API Response
+```javascript
+function validateGoogleQueryResponse(response) {
+  console.log(JSON.stringify({
+    timestamp: new Date().toISOString(),
+    level: 'DEBUG',
+    skill: 'google_ads_performance',
+    action: 'validate_response',
+    response_code: response.code
+  }));
+
+  if (response.code !== 1) {
+    console.error(JSON.stringify({
+      timestamp: new Date().toISOString(),
+      level: 'ERROR',
+      skill: 'google_ads_performance',
+      action: 'api_error',
+      error: response.message
+    }));
+    return { success: false, error: response.message };
+  }
+
+  const record = response.data?.record?.[0];
+  if (!record?.success) {
+    console.error(JSON.stringify({
+      timestamp: new Date().toISOString(),
+      level: 'ERROR',
+      skill: 'google_ads_performance',
+      action: 'query_error',
+      error: record?.error || 'Unknown error'
+    }));
+    return { success: false, error: record?.error };
+  }
+
+  console.log(JSON.stringify({
+    timestamp: new Date().toISOString(),
+    level: 'INFO',
+    skill: 'google_ads_performance',
+    action: 'query_success',
+    result_count: record.results?.length || 0
+  }));
+
+  return { success: true, data: record.results };
+}
+```
+
+### Rate Limiting
+| API | Limit | Recommendation |
+|-----|-------|----------------|
+| Google Query API | 1,000 requests per 100 seconds per account | Batch queries, implement exponential backoff |
+| Attribuly APIs | 100 requests per minute | Cache results, avoid redundant calls |
+
+### Retry Strategy
+```javascript
+async function queryWithRetry(queryFn, maxRetries = 3) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const result = await queryFn();
+      if (result.success) return result;
+      
+      if (attempt < maxRetries - 1) {
+        const delay = Math.pow(2, attempt) * 1000;
+        console.log(`[RETRY] Attempt ${attempt + 1} failed, retrying in ${delay}ms...`);
+        await new Promise(r => setTimeout(r, delay));
+      }
+    } catch (error) {
+      if (attempt === maxRetries - 1) throw error;
+    }
+  }
+}
+```
+
+---
+
+## Standard Attribuly API Calls
 
 ### Get Google Campaign Performance (Current Period)
 ```bash

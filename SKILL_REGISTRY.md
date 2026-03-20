@@ -226,7 +226,69 @@ const goalCode = purchaseGoal?.code || 'purchase'; // fallback to 'purchase'
 
 ---
 
-### 2. Attribution Report APIs
+### 2. Connected Sources API (Account Discovery)
+
+**Purpose:** Retrieve connected ad platform accounts (Google, Meta, TikTok, etc.) to obtain the required `account_id` for platform-specific queries.
+
+**Endpoint:** `POST /{version}/api/get/connection/source`
+
+**Request:**
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "platform_type": "google"
+  }'
+```
+
+**Request Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `platform_type` | string | Optional | Filter by platform: `facebook`, `google`, `tiktok`, `bing`, `snapchat`, `klaviyo`, `impact`, `shareasale`, `cybertargeter`, `cartsee`, `omnisend`, `awin` |
+
+**Response Example:**
+```json
+{
+  "code": 1,
+  "message": "Service succeed",
+  "data": {
+    "records": [
+      {
+        "id": 115,
+        "account_id": "pk_0325a6ecd5500b47180c88a6012f030a92",
+        "name": "PlushBeds",
+        "platform_type": "klaviyo",
+        "currency": "USD",
+        "connected": 1,
+        "trace_status": 0
+      }
+    ]
+  }
+}
+```
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | integer | Internal record ID |
+| `account_id` | string | Platform account ID (use this for platform-specific queries) |
+| `name` | string | Account display name |
+| `platform_type` | string | Platform identifier |
+| `currency` | string | Account currency |
+| `connected` | integer | Connection status (1 = connected) |
+| `trace_status` | integer | Tracking status |
+
+**Usage in Skills:**
+1. **On initialization**, call the Connected Sources API to discover available ad accounts
+2. **Extract `account_id`** for the target platform (e.g., Google, Meta)
+3. **Use `account_id`** in platform-specific query APIs
+
+---
+
+### 3. Attribution Report APIs
 
 #### Get Total Numbers (Summary)
 **Endpoint:** `POST /{version}/api/all-attribution/get-list-sum`
@@ -236,5 +298,201 @@ const goalCode = purchaseGoal?.code || 'purchase'; // fallback to 'purchase'
 
 #### Get Ad Analysis (Campaign/Ad Set/Ad Level)
 **Endpoint:** `POST /{version}/api/get/ad-analysis/list`
+
+---
+
+### 4. Platform-Specific Query APIs
+
+#### Google Ads Query API
+**Purpose:** Execute GAQL (Google Ads Query Language) queries to retrieve detailed Google Ads data including search terms, quality scores, impression share, and more.
+
+**Endpoint:** `POST /{version}/api/source/google-query`
+
+**Request:**
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "6622546829",
+    "gaql": "SELECT search_term_view.search_term, campaign.name, metrics.impressions, metrics.clicks, metrics.cost_micros FROM search_term_view WHERE segments.date BETWEEN '\''2025-03-01'\'' AND '\''2025-03-17'\'' ORDER BY metrics.cost_micros DESC LIMIT 100"
+  }'
+```
+
+**Request Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `account_id` | string | Yes | Google Ads customer ID (obtain from Connected Sources API) |
+| `gaql` | string | Yes | Google Ads Query Language query string |
+
+**Response Example:**
+```json
+{
+  "code": 1,
+  "message": "Service succeed",
+  "data": {
+    "record": [
+      {
+        "account_id": "6622546829",
+        "error": null,
+        "results": [
+          {
+            "campaign": {
+              "id": "1533978646",
+              "name": "Search - Brand"
+            },
+            "adGroup": {
+              "id": "56692376537",
+              "name": "PlushBeds - Top Brand Terms"
+            },
+            "metrics": {
+              "impressions": "78",
+              "clicks": "27",
+              "costMicros": "318470820",
+              "conversions": 0,
+              "ctr": 0.346
+            },
+            "searchTermView": {
+              "searchTerm": "plushbeds",
+              "status": "ADDED"
+            }
+          }
+        ],
+        "success": true
+      }
+    ]
+  }
+}
+```
+
+**Important Notes:**
+- `costMicros` is in micros (divide by 1,000,000 to get actual cost)
+- Google does NOT disclose ~50% of search terms (shown as "(other)")
+- For PMax campaigns, use `campaign_search_term_insight` resource
+
+#### Meta Ads Query API
+**Purpose:** Query Meta (Facebook/Instagram) Ads data including frequency, reach, video metrics, and placement breakdowns.
+
+**Endpoint:** `POST /{version}/api/source/meta-query`
+
+**Request:**
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
+  -H "ApiKey: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "act_123456789",
+    "level": "ad",
+    "fields": ["campaign_name", "adset_name", "ad_name", "impressions", "reach", "frequency", "spend"],
+    "time_range": {
+      "since": "2025-03-01",
+      "until": "2025-03-17"
+    }
+  }'
+```
+
+---
+
+## Error Handling & Rate Limiting
+
+### Error Response Format
+All APIs return errors in a consistent format:
+```json
+{
+  "code": 0,
+  "message": "Error description",
+  "data": null
+}
+```
+
+### Common Error Codes
+
+| Code | Meaning | Action |
+|------|---------|--------|
+| `0` | General error | Check `message` for details |
+| `1` | Success | Process response data |
+| `401` | Unauthorized | Verify ApiKey |
+| `429` | Rate limited | Implement exponential backoff |
+| `500` | Server error | Retry with backoff |
+
+### Rate Limits
+
+| API Type | Limit | Window |
+|----------|-------|--------|
+| Attribuly APIs | 100 requests | Per minute |
+| Google Query API | 1,000 requests | Per 100 seconds per account |
+| Meta Query API | 200 calls | Per hour per ad account |
+
+### Recommended Retry Strategy
+```javascript
+async function apiCallWithRetry(fn, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (error.code === 429 && i < maxRetries - 1) {
+        const delay = Math.pow(2, i) * 1000; // Exponential backoff
+        console.log(`[RATE_LIMIT] Retrying in ${delay}ms...`);
+        await sleep(delay);
+        continue;
+      }
+      throw error;
+    }
+  }
+}
+```
+
+---
+
+## Data Validation
+
+### Required Validations
+1. **Date Range**: Ensure `start_date` <= `end_date` and range <= 90 days
+2. **Account ID**: Verify account exists via Connected Sources API before querying
+3. **Response Code**: Always check `code === 1` before processing data
+4. **Empty Results**: Handle empty `results` arrays gracefully
+
+### Validation Example
+```javascript
+function validateApiResponse(response) {
+  if (response.code !== 1) {
+    console.error(`[API_ERROR] ${response.message}`);
+    return { success: false, error: response.message };
+  }
+  if (!response.data || !response.data.records?.length) {
+    console.warn('[API_WARNING] No data returned');
+    return { success: true, data: [] };
+  }
+  return { success: true, data: response.data.records };
+}
+```
+
+---
+
+## Logging Best Practices
+
+### Log Levels
+
+| Level | When to Use |
+|-------|-------------|
+| `DEBUG` | API request/response details, intermediate calculations |
+| `INFO` | Skill execution start/end, key milestones |
+| `WARN` | Empty results, approaching rate limits, data anomalies |
+| `ERROR` | API failures, validation errors, unexpected exceptions |
+
+### Structured Logging Format
+```javascript
+console.log(JSON.stringify({
+  timestamp: new Date().toISOString(),
+  level: 'INFO',
+  skill: 'google_ads_performance',
+  action: 'fetch_search_terms',
+  account_id: '6622546829',
+  date_range: { start: '2025-03-01', end: '2025-03-17' },
+  result_count: 150,
+  duration_ms: 1234
+}));
+```
 
 *See individual skill files for detailed usage.*
