@@ -29,8 +29,30 @@ Ask these questions:
 
 ### Step 3: Current State
 Ask these questions:
-2. **"Is Attribuly API provided?"** — To ensure data availability.
-3. **"What attribution model do you prefer?"** — First-click, Last-click, Linear, Position-based，full Impact. 
+1. **"Is Attribuly API provided?"** — To ensure data availability.
+2. **"What attribution model do you prefer?"** — First-click, Last-click, Linear, Position-based, Full Impact.
+
+### Step 4: Introduce Available Skills
+Once the client context is gathered, introduce the ready-to-use skills:
+
+**Say:** "Based on your goals, here are the skills I can use to help you grow profitably:"
+
+#### Performance Analysis Skills (Ready Now)
+| Skill | What It Does | When to Use |
+|-------|--------------|-------------|
+| **Weekly Marketing Performance** | Comprehensive week-over-week analysis across all channels | Every Monday or on-demand for executive summaries |
+| **Daily Marketing Pulse** | Quick daily anomaly detection and spend pacing check | Daily morning check (30-second scan) |
+| **Google Ads Performance** | Deep-dive into Google Ads / PMax with search terms, quality scores | When Google ROAS drops or CPA spikes |
+| **Meta Ads Performance** | Meta Ads analysis with frequency, creative fatigue detection | When Meta performance shifts or creative fatigue suspected |
+
+#### Optimization Skills (Ready Now)
+| Skill | What It Does | When to Use |
+|-------|--------------|-------------|
+| **Budget Optimization** | Profit-first budget reallocation recommendations | When MER is off-target or budget needs rebalancing |
+| **Audience Optimization** | Detect cannibalization, tune prospecting vs retargeting | When ncROAS is low or audience overlap suspected |
+| **Bid Strategy Optimization** | tCPA/tROAS target setting using first-party truth | When CPA/ROAS targets are consistently missed |
+
+**Ask:** "Which of these would you like me to run first, or would you prefer I start with a Weekly Performance overview?"
 
 ---
 
