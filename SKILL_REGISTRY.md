@@ -2,80 +2,85 @@
 
 This document defines all available skills, their triggers, and when to use each one.
 
----
+***
 
 ## Skill Categories
 
 ### 1. Performance Analysis Skills
-| Skill ID | Name | Trigger | Status |
-|----------|------|---------|--------|
-| `weekly_marketing_performance` | Weekly Marketing Performance | Scheduled (Monday) / On-demand | ✅ Ready |
-| `daily_marketing_pulse` | Daily Marketing Pulse | Scheduled (Daily) / On-demand | ✅ Ready |
-| `google_ads_performance` | Google Ads Performance | On-demand / Auto (when Google issues detected) | ✅ Ready |
-| `meta_ads_performance` | Meta Ads Performance | On-demand / Auto (when Meta issues detected) | ✅ Ready |
-| `tiktok_ads_performance` | TikTok Ads Performance | On-demand | 🔜 Planned |
+
+| Skill ID                       | Name                         | Trigger                                        | Status     |
+| ------------------------------ | ---------------------------- | ---------------------------------------------- | ---------- |
+| `weekly_marketing_performance` | Weekly Marketing Performance | Scheduled (Monday) / On-demand                 | ✅ Ready    |
+| `daily_marketing_pulse`        | Daily Marketing Pulse        | Scheduled (Daily) / On-demand                  | ✅ Ready    |
+| `google_ads_performance`       | Google Ads Performance       | On-demand / Auto (when Google issues detected) | ✅ Ready    |
+| `meta_ads_performance`         | Meta Ads Performance         | On-demand / Auto (when Meta issues detected)   | ✅ Ready    |
+| `tiktok_ads_performance`       | TikTok Ads Performance       | On-demand                                      | 🔜 Planned |
 
 ### 2. Creative Analysis Skills
-| Skill ID | Name | Trigger | Status |
-|----------|------|---------|--------|
-| `google_creative_analysis` | Google Creative Analysis | On-demand / Auto (when CTR issues) | 🔜 Planned |
-| `meta_creative_analysis` | Meta Creative Analysis | On-demand / Auto (when creative fatigue) | 🔜 Planned |
-| `creative_fatigue_detector` | Creative Fatigue Detector | Auto (frequency > threshold) | 🔜 Planned |
+
+| Skill ID                    | Name                      | Trigger                                  | Status     |
+| --------------------------- | ------------------------- | ---------------------------------------- | ---------- |
+| `google_creative_analysis`  | Google Creative Analysis  | On-demand / Auto (when CTR issues)       | 🔜 Planned |
+| `meta_creative_analysis`    | Meta Creative Analysis    | On-demand / Auto (when creative fatigue) | 🔜 Planned |
+| `creative_fatigue_detector` | Creative Fatigue Detector | Auto (frequency > threshold)             | 🔜 Planned |
 
 ### 3. Optimization Skills
-| Skill ID | Name | Trigger | Status |
-|----------|------|---------|--------|
-| `budget_optimization` | Budget Optimization | On-demand / Auto (when MER off-target) | ✅ Ready |
-| `audience_optimization` | Audience Optimization | On-demand / Auto (when cannibalization detected) | ✅ Ready |
-| `bid_strategy_optimization` | Bid Strategy Optimization | On-demand / Auto (when CPA/ROAS targets missed) | ✅ Ready |
+
+| Skill ID                    | Name                      | Trigger                                          | Status  |
+| --------------------------- | ------------------------- | ------------------------------------------------ | ------- |
+| `budget_optimization`       | Budget Optimization       | On-demand / Auto (when MER off-target)           | ✅ Ready |
+| `audience_optimization`     | Audience Optimization     | On-demand / Auto (when cannibalization detected) | ✅ Ready |
+| `bid_strategy_optimization` | Bid Strategy Optimization | On-demand / Auto (when CPA/ROAS targets missed)  | ✅ Ready |
 
 ### 4. Diagnostic Skills
-| Skill ID | Name | Trigger | Status |
-|----------|------|---------|--------|
-| `funnel_analysis` | Funnel Analysis | On-demand / Auto (when CVR drops) | 🔜 Planned |
-| `landing_page_analysis` | Landing Page Analysis | On-demand | 🔜 Planned |
-| `attribution_discrepancy` | Attribution Discrepancy Analysis | On-demand | 🔜 Planned |
+
+| Skill ID                  | Name                             | Trigger                           | Status     |
+| ------------------------- | -------------------------------- | --------------------------------- | ---------- |
+| `funnel_analysis`         | Funnel Analysis                  | On-demand / Auto (when CVR drops) | 🔜 Planned |
+| `landing_page_analysis`   | Landing Page Analysis            | On-demand                         | 🔜 Planned |
+| `attribution_discrepancy` | Attribution Discrepancy Analysis | On-demand                         | 🔜 Planned |
 
 ### 5. Product & Customer Skills
-| Skill ID | Name | Trigger | Status |
-|----------|------|---------|--------|
-| `product_performance` | Product Performance Analysis | On-demand | 🔜 Planned |
-| `customer_journey_analysis` | Customer Journey Analysis | On-demand | 🔜 Planned |
-| `ltv_analysis` | LTV Analysis | On-demand | 🔜 Planned |
 
----
+| Skill ID                    | Name                         | Trigger   | Status     |
+| --------------------------- | ---------------------------- | --------- | ---------- |
+| `product_performance`       | Product Performance Analysis | On-demand | 🔜 Planned |
+| `customer_journey_analysis` | Customer Journey Analysis    | On-demand | 🔜 Planned |
+| `ltv_analysis`              | LTV Analysis                 | On-demand | 🔜 Planned |
+
+***
 
 ## Skill Trigger Matrix
 
 ### User Intent → Skill Mapping
 
-| User Says | Primary Skill | Secondary Skills |
-|-----------|---------------|------------------|
-| "Weekly report" | `weekly_marketing_performance` | - |
-| "How did we do last week?" | `weekly_marketing_performance` | - |
-| "Daily update" | `daily_marketing_pulse` | - |
-| "How's Google doing?" | `google_ads_performance` | `google_creative_analysis` |
-| "Meta performance" | `meta_ads_performance` | `meta_creative_analysis` |
-| "Why did ROAS drop?" | `weekly_marketing_performance` | Channel-specific skill |
-| "Creative fatigue?" | `creative_fatigue_detector` | `meta_creative_analysis` |
-| "Optimize budget" | `budget_optimization` | - |
-| "Which products are winning?" | `product_performance` | - |
-| "Customer journey" | `customer_journey_analysis` | - |
-| "Funnel issues" | `funnel_analysis` | `landing_page_analysis` |
+| User Says                     | Primary Skill                  | Secondary Skills           |
+| ----------------------------- | ------------------------------ | -------------------------- |
+| "Weekly report"               | `weekly_marketing_performance` | -                          |
+| "How did we do last week?"    | `weekly_marketing_performance` | -                          |
+| "Daily update"                | `daily_marketing_pulse`        | -                          |
+| "How's Google doing?"         | `google_ads_performance`       | `google_creative_analysis` |
+| "Meta performance"            | `meta_ads_performance`         | `meta_creative_analysis`   |
+| "Why did ROAS drop?"          | `weekly_marketing_performance` | Channel-specific skill     |
+| "Creative fatigue?"           | `creative_fatigue_detector`    | `meta_creative_analysis`   |
+| "Optimize budget"             | `budget_optimization`          | -                          |
+| "Which products are winning?" | `product_performance`          | -                          |
+| "Customer journey"            | `customer_journey_analysis`    | -                          |
+| "Funnel issues"               | `funnel_analysis`              | `landing_page_analysis`    |
 
 ### Automatic Triggers
 
-| Condition | Triggered Skill | Priority |
-|-----------|-----------------|----------|
-| Monday 09:00 AM | `weekly_marketing_performance` | High |
-| Daily 09:00 AM | `daily_marketing_pulse` | Medium |
-| ROAS drops >20% | `weekly_marketing_performance` + channel drill-down | Critical |
-| CPA increases >20% | Channel-specific performance skill | High |
-| CTR drops >15% | `creative_fatigue_detector` | Medium |
-| CVR drops >15% | `funnel_analysis` | High |
-| Spend >30% over budget | `budget_optimization` | Critical |
+| Condition              | Triggered Skill                                     | Priority |
+| ---------------------- | --------------------------------------------------- | -------- |
+| Monday 09:00 AM        | `weekly_marketing_performance`                      | High     |
+| Daily 09:00 AM         | `daily_marketing_pulse`                             | Medium   |
+| ROAS drops >20%        | `weekly_marketing_performance` + channel drill-down | Critical |
+| CPA increases >20%     | Channel-specific performance skill                  | High     |
+| CTR drops >15%         | `creative_fatigue_detector`                         | Medium   |
+| CVR drops >15%         | `funnel_analysis`                                   | High     |
+| Spend >30% over budget | `budget_optimization`                               | Critical |
 
----
+***
 
 ## Skill Chaining Logic
 
@@ -92,21 +97,23 @@ weekly_marketing_performance
 └── IF budget inefficiency → budget_optimization
 ```
 
----
+***
 
 ## Skill File Naming Convention
 
 All skill files should follow this pattern:
+
 ```
 /openclaw-config/skills/{skill_id}.md
 ```
 
 Example:
+
 - `weekly_marketing_performance.md`
 - `google_ads_performance.md`
 - `meta_creative_analysis.md`
 
----
+***
 
 ## Skill File Structure Template
 
@@ -125,23 +132,23 @@ Each skill file MUST include:
 11. **Example API Calls** - Ready-to-use curl commands
 12. **Related Skills** - What skills to chain to
 
----
+***
 
 ## Default API Parameters (Global)
 
 These defaults apply to ALL skills unless overridden:
 
-| Parameter | Default Value | Notes |
-|-----------|---------------|-------|
-| `model` | `linear` | Full Impact attribution |
-| `goal` | `purchase` | Purchase conversions (use dynamic goal code from Settings API) |
-| `version` | `v2-4-2` | API version |
-| `page_size` | `100` | Max records per page |
+| Parameter   | Default Value | Notes                                                          |
+| ----------- | ------------- | -------------------------------------------------------------- |
+| `model`     | `linear`      | Full Impact attribution                                        |
+| `goal`      | `purchase`    | Purchase conversions (use dynamic goal code from Settings API) |
+| `version`   | `v2-4-2`      | API version                                                    |
+| `page_size` | `100`         | Max records per page                                           |
 
 **Base URL:** `https://data.api.attribuly.com`
 **Authentication:** `ApiKey` header
 
----
+***
 
 ## Global API Endpoints
 
@@ -152,6 +159,7 @@ These defaults apply to ALL skills unless overridden:
 **Endpoint:** `POST /{version}/api/get/setting-goals`
 
 **Request:**
+
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
   -H "ApiKey: YOUR_API_KEY" \
@@ -160,6 +168,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
 ```
 
 **Response Example:**
+
 ```json
 {
   "code": 1,
@@ -191,32 +200,34 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
 
 **Response Fields:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Human-readable goal name (e.g., "Purchase", "Add to cart") |
-| `code` | string | Unique goal code to use in `goal` parameter for attribution APIs |
-| `event_type` | string | The underlying event type (e.g., `checkout_completed`, `product_added_to_cart`) |
-| `limit_type` | string | Limit type for the goal |
-| `limit_value` | array | Limit values |
-| `data_source` | integer | Data source identifier |
-| `conversion_num` | integer | Number of conversions tracked |
+| Field            | Type    | Description                                                                     |
+| ---------------- | ------- | ------------------------------------------------------------------------------- |
+| `name`           | string  | Human-readable goal name (e.g., "Purchase", "Add to cart")                      |
+| `code`           | string  | Unique goal code to use in `goal` parameter for attribution APIs                |
+| `event_type`     | string  | The underlying event type (e.g., `checkout_completed`, `product_added_to_cart`) |
+| `limit_type`     | string  | Limit type for the goal                                                         |
+| `limit_value`    | array   | Limit values                                                                    |
+| `data_source`    | integer | Data source identifier                                                          |
+| `conversion_num` | integer | Number of conversions tracked                                                   |
 
 **Common Event Types:**
 
-| Event Type | Description |
-|------------|-------------|
-| `checkout_completed` | Purchase/Order completed |
-| `product_added_to_cart` | Add to cart event |
-| `checkout_started` | Checkout initiated |
-| `page_viewed` | Page view |
-| `lead` | Lead form submission |
+| Event Type              | Description              |
+| ----------------------- | ------------------------ |
+| `checkout_completed`    | Purchase/Order completed |
+| `product_added_to_cart` | Add to cart event        |
+| `checkout_started`      | Checkout initiated       |
+| `page_viewed`           | Page view                |
+| `lead`                  | Lead form submission     |
 
 **Usage in Skills:**
+
 1. **On initialization**, call the Conversion Goals API to fetch available goals
 2. **Map goal names to codes** — Use the `code` field when calling attribution APIs
 3. **Default to "Purchase"** — If no specific goal is requested, use the goal with `event_type: checkout_completed`
 
 **Example: Getting the Purchase Goal Code**
+
 ```javascript
 // Pseudo-code for skill initialization
 const goals = await fetchGoals();
@@ -224,7 +235,7 @@ const purchaseGoal = goals.find(g => g.event_type === 'checkout_completed');
 const goalCode = purchaseGoal?.code || 'purchase'; // fallback to 'purchase'
 ```
 
----
+***
 
 ### 2. Connected Sources API (Account Discovery)
 
@@ -233,6 +244,7 @@ const goalCode = purchaseGoal?.code || 'purchase'; // fallback to 'purchase'
 **Endpoint:** `POST /{version}/api/get/connection/source`
 
 **Request:**
+
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
   -H "ApiKey: YOUR_API_KEY" \
@@ -244,11 +256,12 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
 
 **Request Parameters:**
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
+| Parameter       | Type   | Required | Description                                                                                                                                               |
+| --------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `platform_type` | string | Optional | Filter by platform: `facebook`, `google`, `tiktok`, `bing`, `snapchat`, `klaviyo`, `impact`, `shareasale`, `cybertargeter`, `cartsee`, `omnisend`, `awin` |
 
 **Response Example:**
+
 ```json
 {
   "code": 1,
@@ -271,44 +284,50 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
 
 **Response Fields:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | integer | Internal record ID |
-| `account_id` | string | Platform account ID (use this for platform-specific queries) |
-| `name` | string | Account display name |
-| `platform_type` | string | Platform identifier |
-| `currency` | string | Account currency |
-| `connected` | integer | Connection status (1 = connected) |
-| `trace_status` | integer | Tracking status |
+| Field           | Type    | Description                                                  |
+| --------------- | ------- | ------------------------------------------------------------ |
+| `id`            | integer | Internal record ID                                           |
+| `account_id`    | string  | Platform account ID (use this for platform-specific queries) |
+| `name`          | string  | Account display name                                         |
+| `platform_type` | string  | Platform identifier                                          |
+| `currency`      | string  | Account currency                                             |
+| `connected`     | integer | Connection status (1 = connected)                            |
+| `trace_status`  | integer | Tracking status                                              |
 
 **Usage in Skills:**
-1. **On initialization**, call the Connected Sources API to discover available ad accounts
-2. **Extract `account_id`** for the target platform (e.g., Google, Meta)
-3. **Use `account_id`** in platform-specific query APIs
 
----
+1. **On initialization**, call the Connected Sources API to discover available ad accounts
+2. **Extract** **`account_id`** for the target platform (e.g., Google, Meta)
+3. **Use** **`account_id`** in platform-specific query APIs
+
+***
 
 ### 3. Attribution Report APIs
 
 #### Get Total Numbers (Summary)
+
 **Endpoint:** `POST /{version}/api/all-attribution/get-list-sum`
 
 #### Get Attribution Report (Detailed)
+
 **Endpoint:** `POST /{version}/api/all-attribution/get-list`
 
 #### Get Ad Analysis (Campaign/Ad Set/Ad Level)
+
 **Endpoint:** `POST /{version}/api/get/ad-analysis/list`
 
----
+***
 
 ### 4. Platform-Specific Query APIs
 
 #### Google Ads Query API
+
 **Purpose:** Execute GAQL (Google Ads Query Language) queries to retrieve detailed Google Ads data including search terms, quality scores, impression share, and more.
 
 **Endpoint:** `POST /{version}/api/source/google-query`
 
 **Request:**
+
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
   -H "ApiKey: YOUR_API_KEY" \
@@ -321,12 +340,13 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
 
 **Request Parameters:**
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `account_id` | string | Yes | Google Ads customer ID (obtain from Connected Sources API) |
-| `gaql` | string | Yes | Google Ads Query Language query string |
+| Parameter    | Type   | Required | Description                                                |
+| ------------ | ------ | -------- | ---------------------------------------------------------- |
+| `account_id` | string | Yes      | Google Ads customer ID (obtain from Connected Sources API) |
+| `gaql`       | string | Yes      | Google Ads Query Language query string                     |
 
 **Response Example:**
+
 ```json
 {
   "code": 1,
@@ -344,7 +364,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
             },
             "adGroup": {
               "id": "56692376537",
-              "name": "PlushBeds - Top Brand Terms"
+              "name": "Attribuly - Top Brand Terms"
             },
             "metrics": {
               "impressions": "78",
@@ -354,7 +374,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
               "ctr": 0.346
             },
             "searchTermView": {
-              "searchTerm": "plushbeds",
+              "searchTerm": "attribuly",
               "status": "ADDED"
             }
           }
@@ -367,16 +387,19 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
 ```
 
 **Important Notes:**
+
 - `costMicros` is in micros (divide by 1,000,000 to get actual cost)
-- Google does NOT disclose ~50% of search terms (shown as "(other)")
+- Google does NOT disclose \~50% of search terms (shown as "(other)")
 - For PMax campaigns, use `campaign_search_term_insight` resource
 
 #### Meta Ads Query API
+
 **Purpose:** Query Meta (Facebook/Instagram) Ads data including frequency, reach, video metrics, and placement breakdowns.
 
 **Endpoint:** `POST /{version}/api/source/meta-query`
 
 **Request:**
+
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
   -H "ApiKey: YOUR_API_KEY" \
@@ -392,12 +415,14 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
   }'
 ```
 
----
+***
 
 ## Error Handling & Rate Limiting
 
 ### Error Response Format
+
 All APIs return errors in a consistent format:
+
 ```json
 {
   "code": 0,
@@ -408,23 +433,24 @@ All APIs return errors in a consistent format:
 
 ### Common Error Codes
 
-| Code | Meaning | Action |
-|------|---------|--------|
-| `0` | General error | Check `message` for details |
-| `1` | Success | Process response data |
-| `401` | Unauthorized | Verify ApiKey |
-| `429` | Rate limited | Implement exponential backoff |
-| `500` | Server error | Retry with backoff |
+| Code  | Meaning       | Action                        |
+| ----- | ------------- | ----------------------------- |
+| `0`   | General error | Check `message` for details   |
+| `1`   | Success       | Process response data         |
+| `401` | Unauthorized  | Verify ApiKey                 |
+| `429` | Rate limited  | Implement exponential backoff |
+| `500` | Server error  | Retry with backoff            |
 
 ### Rate Limits
 
-| API Type | Limit | Window |
-|----------|-------|--------|
-| Attribuly APIs | 100 requests | Per minute |
+| API Type         | Limit          | Window                      |
+| ---------------- | -------------- | --------------------------- |
+| Attribuly APIs   | 100 requests   | Per minute                  |
 | Google Query API | 1,000 requests | Per 100 seconds per account |
-| Meta Query API | 200 calls | Per hour per ad account |
+| Meta Query API   | 200 calls      | Per hour per ad account     |
 
 ### Recommended Retry Strategy
+
 ```javascript
 async function apiCallWithRetry(fn, maxRetries = 3) {
   for (let i = 0; i < maxRetries; i++) {
@@ -443,17 +469,19 @@ async function apiCallWithRetry(fn, maxRetries = 3) {
 }
 ```
 
----
+***
 
 ## Data Validation
 
 ### Required Validations
+
 1. **Date Range**: Ensure `start_date` <= `end_date` and range <= 90 days
 2. **Account ID**: Verify account exists via Connected Sources API before querying
 3. **Response Code**: Always check `code === 1` before processing data
 4. **Empty Results**: Handle empty `results` arrays gracefully
 
 ### Validation Example
+
 ```javascript
 function validateApiResponse(response) {
   if (response.code !== 1) {
@@ -468,20 +496,21 @@ function validateApiResponse(response) {
 }
 ```
 
----
+***
 
 ## Logging Best Practices
 
 ### Log Levels
 
-| Level | When to Use |
-|-------|-------------|
+| Level   | When to Use                                             |
+| ------- | ------------------------------------------------------- |
 | `DEBUG` | API request/response details, intermediate calculations |
-| `INFO` | Skill execution start/end, key milestones |
-| `WARN` | Empty results, approaching rate limits, data anomalies |
-| `ERROR` | API failures, validation errors, unexpected exceptions |
+| `INFO`  | Skill execution start/end, key milestones               |
+| `WARN`  | Empty results, approaching rate limits, data anomalies  |
+| `ERROR` | API failures, validation errors, unexpected exceptions  |
 
 ### Structured Logging Format
+
 ```javascript
 console.log(JSON.stringify({
   timestamp: new Date().toISOString(),
