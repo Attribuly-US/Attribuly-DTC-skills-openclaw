@@ -36,7 +36,7 @@ This document defines all available skills, their triggers, and when to use each
 
 | Skill ID                  | Name                             | Trigger                           | Status     |
 | ------------------------- | -------------------------------- | --------------------------------- | ---------- |
-| `funnel_analysis`         | Funnel Analysis                  | On-demand / Auto (when CVR drops) | 🔜 Planned |
+| `funnel_analysis`         | Funnel Analysis                  | On-demand / Auto (when CVR drops) | ✅ Ready    |
 | `landing_page_analysis`   | Landing Page Analysis            | On-demand                         | 🔜 Planned |
 | `attribution_discrepancy` | Attribution Discrepancy Analysis | On-demand                         | 🔜 Planned |
 
