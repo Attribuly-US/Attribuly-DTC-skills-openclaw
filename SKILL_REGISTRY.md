@@ -37,8 +37,105 @@ This document defines all available skills, their triggers, and when to use each
 | Skill ID                  | Name                             | Trigger                           | Status     |
 | ------------------------- | -------------------------------- | --------------------------------- | ---------- |
 | `funnel_analysis`         | Funnel Analysis                  | On-demand / Auto (when CVR drops) | ✅ Ready    |
-| `landing_page_analysis`   | Landing Page Analysis            | On-demand                         | 🔜 Planned |
+| `landing_page_analysis`   | Landing Page Analysis            | On-demand                         | ✅ Ready    |
 | `attribution_discrepancy` | Attribution Discrepancy Analysis | On-demand                         | 🔜 Planned |
+
+#### `landing_page_analysis`
+
+1. **Skill Metadata**
+   - **ID**: `landing_page_analysis`
+   - **Version**: `v1.0.0`
+   - **Category**: Diagnostic Skills
+   - **Trigger**: On-demand / Auto (when top-of-funnel drop-off is high)
+
+2. **When to Trigger**
+   - **Automatic**: Trigger when Homepage → Product View drop-off exceeds 20% in `funnel_analysis`.
+   - **Manual**: User asks "Why is this landing page not converting?" or "Analyze landing page performance".
+   - **Context**: Trigger after new LP launch, major creative refresh, or channel-level CVR decline.
+
+3. **Skill Purpose**
+   - Diagnose landing-page performance issues by isolating weak pages, low-quality traffic sources, and engagement breakdowns that reduce downstream conversions.
+
+4. **Data Sources**
+   - **Endpoint A**: `POST /{version}/api/web-analytics/funnel`
+     - Use `dimensions`: `["landing_page","channel","utm_campaign","utm_source","utm_medium"]`
+     - Key fields: `landing_page`, `homepage_view_users`, `product_view_users`, `atc_users`, `purchases`, `purchases_rate`, `engagement_rate`, `event_per_session`, `spend`, `revenue`
+   - **Endpoint B**: `POST /{version}/api/all-attribution/get-list`
+     - Use for conversion value and channel-level attribution context by landing page dimension.
+
+5. **Default Parameters**
+   - `version`: `v2-4-2`
+   - `start_date`: Last 14 days
+   - `end_date`: Today
+   - `dimensions`: `["landing_page","channel","utm_campaign"]`
+   - `page_size`: `100`
+   - `model`: `linear`
+   - `goal`: `purchase`
+
+6. **Execution Steps**
+   - **Step 1**: Validate date range (`start_date <= end_date`, window <= 90 days).
+   - **Step 2**: Fetch landing-page funnel dataset and confirm `code === 1`.
+   - **Step 3**: Compute LP stage conversion rates:
+     - LP View → Product View = `product_view_users / homepage_view_users`
+     - Product View → Add-to-Cart = `atc_users / product_view_users`
+     - Add-to-Cart → Purchase = `purchases / atc_users`
+   - **Step 4**: Rank worst LPs by drop-off severity and revenue impact.
+   - **Step 5**: Segment by `channel`, `utm_campaign`, `utm_source`, `utm_medium` to separate traffic-quality vs page-quality issues.
+   - **Step 6**: Generate remediation recommendations with severity labels.
+
+7. **Key Metrics**
+   - `landing_page`
+   - `homepage_view_users`
+   - `product_view_users`
+   - `atc_users`
+   - `purchases`
+   - `purchases_rate`
+   - `engagement_rate`
+   - `event_per_session`
+   - `spend`
+   - `revenue`
+
+8. **Root Cause Analysis Logic**
+   - **IF** LP View → Product View is weak and `engagement_rate` is low:
+     - Probable mismatch between ad message and LP content, weak first fold, or poor page speed.
+   - **IF** Product View is healthy but Add-to-Cart is weak:
+     - Probable offer/pricing/PDP quality issue.
+   - **IF** Add-to-Cart is healthy but Purchase is weak:
+     - Probable checkout friction, shipping shock, or payment failure.
+   - **IF** one channel drives most bad LP traffic:
+     - Probable targeting/query intent mismatch; recommend channel-level refinement.
+
+9. **Output Format**
+   - **Section A**: Landing page health summary (top issues, severity, impacted revenue).
+   - **Section B**: LP ranking table (views, progression rates, drop-off, spend, revenue).
+   - **Section C**: Traffic source diagnosis by channel/campaign/source/medium.
+   - **Section D**: Action plan (quick wins, structural fixes, validation tests).
+
+10. **Thresholds**
+    - **Warning**:
+      - LP View → Product View drop-off > 20%
+      - `engagement_rate` < 40%
+    - **Critical**:
+      - LP View → Product View drop-off > 35%
+      - `engagement_rate` < 20%
+      - High-spend LP with `purchases = 0`
+
+11. **Example API Calls**
+    ```bash
+    curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
+      -H "ApiKey: YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "start_date": "2026-03-01",
+        "end_date": "2026-03-17",
+        "dimensions": ["landing_page", "channel", "utm_campaign", "utm_source", "utm_medium"]
+      }'
+    ```
+
+12. **Related Skills**
+    - `funnel_analysis` (parent diagnostic trigger)
+    - `budget_optimization` (when spend is concentrated on low-performing LPs)
+    - `attribution_discrepancy` (when LP-level purchases diverge from backend orders)
 
 ### 5. Product & Customer Skills
 
