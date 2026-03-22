@@ -88,7 +88,7 @@ See [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) for detailed triggers and usage mapp
 
 ## Installation Guide
 
-### Step 0: Obtain Your Attribuly API Key
+### Step 1: Obtain Your Attribuly API Key
 
 Before installing the skills, you need an Attribuly API key. These skills rely heavily on Attribuly-exclusive metrics (like `new_order_roas` and true profit) to function autonomously.
 
@@ -100,13 +100,13 @@ Before installing the skills, you need an Attribuly API key. These skills rely h
 
 There are two primary ways to install these Attribuly skills into your own OpenClaw environment. Choose the method that best fits your workflow.
 
-### Method 1: Install via chat (Quick Start)
+### Step 2: Install via chat (Quick Start)
 
 Copy the prompt below into your OpenClaw interface, and the agent will install it for you:
 
 > Install these skills from https\://github.com/Alexchulee/Attribuly-DTC-skills-openclaw\.git
 
-### Method 2: Git Submodule (Recommended for Easy Updates)
+### Step 2: Git Submodule (Recommended for Easy Updates)
 
 If you want to keep your skills up-to-date with the latest improvements from this repository, adding it as a Git submodule is the best approach.
 
@@ -131,6 +131,13 @@ To ensure you always have the latest skill logic, you can easily pull updates an
 git submodule update --remote --merge
 rsync -av vendor/attribuly/*.md ./openclaw-config/skills/
 ```
+
+### Step 3: Initialize Agent Role (Rule & Soul)
+
+To ensure the agent behaves as an expert DTC Growth Partner, you need to configure its core identity.
+1. Open the [`role_prompt.md`](role_prompt.md) file in this repository.
+2. Copy the entire content of the file.
+3. Paste it into your OpenClaw chat/dialog box to initialize the agent's rules, soul, and persona.
 
 ---
 
