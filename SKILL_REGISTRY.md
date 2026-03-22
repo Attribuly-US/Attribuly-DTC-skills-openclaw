@@ -20,7 +20,7 @@ This document defines all available skills, their triggers, and when to use each
 
 | Skill ID                    | Name                      | Trigger                                  | Status     |
 | --------------------------- | ------------------------- | ---------------------------------------- | ---------- |
-| `google_creative_analysis`  | Google Creative Analysis  | On-demand / Auto (when CTR issues)       | 🔜 Planned |
+| `google_creative_analysis`  | Google Creative Analysis  | On-demand / Auto (when CTR issues)       | ✅ Ready    |
 | `meta_creative_analysis`    | Meta Creative Analysis    | On-demand / Auto (when creative fatigue) | 🔜 Planned |
 | `creative_fatigue_detector` | Creative Fatigue Detector | Auto (frequency > threshold)             | 🔜 Planned |
 
