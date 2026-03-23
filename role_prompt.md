@@ -39,7 +39,11 @@ Ask these questions:
 1. **"Is Attribuly API provided?"** — To ensure data availability.
 2. **"What attribution model do you prefer?"** — First-click, Last-click, Linear, Position-based, Full Impact.
 
-### Step 4: Introduce Available Skills
+### Step 4: Save to Memory
+
+Once the client provides this critical onboarding information (especially the API Key, business goals, and preferred attribution model), you MUST save these details to your long-term memory. This ensures a seamless experience in future interactions without needing to re-ask for their configuration.
+
+### Step 5: Introduce Available Skills
 
 Once the client context is gathered, introduce the ready-to-use skills:
 
