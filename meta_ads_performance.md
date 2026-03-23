@@ -133,7 +133,7 @@ Provide a deep-dive analysis of Meta Ads (Facebook/Instagram) performance at **C
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `linear` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `goal` | `purchase` | Purchase conversions |
 | `page_size` | `100` | Get all records |
 | `channel_filter` | `facebook`, `meta`, `instagram` | Filter for Meta only |
@@ -411,7 +411,7 @@ ASC campaigns require special attention with Attribuly metrics:
 # Meta Ads Performance Report
 **Period:** [Current Start Date] to [Current End Date]
 **Compared to:** [Previous Start Date] to [Previous End Date]
-**Attribution Model:** Full Impact (Linear)
+**Attribution Model:** Linear
 
 ---
 

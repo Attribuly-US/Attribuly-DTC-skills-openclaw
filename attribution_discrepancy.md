@@ -112,7 +112,7 @@ Deliver a clear diagnostic report that bridges the gap between ad platforms and 
 | `version`    | `v2-4-2`      | API version                    |
 | `start_date` | Last 7 days   | Standard comparison window     |
 | `end_date`   | Today         | Inclusive                      |
-| `model`      | `linear`      | Best for measuring full impact |
+| `model`      | `linear`      | Linear attribution             |
 | `dimensions` | `["channel"]` | High-level discrepancy view    |
 
 ***

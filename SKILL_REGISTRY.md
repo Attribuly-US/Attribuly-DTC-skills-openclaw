@@ -237,7 +237,7 @@ These defaults apply to ALL skills unless overridden:
 
 | Parameter   | Default Value | Notes                                                          |
 | ----------- | ------------- | -------------------------------------------------------------- |
-| `model`     | `linear`      | Full Impact attribution                                        |
+| `model`     | `linear`      | Linear attribution                                             |
 | `goal`      | `purchase`    | Purchase conversions (use dynamic goal code from Settings API) |
 | `version`   | `v2-4-2`      | API version                                                    |
 | `page_size` | `100`         | Max records per page                                           |

@@ -128,7 +128,7 @@ Provide a deep-dive analysis of Google Ads performance at **Campaign**, **Ad Set
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `linear` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `goal` | `purchase` | Purchase conversions |
 | `page_size` | `100` | Get all records |
 | `channel_filter` | `google`, `google_ads` | Filter for Google only |
@@ -360,7 +360,7 @@ PMax campaigns require special attention with Attribuly metrics:
 # Google Ads Performance Report
 **Period:** [Current Start Date] to [Current End Date]
 **Compared to:** [Previous Start Date] to [Previous End Date]
-**Attribution Model:** Full Impact (Linear)
+**Attribution Model:** Linear
 
 ---
 

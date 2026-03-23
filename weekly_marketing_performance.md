@@ -89,7 +89,7 @@ Provide a comprehensive **Week-over-Week (WoW)** comparison of marketing perform
   "start_date": "YYYY-MM-DD",
   "end_date": "YYYY-MM-DD",
   "dimensions": ["channel"],
-  "model": "full-impact",
+  "model": "linear",
   "goal": "purchase",
   "orders": [{"column": "conversion_value", "order": "desc"}],
   "page": 1,
@@ -103,7 +103,7 @@ Provide a comprehensive **Week-over-Week (WoW)** comparison of marketing perform
   "start_date": "YYYY-MM-DD",
   "end_date": "YYYY-MM-DD",
   "dimensions": ["channel", "campaign"],
-  "model": "full-impact",
+  "model": "linear",
   "goal": "purchase",
   "orders": [{"column": "conversion_value", "order": "desc"}],
   "page": 1,
@@ -117,7 +117,7 @@ Provide a comprehensive **Week-over-Week (WoW)** comparison of marketing perform
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `full-impact` | Full Impact attribution (credit both views & clicks with incremental impact attribution) |
+| `model` | `linear` | Linear attribution |
 | `goal` | `purchase` | Focus on purchase conversions |
 | `dimensions` | `["channel"]` for summary, `["channel", "campaign"]` for drill-down | |
 | `page_size` | `100` | Get all channels/campaigns |
@@ -306,7 +306,7 @@ Based on root cause, provide actionable recommendations.
 # Weekly Marketing Performance Report
 **Period:** [Current Start Date] to [Current End Date]
 **Compared to:** [Previous Start Date] to [Previous End Date]
-**Attribution Model:** Full Impact
+**Attribution Model:** Linear
 
 ---
 

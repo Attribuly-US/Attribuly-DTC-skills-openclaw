@@ -122,7 +122,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `full impact` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `goal` | Dynamic from Settings API | Use `checkout_completed` event type |
 | `lookback_period` | 14 days | Enough data for stable recommendations |
 | `min_spend_threshold` | $100 | Minimum spend to include in analysis |

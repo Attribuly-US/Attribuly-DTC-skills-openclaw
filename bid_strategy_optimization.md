@@ -120,7 +120,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `linear` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `goal` | Dynamic from Settings API | Use `checkout_completed` event type |
 | `lookback_period` | 30 days | Enough data for stable targets |
 | `min_conversions` | 30 | Minimum conversions for reliable targets |

@@ -123,7 +123,7 @@ Provide a **quick, actionable daily snapshot** of marketing performance. Focus o
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `linear` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `goal` | `purchase` | Focus on purchase conversions |
 | `dimensions` | `["channel"]` for summary | |
 | `page_size` | `50` | Smaller for daily (faster) |

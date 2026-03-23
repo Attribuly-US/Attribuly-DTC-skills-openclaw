@@ -109,7 +109,7 @@ Provide a deep-dive diagnostic report on Google Ads creative performance:
 | `version` | `v2-4-2` | API version |
 | `start_date` | Last 14 days | Standard creative evaluation window |
 | `end_date` | Today | Inclusive |
-| `model` | `linear` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `page_size` | `100` | Max records for deep analysis |
 
 ---
