@@ -63,7 +63,7 @@ Deliver a practical diagnostic report with:
 ### Primary API
 
 #### 1. Web Analytics Funnel
-**Endpoint:** `POST /{version}/api/web-analytics/funnel`  
+**Endpoint:** `POST /{version}/api/get/web-analysis/list`  
 **Base URL:** `https://data.api.attribuly.com`  
 **Authentication:** `ApiKey` header  
 **Purpose:** Fetch funnel metrics with dimension breakdown.
@@ -120,7 +120,7 @@ Deliver a practical diagnostic report with:
 - Validate `dimensions` is non-empty.
 
 ### Step 2: Fetch Funnel Dataset
-- Call `/api/web-analytics/funnel` with date range + dimensions.
+- Call `/api/get/web-analysis/list` with date range + dimensions.
 - Confirm response `code === 1` before processing.
 
 ### Step 3: Calculate Stage Conversion
@@ -242,7 +242,7 @@ Date Range: [start] to [end]
 ### 1. Funnel by Channel + Landing Page
 
 ```bash
-curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
   -H "ApiKey: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -255,7 +255,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
 ### 2. Funnel by Campaign
 
 ```bash
-curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
   -H "ApiKey: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

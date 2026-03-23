@@ -62,8 +62,8 @@ Provide a clear landing-page diagnostic report focused on:
 
 ### Primary APIs
 
-#### 1. Web Analytics Funnel
-**Endpoint:** `POST /{version}/api/web-analytics/funnel`  
+#### 1. Web Analytics List
+**Endpoint:** `POST /{version}/api/get/web-analysis/list`  
 **Base URL:** `https://data.api.attribuly.com`  
 **Authentication:** `ApiKey` header  
 **Purpose:** Evaluate LP progression through key funnel stages.
@@ -123,7 +123,7 @@ Provide a clear landing-page diagnostic report focused on:
 - Ensure `dimensions` contains `landing_page`.
 
 ### Step 2: Fetch Landing Page Dataset
-- Call `/api/web-analytics/funnel` with landing-page-centric dimensions.
+- Call `/api/get/web-analysis/list` with landing-page-centric dimensions.
 - Continue only when `code === 1`.
 
 ### Step 3: Compute Conversion Progression
@@ -245,7 +245,7 @@ Date Range: [start] to [end]
 ### 1. Landing Page + Channel Breakdown
 
 ```bash
-curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
   -H "ApiKey: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -258,7 +258,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
 ### 2. Landing Page + Source/Medium Breakdown
 
 ```bash
-curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
   -H "ApiKey: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

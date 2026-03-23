@@ -57,7 +57,7 @@ This document defines all available skills, their triggers, and when to use each
    - Diagnose landing-page performance issues by isolating weak pages, low-quality traffic sources, and engagement breakdowns that reduce downstream conversions.
 
 4. **Data Sources**
-   - **Endpoint A**: `POST /{version}/api/web-analytics/funnel`
+   - **Endpoint A**: `POST /{version}/api/get/web-analysis/list`
      - Use `dimensions`: `["landing_page","channel","utm_campaign","utm_source","utm_medium"]`
      - Key fields: `landing_page`, `homepage_view_users`, `product_view_users`, `atc_users`, `purchases`, `purchases_rate`, `engagement_rate`, `event_per_session`, `spend`, `revenue`
    - **Endpoint B**: `POST /{version}/api/all-attribution/get-list`
@@ -122,7 +122,7 @@ This document defines all available skills, their triggers, and when to use each
 
 11. **Example API Calls**
     ```bash
-    curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
+    curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
       -H "ApiKey: YOUR_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
