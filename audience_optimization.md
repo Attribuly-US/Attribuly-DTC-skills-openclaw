@@ -415,7 +415,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
   -H "ApiKey: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "start_date": "2025-03-04",
+    "start_date": "2025-03-05",
     "end_date": "2025-03-18",
     "dimensions": ["channel", "campaign", "ad_set"],
     "model": "linear",
@@ -432,7 +432,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
   -H "ApiKey: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "start_date": "2025-03-04",
+    "start_date": "2025-03-05",
     "end_date": "2025-03-18",
     "dimensions": ["channel", "campaign"],
     "model": "linear",

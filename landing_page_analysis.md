@@ -106,8 +106,8 @@ Provide a clear landing-page diagnostic report focused on:
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
 | `version` | `v2-4-2` | API version |
-| `start_date` | Last 14 days | Stable diagnostic window |
-| `end_date` | Today | Inclusive |
+| `start_date` | Today - 14 days | Stable diagnostic window |
+| `end_date` | Today - 1 day | Yesterday, explicitly excluding today |
 | `dimensions` | `["landing_page","channel","utm_campaign"]` | Primary diagnostic split |
 | `page_size` | `100` | Full LP ranking coverage |
 | `model` | `linear` | Attribution model |

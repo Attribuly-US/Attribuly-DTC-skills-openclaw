@@ -65,8 +65,8 @@ This document defines all available skills, their triggers, and when to use each
 
 5. **Default Parameters**
    - `version`: `v2-4-2`
-   - `start_date`: Last 14 days
-   - `end_date`: Today
+   - `start_date`: Today - 14 days
+   - `end_date`: Today - 1 day (Yesterday, explicitly excluding today)
    - `dimensions`: `["landing_page","channel","utm_campaign"]`
    - `page_size`: `100`
    - `model`: `linear`

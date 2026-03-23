@@ -107,8 +107,8 @@ Provide a deep-dive diagnostic report on Google Ads creative performance:
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
 | `version` | `v2-4-2` | API version |
-| `start_date` | Last 14 days | Standard creative evaluation window |
-| `end_date` | Today | Inclusive |
+| `start_date` | Today - 14 days | Standard creative evaluation window |
+| `end_date` | Today - 1 day | Yesterday, explicitly excluding today |
 | `model` | `linear` | Linear attribution |
 | `page_size` | `100` | Max records for deep analysis |
 

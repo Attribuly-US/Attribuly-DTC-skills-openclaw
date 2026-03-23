@@ -642,7 +642,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
     "fields": ["campaign_name", "campaign_id", "adset_name", "adset_id", "ad_name", "ad_id", "impressions", "reach", "frequency", "spend", "clicks", "cpm", "cpc", "ctr"],
     "time_range": {
       "since": "2025-03-10",
-      "until": "2025-03-17"
+      "until": "2025-03-16"
     }
   }'
 ```
@@ -674,7 +674,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
     "fields": ["ad_name", "ad_id", "impressions", "reach", "video_play_actions", "video_p25_watched_actions", "video_p50_watched_actions", "video_p75_watched_actions", "video_p95_watched_actions", "video_p100_watched_actions", "video_thruplay_watched_actions", "video_avg_time_watched_actions", "video_continuous_2_sec_watched_actions", "video_30_sec_watched_actions"],
     "time_range": {
       "since": "2025-03-10",
-      "until": "2025-03-17"
+      "until": "2025-03-16"
     }
   }'
 ```
@@ -700,7 +700,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
     "breakdowns": ["publisher_platform", "platform_position"],
     "time_range": {
       "since": "2025-03-10",
-      "until": "2025-03-17"
+      "until": "2025-03-16"
     }
   }'
 ```
@@ -727,7 +727,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
     "breakdowns": ["age", "gender"],
     "time_range": {
       "since": "2025-03-10",
-      "until": "2025-03-17"
+      "until": "2025-03-16"
     }
   }'
 ```
@@ -751,7 +751,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
     "breakdowns": ["impression_device"],
     "time_range": {
       "since": "2025-03-10",
-      "until": "2025-03-17"
+      "until": "2025-03-16"
     }
   }'
 ```
@@ -850,7 +850,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimension": "campaign",
     "model": "linear",
     "goal": "purchase",
@@ -866,7 +866,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimension": "ad_set",
     "model": "linear",
     "goal": "purchase",
@@ -882,7 +882,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimension": "ad",
     "model": "linear",
     "goal": "purchase",

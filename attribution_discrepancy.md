@@ -110,8 +110,8 @@ Deliver a clear diagnostic report that bridges the gap between ad platforms and 
 | Parameter    | Default Value | Notes                          |
 | ------------ | ------------- | ------------------------------ |
 | `version`    | `v2-4-2`      | API version                    |
-| `start_date` | Last 7 days   | Standard comparison window     |
-| `end_date`   | Today         | Inclusive                      |
+| `start_date` | Today - 7 days   | Standard comparison window     |
+| `end_date`   | Today - 1 day | Yesterday, explicitly excluding today |
 | `model`      | `linear`      | Linear attribution             |
 | `dimensions` | `["channel"]` | High-level discrepancy view    |
 

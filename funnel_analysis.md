@@ -105,8 +105,8 @@ Deliver a practical diagnostic report with:
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
 | `version` | `v2-4-2` | API version |
-| `start_date` | Last 7 days | Diagnostic default window |
-| `end_date` | Today | Inclusive |
+| `start_date` | Today - 7 days | Diagnostic default window |
+| `end_date` | Today - 1 day | Yesterday, explicitly excluding today |
 | `dimensions` | `["channel","utm_campaign","landing_page"]` | Root-cause breakdown |
 | `page_size` | `99` | Align with web analytics sample size |
 

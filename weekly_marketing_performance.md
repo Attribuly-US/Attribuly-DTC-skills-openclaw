@@ -129,18 +129,18 @@ Provide a comprehensive **Week-over-Week (WoW)** comparison of marketing perform
 ### Current Period (Last 7 Days)
 ```
 current_start_date = TODAY - 7 days
-current_end_date = TODAY
+current_end_date = TODAY - 1 day
 ```
 
 ### Previous Period (Prior 7 Days)
 ```
 previous_start_date = TODAY - 14 days
-previous_end_date = TODAY - 7 days
+previous_end_date = TODAY - 8 days
 ```
 
 **Example (if TODAY = 2025-03-17):**
-- Current Period: 2025-03-10 to 2025-03-17
-- Previous Period: 2025-03-03 to 2025-03-10
+- Current Period: 2025-03-10 to 2025-03-16
+- Previous Period: 2025-03-03 to 2025-03-09
 
 ---
 
@@ -451,7 +451,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimensions": ["channel"],
     "model": "linear",
     "goal": "purchase"
@@ -465,7 +465,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimensions": ["channel"],
     "model": "linear",
     "goal": "purchase",
@@ -482,7 +482,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimensions": ["channel", "campaign"],
     "model": "linear",
     "goal": "purchase",
