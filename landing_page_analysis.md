@@ -127,10 +127,20 @@ Provide a clear landing-page diagnostic report focused on:
 - Continue only when `code === 1`.
 
 ### Step 3: Compute Conversion Progression
-- LP → Product View = `product_view_users / homepage_view_users`
-- Product View → ATC = `atc_users / product_view_users`
-- ATC → Purchase = `purchases / atc_users`
-- Overall LP CVR = `purchases_rate`
+For each landing page record in the dataset, apply the following logic:
+
+**URL Type Detection:**
+- Parse the `landing_page` string.
+- If the URL path contains `"/products"`, classify it as a **Product Page**.
+- Otherwise, classify it as a **Standard Landing Page**.
+
+**Progression Calculation:**
+- **LP → Product View**: 
+  - *Rule*: Skip this calculation for Product Pages (since the user is already on the product page).
+  - *Formula (Standard LP only)*: `product_view_users / homepage_view_users`
+- **Product View → ATC**: `atc_users / product_view_users`
+- **ATC → Purchase**: `purchases / atc_users`
+- **Overall LP CVR**: `purchases_rate`
 
 ### Step 4: Rank LP Performance
 - Rank LPs by worst progression rates and highest spend.
