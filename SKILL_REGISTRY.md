@@ -367,8 +367,8 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
     "records": [
       {
         "id": 115,
-        "account_id": "pk_0325a6ecd5500b47180c88a6012f030a92",
-        "name": "PlushBeds",
+        "account_id": "pk_1234567890",
+        "name": "Attribuly",
         "platform_type": "klaviyo",
         "currency": "USD",
         "connected": 1,
