@@ -1,16 +1,9 @@
-# Skill: AllyClaw Google Ads Analyzer for DTC
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `google_ads_performance` |
-| **Name** | AllyClaw Google Ads Analyzer for DTC |
-| **Description** | Diagnose Google Ads and PMax campaigns for your ecommerce store. Uncover true ncROAS and stop brand cannibalization with Attribuly. |
-| **Version** | 1.1.0 |
-| **Category** | Channel Performance |
-| **Trigger** | On-Demand / Auto (when Google issues detected in weekly report) |
-
 ---
+name: google-ads-performance
+version: 1.1.0
+description: Diagnose Google Ads and PMax campaigns for your ecommerce store. Uncover true ncROAS and stop brand cannibalization with Attribuly.
+---
+# Skill: AllyClaw Google Ads Analyzer for DTC
 
 ## 🎯 Attribuly Unique Value Proposition
 

@@ -1,16 +1,9 @@
-# Skill: AllyClaw Daily Marketing Pulse for Ecommerce
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `daily_marketing_pulse` |
-| **Name** | AllyClaw Daily Marketing Pulse for Ecommerce |
-| **Description** | Daily marketing snapshot for DTC brands. Monitor Shopify and WooCommerce spend, profit, and Attribuly incrementality metrics in real-time. |
-| **Version** | 1.0.0 |
-| **Category** | Marketing Analytics |
-| **Trigger** | Scheduled (Daily) or On-Demand |
-
 ---
+name: daily-marketing-pulse
+version: 1.0.0
+description: Daily marketing snapshot for DTC brands. Monitor Shopify and WooCommerce spend, profit, and Attribuly incrementality metrics in real-time.
+---
+# Skill: AllyClaw Daily Marketing Pulse for Ecommerce
 
 ## 🎯 Attribuly Unique Value Proposition
 

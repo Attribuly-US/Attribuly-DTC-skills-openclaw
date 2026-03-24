@@ -23,22 +23,21 @@
 
 ### [v1.1.0] 新增
 - **诊断分析技能套件**: 
-  - `funnel_analysis.md`: 全链路客户转化漏斗分析，精确定位各渠道或落地页的流失瓶颈。
-  - `landing_page_analysis.md`: 通过分析阶段转化、互动质量及流量匹配度，诊断落地页转化流失。
-  - `attribution_discrepancy.md`: 识别并诊断广告平台（Meta/Google）报告、Attribuly 统一归因以及后端商城订单之间的数据差异。
+  - `funnel-analysis`: 全链路客户转化漏斗分析，精确定位各渠道或落地页的流失瓶颈。
+  - `landing-page-analysis`: 诊断落地页转化流失，区分流量质量问题与用户体验摩擦。
+  - `attribution-discrepancy`: 识别并诊断广告平台指标（Meta/Google）、Attribuly 统一归因和后端商店数据之间的报告差异。
 - **创意分析技能**:
-  - `google_creative_analysis.md`: 提取并分析 Google Ads 创意表现。集成质量得分 (Quality Score)、PMax 资产数据以及标准化的 A/B 测试协议。
+  - `google-creative-analysis`: 提取、处理并分析 Google Ads 的创意表现数据，集成了质量得分、PMax 资产数据及标准化的 A/B 测试评估协议。
 
-### [v1.1.0] 优化与变更
-- **技能注册表更新**: `SKILL_REGISTRY.md` 中 `funnel_analysis`, `landing_page_analysis`, `attribution_discrepancy`, 和 `google_creative_analysis` 的状态已从 `🔜 计划中` 更新为 `✅ 可用`。
-- **归因差异诊断流程增强**: 
-  - 集成服务端追踪 (CAPI) 验证 (`api/get/connection/destination`)，用于检测像素丢失问题。
-  - 针对企业版用户升级逻辑，采用全链路影响力归因模型 (Full Impact Attribution) 以捕获 Meta 的浏览型转化。
-  - 统一平台指标提取接口，现直接依赖 Attribuly 统一的 `/api/all-attribution/get-list` 端点。
-- **Google 创意分析整合**: 将独立的创意分析框架（评估标准、DTC 最佳实践、仪表板架构）直接合并至 `google_creative_analysis.md` 技能文件中。
+### [v1.1.0] 变更
+- **技能注册表更新**: 更新了 `SKILL_REGISTRY.md`，将 `funnel-analysis`, `landing-page-analysis`, `attribution-discrepancy`, 和 `google-creative-analysis` 的状态从 `🔜 Planned` 修改为 `✅ Ready`。
+- **Google Ads Performance**: 增强了深度的根本原因细分逻辑，当检测到 CTR 问题时，可直接映射触发新的 `google-creative-analysis` 技能。
+- **Weekly Marketing Performance**: 整合了漏斗健康检查，并添加了在 CVR 下降时调用新 `funnel-analysis` 技能的触发条件。
+- **Meta Ads Performance**: 更新了数据获取的 schema，以包含与新归因管道兼容的标准化参数。
+- **Google Creative Analysis 整合**: 将独立的创意分析框架（评估标准、DTC 最佳实践、仪表板架构）直接合并到 `google-creative-analysis` 技能中。
 
 ### [v1.1.0] 移除
-- 移除了 `attribution_discrepancy.md` 根因分析中过时的“漏追踪 (Under-tracking)”场景。
+- 从 `attribution-discrepancy` 的根本原因分析逻辑中删除了过时的“跟踪不足 (Under-tracking)”场景。
 - 删除了冗余的独立文件 `creative_analysis_framework.md`。
 
 **[首次发布] v1.0.0**
@@ -61,26 +60,26 @@
 
 ### ✅ 可用 (Ready)
 
-- `weekly_marketing_performance` — 跨渠道每周高管摘要
-- `daily_marketing_pulse` — 每日异常检测与预算消耗报告 (30秒极速扫描)
-- `google_ads_performance` — Google Ads / PMax 业绩诊断
-- `meta_ads_performance` — Meta Ads 业绩诊断 (填补 iOS14 数据鸿沟)
-- `budget_optimization` — 利润优先的预算重分配建议
-- `audience_optimization` — 受众重叠分析与拉新/重定向调优
-- `bid_strategy_optimization` — 基于第一方数据的 tCPA/tROAS 目标设定
-- `funnel_analysis` — 客户全生命周期漏斗流失诊断
-- `landing_page_analysis` — 识别落地页的流量质量与 UX 摩擦
-- `attribution_discrepancy` — 量化并诊断广告网络与后端系统间的报告差异
-- `google_creative_analysis` — Google Ads 创意质量得分、PMax 资产及标准化评估
+- `weekly-marketing-performance` — 跨渠道每周高管摘要
+- `daily-marketing-pulse` — 每日异常检测与预算消耗报告 (30秒极速扫描)
+- `google-ads-performance` — Google Ads / PMax 业绩诊断
+- `meta-ads-performance` — Meta Ads 业绩诊断 (填补 iOS14 数据鸿沟)
+- `budget-optimization` — 利润优先的预算重分配建议
+- `audience-optimization` — 受众重叠分析与拉新/重定向调优
+- `bid-strategy-optimization` — 基于第一方数据的 tCPA/tROAS 目标设定
+- `funnel-analysis` — 客户全生命周期漏斗流失诊断
+- `landing-page-analysis` — 识别落地页的流量质量与 UX 摩擦
+- `attribution-discrepancy` — 量化并诊断广告网络与后端系统间的报告差异
+- `google-creative-analysis` — Google Ads 创意质量得分、PMax 资产及标准化评估
 
 ### 🔜 计划中 (Coming Soon)
 
-- `tiktok_ads_performance`
-- `meta_creative_analysis`
-- `creative_fatigue_detector`
-- `product_performance`
-- `customer_journey_analysis`
-- `ltv_analysis`
+- `tiktok-ads-performance`
+- `meta-creative-analysis`
+- `creative-fatigue-detector`
+- `product-performance`
+- `customer-journey-analysis`
+- `ltv-analysis`
 
 有关触发条件和使用映射的详细信息，请参阅 [SKILL\_REGISTRY.md](SKILL_REGISTRY.md)。
 
@@ -119,9 +118,9 @@
    ```bash
    mkdir -p ./openclaw-config/skills
    ```
-4. 将技能文件同步到您的活动配置目录：
+4. 将技能文件夹同步到您的活动配置目录：
    ```bash
-   rsync -av vendor/attribuly/*.md ./openclaw-config/skills/
+   rsync -av --exclude=".*" --exclude="*.md" --exclude="LICENSE" --exclude="restructure.py" vendor/attribuly/ ./openclaw-config/skills/
    ```
 
 **如何拉取后续更新：**
@@ -129,7 +128,7 @@
 
 ```bash
 git submodule update --remote --merge
-rsync -av vendor/attribuly/*.md ./openclaw-config/skills/
+rsync -av --exclude=".*" --exclude="*.md" --exclude="LICENSE" --exclude="restructure.py" vendor/attribuly/ ./openclaw-config/skills/
 ```
 
 ### 步骤 3：初始化 Agent 角色 (Rule & Soul)
@@ -160,4 +159,4 @@ cp vendor/attribuly/role_prompt.md ./openclaw-config/SOUL.md
 
 ## 安装后配置
 
-一旦 `.md` 文件成功放置在您的 `openclaw-config/skills/` 目录中（本地或云端），请查阅 [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) 以获取有关特定触发器和有效使用每个技能所需上下文的详细信息。
+一旦技能文件夹成功放置在您的 `openclaw-config/skills/` 目录中（本地或云端），请查阅 [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) 以获取有关特定触发器和有效使用每个技能所需上下文的详细信息。

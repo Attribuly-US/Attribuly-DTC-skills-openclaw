@@ -1,17 +1,9 @@
-# Skill: AllyClaw Landing Page Analysis
-
-## Skill Metadata
-
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `landing_page_analysis` |
-| **Name** | AllyClaw Landing Page Analysis |
-| **Description** | Diagnose landing-page conversion loss by analyzing stage progression, engagement quality, and traffic-source fit across landing pages. |
-| **Version** | 1.0.0 |
-| **Category** | Diagnostic Skills |
-| **Trigger** | On-demand / Auto (when top-of-funnel drop-off is high) |
-
 ---
+name: landing-page-analysis
+version: 1.0.0
+description: Diagnose landing-page conversion loss by analyzing stage progression, engagement quality, and traffic-source fit across landing pages.
+---
+# Skill: AllyClaw Landing Page Analysis
 
 ## 🎯 Attribuly Unique Value Proposition
 

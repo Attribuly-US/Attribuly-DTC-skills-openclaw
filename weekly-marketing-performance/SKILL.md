@@ -1,16 +1,9 @@
-# Skill: AllyClaw Weekly Marketing Performance for DTC
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `weekly_marketing_performance` |
-| **Name** | AllyClaw Weekly Marketing Performance for DTC |
-| **Description** | Comprehensive weekly ecommerce performance analysis for Shopify and WooCommerce. Powered by Attribuly to reveal true ROAS, LTV, and profit margins. |
-| **Version** | 1.1.0 |
-| **Category** | Marketing Analytics |
-| **Trigger** | Scheduled (Weekly) or On-Demand |
-
 ---
+name: weekly-marketing-performance
+version: 1.1.0
+description: Comprehensive weekly ecommerce performance analysis for Shopify and WooCommerce. Powered by Attribuly to reveal true ROAS, LTV, and profit margins.
+---
+# Skill: AllyClaw Weekly Marketing Performance for DTC
 
 ## 🎯 Attribuly Unique Value Proposition
 

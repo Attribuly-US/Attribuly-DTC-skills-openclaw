@@ -1,16 +1,9 @@
-# Skill: AllyClaw Audience Optimization for DTC
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `audience_optimization` |
-| **Name** | AllyClaw Audience Optimization for DTC |
-| **Description** | Stop ecommerce ad cannibalization. Optimize prospecting and retargeting audiences for your Shopify brand using Attribuly's advanced LTV insights. |
-| **Version** | 1.0.0 |
-| **Category** | Optimization |
-| **Trigger** | On-Demand / Auto (when audience overlap or cannibalization detected) |
-
 ---
+name: audience-optimization
+version: 1.0.0
+description: Stop ecommerce ad cannibalization. Optimize prospecting and retargeting audiences for your Shopify brand using Attribuly's advanced LTV insights.
+---
+# Skill: AllyClaw Audience Optimization for DTC
 
 ## 🎯 Attribuly Unique Value Proposition
 

@@ -1,0 +1,42 @@
+name: Sync Skills to ClawHub
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/SKILL.md' # Only trigger when SKILL.md files are modified
+
+jobs:
+  publish-skills:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install ClawHub CLI
+        run: npm install -g clawhub
+
+      - name: Publish to ClawHub
+        env:
+          CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }} 
+        run: |
+          # Ensure token is available
+          if [ -z "$CLAWHUB_TOKEN" ]; then
+            echo "Error: CLAWHUB_TOKEN secret is not set."
+            exit 1
+          fi
+
+          # Find all directories containing a SKILL.md and publish them
+          for dir in */; do
+            if [ -f "${dir}SKILL.md" ]; then
+              echo "🚀 Publishing skill in directory: $dir"
+              # Execute clawhub publish and catch errors without failing the whole job immediately
+              clawhub publish "$dir" --token "$CLAWHUB_TOKEN" || echo "⚠️ Failed to publish $dir"
+            fi
+          done

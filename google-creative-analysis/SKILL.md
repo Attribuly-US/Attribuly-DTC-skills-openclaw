@@ -1,17 +1,9 @@
-# Skill: AllyClaw Google Creative Analysis
-
-## Skill Metadata
-
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `google_creative_analysis` |
-| **Name** | AllyClaw Google Creative Analysis |
-| **Description** | Extracts, processes, and analyzes creative performance data for Google Ads. Identifies creative fatigue, low CTRs, and poor conversion drivers by combining Google's platform metrics with Attribuly's deduplicated backend data. |
-| **Version** | 1.0.0 |
-| **Category** | Creative Analysis Skills |
-| **Trigger** | On-demand / Auto (when Google Ads CTR drops or CPA spikes) |
-
 ---
+name: google-creative-analysis
+version: 1.0.0
+description: Extracts, processes, and analyzes creative performance data for Google Ads. Identifies creative fatigue, low CTRs, and poor conversion drivers by combining Google's platform metrics with Attribuly's deduplicated backend data.
+---
+# Skill: AllyClaw Google Creative Analysis
 
 ## 🎯 Attribuly Unique Value Proposition
 

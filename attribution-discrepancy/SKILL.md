@@ -1,3 +1,8 @@
+---
+name: attribution-discrepancy
+version: 1.0.0
+description: Identifies and diagnoses reporting discrepancies between ad platform metrics (Meta/Google), Attribuly's unified attribution, and backend store data (Shopify/WooCommerce).
+---
 # Skill: AllyClaw Attribution Discrepancy Analysis
 
 ## Skill Metadata

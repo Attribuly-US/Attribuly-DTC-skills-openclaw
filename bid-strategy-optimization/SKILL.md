@@ -1,16 +1,9 @@
-# Skill: AllyClaw Ecommerce Bid Strategy Optimizer
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `bid_strategy_optimization` |
-| **Name** | AllyClaw Ecommerce Bid Strategy Optimizer |
-| **Description** | Set accurate bid targets for Google and Meta Ads. Use Attribuly's first-party Shopify and WooCommerce data to optimize ecommerce CPA and ROAS. |
-| **Version** | 1.0.0 |
-| **Category** | Optimization |
-| **Trigger** | On-Demand / Auto (after budget changes or when CPA/ROAS targets missed) |
-
 ---
+name: bid-strategy-optimization
+version: 1.0.0
+description: Set accurate bid targets for Google and Meta Ads. Use Attribuly's first-party Shopify and WooCommerce data to optimize ecommerce CPA and ROAS.
+---
+# Skill: AllyClaw Ecommerce Bid Strategy Optimizer
 
 ## 🎯 Attribuly Unique Value Proposition
 

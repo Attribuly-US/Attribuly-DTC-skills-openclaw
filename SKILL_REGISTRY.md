@@ -10,46 +10,46 @@ This document defines all available skills, their triggers, and when to use each
 
 | Skill ID                       | Name                         | Trigger                                        | Status     |
 | ------------------------------ | ---------------------------- | ---------------------------------------------- | ---------- |
-| `weekly_marketing_performance` | Weekly Marketing Performance | Scheduled (Monday) / On-demand                 | ✅ Ready    |
-| `daily_marketing_pulse`        | Daily Marketing Pulse        | Scheduled (Daily) / On-demand                  | ✅ Ready    |
-| `google_ads_performance`       | Google Ads Performance       | On-demand / Auto (when Google issues detected) | ✅ Ready    |
-| `meta_ads_performance`         | Meta Ads Performance         | On-demand / Auto (when Meta issues detected)   | ✅ Ready    |
+| `weekly-marketing-performance` | Weekly Marketing Performance | Scheduled (Monday) / On-demand                 | ✅ Ready    |
+| `daily-marketing-pulse`        | Daily Marketing Pulse        | Scheduled (Daily) / On-demand                  | ✅ Ready    |
+| `google-ads-performance`       | Google Ads Performance       | On-demand / Auto (when Google issues detected) | ✅ Ready    |
+| `meta-ads-performance`         | Meta Ads Performance         | On-demand / Auto (when Meta issues detected)   | ✅ Ready    |
 | `tiktok_ads_performance`       | TikTok Ads Performance       | On-demand                                      | 🔜 Planned |
 
 ### 2. Creative Analysis Skills
 
 | Skill ID                    | Name                      | Trigger                                  | Status     |
 | --------------------------- | ------------------------- | ---------------------------------------- | ---------- |
-| `google_creative_analysis`  | Google Creative Analysis  | On-demand / Auto (when CTR issues)       | ✅ Ready    |
-| `meta_creative_analysis`    | Meta Creative Analysis    | On-demand / Auto (when creative fatigue) | 🔜 Planned |
-| `creative_fatigue_detector` | Creative Fatigue Detector | Auto (frequency > threshold)             | 🔜 Planned |
+| `google-creative-analysis`  | Google Creative Analysis  | On-demand / Auto (when CTR issues)       | ✅ Ready    |
+| `meta-creative-analysis`    | Meta Creative Analysis    | On-demand / Auto (when creative fatigue) | 🔜 Planned |
+| `creative-fatigue-detector` | Creative Fatigue Detector | Auto (frequency > threshold)             | 🔜 Planned |
 
 ### 3. Optimization Skills
 
 | Skill ID                    | Name                      | Trigger                                          | Status  |
 | --------------------------- | ------------------------- | ------------------------------------------------ | ------- |
-| `budget_optimization`       | Budget Optimization       | On-demand / Auto (when MER off-target)           | ✅ Ready |
-| `audience_optimization`     | Audience Optimization     | On-demand / Auto (when cannibalization detected) | ✅ Ready |
-| `bid_strategy_optimization` | Bid Strategy Optimization | On-demand / Auto (when CPA/ROAS targets missed)  | ✅ Ready |
+| `budget-optimization`       | Budget Optimization       | On-demand / Auto (when MER off-target)           | ✅ Ready |
+| `audience-optimization`     | Audience Optimization     | On-demand / Auto (when cannibalization detected) | ✅ Ready |
+| `bid-strategy-optimization` | Bid Strategy Optimization | On-demand / Auto (when CPA/ROAS targets missed)  | ✅ Ready |
 
 ### 4. Diagnostic Skills
 
 | Skill ID                  | Name                             | Trigger                           | Status     |
 | ------------------------- | -------------------------------- | --------------------------------- | ---------- |
-| `funnel_analysis`         | Funnel Analysis                  | On-demand / Auto (when CVR drops) | ✅ Ready    |
-| `landing_page_analysis`   | Landing Page Analysis            | On-demand                         | ✅ Ready    |
-| `attribution_discrepancy` | Attribution Discrepancy Analysis | On-demand                         | ✅ Ready    |
+| `funnel-analysis`         | Funnel Analysis                  | On-demand / Auto (when CVR drops) | ✅ Ready    |
+| `landing-page-analysis`   | Landing Page Analysis            | On-demand                         | ✅ Ready    |
+| `attribution-discrepancy` | Attribution Discrepancy Analysis | On-demand                         | ✅ Ready    |
 
-#### `landing_page_analysis`
+#### `landing-page-analysis`
 
 1. **Skill Metadata**
-   - **ID**: `landing_page_analysis`
+   - **ID**: `landing-page-analysis`
    - **Version**: `v1.0.0`
    - **Category**: Diagnostic Skills
    - **Trigger**: On-demand / Auto (when top-of-funnel drop-off is high)
 
 2. **When to Trigger**
-   - **Automatic**: Trigger when Homepage → Product View drop-off exceeds 20% in `funnel_analysis`.
+   - **Automatic**: Trigger when Homepage → Product View drop-off exceeds 20% in `funnel-analysis`.
    - **Manual**: User asks "Why is this landing page not converting?" or "Analyze landing page performance".
    - **Context**: Trigger after new LP launch, major creative refresh, or channel-level CVR decline.
 
@@ -133,17 +133,17 @@ This document defines all available skills, their triggers, and when to use each
     ```
 
 12. **Related Skills**
-    - `funnel_analysis` (parent diagnostic trigger)
-    - `budget_optimization` (when spend is concentrated on low-performing LPs)
-    - `attribution_discrepancy` (when LP-level purchases diverge from backend orders)
+    - `funnel-analysis` (parent diagnostic trigger)
+    - `budget-optimization` (when spend is concentrated on low-performing LPs)
+    - `attribution-discrepancy` (when LP-level purchases diverge from backend orders)
 
 ### 5. Product & Customer Skills
 
 | Skill ID                    | Name                         | Trigger   | Status     |
 | --------------------------- | ---------------------------- | --------- | ---------- |
-| `product_performance`       | Product Performance Analysis | On-demand | 🔜 Planned |
-| `customer_journey_analysis` | Customer Journey Analysis    | On-demand | 🔜 Planned |
-| `ltv_analysis`              | LTV Analysis                 | On-demand | 🔜 Planned |
+| `product-performance`       | Product Performance Analysis | On-demand | 🔜 Planned |
+| `customer-journey-analysis` | Customer Journey Analysis    | On-demand | 🔜 Planned |
+| `ltv-analysis`              | LTV Analysis                 | On-demand | 🔜 Planned |
 
 ***
 
@@ -153,29 +153,29 @@ This document defines all available skills, their triggers, and when to use each
 
 | User Says                     | Primary Skill                  | Secondary Skills           |
 | ----------------------------- | ------------------------------ | -------------------------- |
-| "Weekly report"               | `weekly_marketing_performance` | -                          |
-| "How did we do last week?"    | `weekly_marketing_performance` | -                          |
-| "Daily update"                | `daily_marketing_pulse`        | -                          |
-| "How's Google doing?"         | `google_ads_performance`       | `google_creative_analysis` |
-| "Meta performance"            | `meta_ads_performance`         | `meta_creative_analysis`   |
-| "Why did ROAS drop?"          | `weekly_marketing_performance` | Channel-specific skill     |
-| "Creative fatigue?"           | `creative_fatigue_detector`    | `meta_creative_analysis`   |
-| "Optimize budget"             | `budget_optimization`          | -                          |
-| "Which products are winning?" | `product_performance`          | -                          |
-| "Customer journey"            | `customer_journey_analysis`    | -                          |
-| "Funnel issues"               | `funnel_analysis`              | `landing_page_analysis`    |
+| "Weekly report"               | `weekly-marketing-performance` | -                          |
+| "How did we do last week?"    | `weekly-marketing-performance` | -                          |
+| "Daily update"                | `daily-marketing-pulse`        | -                          |
+| "How's Google doing?"         | `google-ads-performance`       | `google-creative-analysis` |
+| "Meta performance"            | `meta-ads-performance`         | `meta-creative-analysis`   |
+| "Why did ROAS drop?"          | `weekly-marketing-performance` | Channel-specific skill     |
+| "Creative fatigue?"           | `creative-fatigue-detector`    | `meta-creative-analysis`   |
+| "Optimize budget"             | `budget-optimization`          | -                          |
+| "Which products are winning?" | `product-performance`          | -                          |
+| "Customer journey"            | `customer-journey-analysis`    | -                          |
+| "Funnel issues"               | `funnel-analysis`              | `landing-page-analysis`    |
 
 ### Automatic Triggers
 
 | Condition              | Triggered Skill                                     | Priority |
 | ---------------------- | --------------------------------------------------- | -------- |
-| Monday 09:00 AM        | `weekly_marketing_performance`                      | High     |
-| Daily 09:00 AM         | `daily_marketing_pulse`                             | Medium   |
-| ROAS drops >20%        | `weekly_marketing_performance` + channel drill-down | Critical |
+| Monday 09:00 AM        | `weekly-marketing-performance`                      | High     |
+| Daily 09:00 AM         | `daily-marketing-pulse`                             | Medium   |
+| ROAS drops >20%        | `weekly-marketing-performance` + channel drill-down | Critical |
 | CPA increases >20%     | Channel-specific performance skill                  | High     |
-| CTR drops >15%         | `creative_fatigue_detector`                         | Medium   |
-| CVR drops >15%         | `funnel_analysis`                                   | High     |
-| Spend >30% over budget | `budget_optimization`                               | Critical |
+| CTR drops >15%         | `creative-fatigue-detector`                         | Medium   |
+| CVR drops >15%         | `funnel-analysis`                                   | High     |
+| Spend >30% over budget | `budget-optimization`                               | Critical |
 
 ***
 
@@ -184,35 +184,46 @@ This document defines all available skills, their triggers, and when to use each
 When one skill detects an issue, it can trigger related skills:
 
 ```
-weekly_marketing_performance
-├── IF Google Ads issue detected → google_ads_performance
-│   └── IF CTR issue → google_creative_analysis
-├── IF Meta Ads issue detected → meta_ads_performance
-│   └── IF frequency high → meta_creative_analysis
-├── IF CVR issue detected → funnel_analysis
-│   └── IF landing page issue → landing_page_analysis
-└── IF budget inefficiency → budget_optimization
+weekly-marketing-performance
+├── IF Google Ads issue detected → google-ads-performance
+│   └── IF CTR issue → google-creative-analysis
+├── IF Meta Ads issue detected → meta-ads-performance
+│   └── IF frequency high → meta-creative-analysis
+├── IF CVR issue detected → funnel-analysis
+│   └── IF landing page issue → landing-page-analysis
+└── IF budget inefficiency → budget-optimization
 ```
 
 ***
 
-## Skill File Naming Convention
+## Skill Naming Convention
 
-All skill files should follow this pattern:
+All skills should follow this directory pattern:
 
 ```
-/openclaw-config/skills/{skill_id}.md
+/openclaw-config/skills/{skill-slug}/SKILL.md
 ```
 
 Example:
 
-- `weekly_marketing_performance.md`
-- `google_ads_performance.md`
-- `meta_creative_analysis.md`
+- `weekly-marketing-performance/SKILL.md`
+- `google-ads-performance/SKILL.md`
+- `meta-creative-analysis/SKILL.md`
 
 ***
 
 ## Skill File Structure Template
+
+All `SKILL.md` files must start with valid YAML frontmatter containing `name`, `version`, and `description`.
+
+```markdown
+---
+name: example-skill-slug
+version: 1.0.0
+description: A short summary of what the skill does.
+---
+# Skill: [Skill Name]
+```
 
 Each skill file MUST include:
 
@@ -612,7 +623,7 @@ function validateApiResponse(response) {
 console.log(JSON.stringify({
   timestamp: new Date().toISOString(),
   level: 'INFO',
-  skill: 'google_ads_performance',
+  skill: 'google-ads-performance',
   action: 'fetch_search_terms',
   account_id: '6622546829',
   date_range: { start: '2025-03-01', end: '2025-03-17' },

@@ -1,17 +1,9 @@
-# Skill: AllyClaw Funnel Analysis
-
-## Skill Metadata
-
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `funnel_analysis` |
-| **Name** | AllyClaw Funnel Analysis |
-| **Description** | Diagnose conversion drop-offs across Homepage → Product View → Add to Cart → Purchase, then quantify impact by channel, campaign, and landing page. |
-| **Version** | 1.0.1 |
-| **Category** | Diagnostic Skills |
-| **Trigger** | On-demand / Auto (when CVR drops > 15%) |
-
 ---
+name: funnel-analysis
+version: 1.0.1
+description: Diagnose conversion drop-offs across Homepage → Product View → Add to Cart → Purchase, then quantify impact by channel, campaign, and landing page.
+---
+# Skill: AllyClaw Funnel Analysis
 
 ## 🎯 Attribuly Unique Value Proposition
 

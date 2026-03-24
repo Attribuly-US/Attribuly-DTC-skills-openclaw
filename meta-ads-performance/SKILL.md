@@ -1,16 +1,9 @@
-# Skill: AllyClaw Meta Ads Optimizer for Shopify
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `meta_ads_performance` |
-| **Name** | AllyClaw Meta Ads Optimizer for Shopify |
-| **Description** | Optimize Meta Ads for your DTC brand. Leverage Attribuly first-party data to bypass iOS14 tracking issues on WooCommerce and Shopify. |
-| **Version** | 1.1.0 |
-| **Category** | Channel Performance |
-| **Trigger** | On-Demand / Auto (when Meta issues detected in weekly report) |
-
 ---
+name: meta-ads-performance
+version: 1.1.0
+description: Optimize Meta Ads for your DTC brand. Leverage Attribuly first-party data to bypass iOS14 tracking issues on WooCommerce and Shopify.
+---
+# Skill: AllyClaw Meta Ads Optimizer for Shopify
 
 ## 🎯 Attribuly Unique Value Proposition
 

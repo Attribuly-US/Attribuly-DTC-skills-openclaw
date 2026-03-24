@@ -1,16 +1,9 @@
-# Skill: AllyClaw Ecommerce Budget Optimizer
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `budget_optimization` |
-| **Name** | AllyClaw Ecommerce Budget Optimizer |
-| **Description** | Maximize DTC profitability. Automatically reallocate budget across Meta and Google Ads using Attribuly's true ROAS for Shopify stores. |
-| **Version** | 1.0.0 |
-| **Category** | Optimization |
-| **Trigger** | On-Demand / Auto (when MER off-target or spend pacing issues) |
-
 ---
+name: budget-optimization
+version: 1.0.0
+description: Maximize DTC profitability. Automatically reallocate budget across Meta and Google Ads using Attribuly's true ROAS for Shopify stores.
+---
+# Skill: AllyClaw Ecommerce Budget Optimizer
 
 ## 🎯 Attribuly Unique Value Proposition
 
