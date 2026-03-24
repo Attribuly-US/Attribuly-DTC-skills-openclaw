@@ -1,1 +1,11 @@
 ignore/
+
+# IDE & Editor
+.vscode/
+
+# Trae AI Agent files
+.trae/
+
+# OS generated files
+.DS_Store
+**/.DS_Store
