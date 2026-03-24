@@ -198,34 +198,34 @@ weekly-marketing-performance
 
 ## Skill Naming Convention
 
-All skills should follow this directory pattern:
+All capabilities are referenced via this directory pattern inside the skill bundle:
 
 ```
-/openclaw-config/skills/{skill-slug}/SKILL.md
+/openclaw-config/skills/attribuly-dtc-analyst/references/{capability-slug}.md
 ```
 
 Example:
 
-- `weekly-marketing-performance/SKILL.md`
-- `google-ads-performance/SKILL.md`
-- `meta-creative-analysis/SKILL.md`
+- `references/weekly-marketing-performance.md`
+- `references/google-ads-performance.md`
+- `references/meta-creative-analysis.md`
 
 ***
 
-## Skill File Structure Template
+## Capability File Structure Template
 
-All `SKILL.md` files must start with valid YAML frontmatter containing `name`, `version`, and `description`.
+All capability reference files in `references/` start with valid YAML frontmatter containing `name`, `version`, and `description`.
 
 ```markdown
 ---
-name: example-skill-slug
+name: example-capability-slug
 version: 1.0.0
-description: A short summary of what the skill does.
+description: A short summary of what the capability does.
 ---
-# Skill: [Skill Name]
+# Capability: [Capability Name]
 ```
 
-Each skill file MUST include:
+Each capability reference file MUST include:
 
 1. **Skill Metadata** - ID, version, category, trigger
 2. **When to Trigger** - Automatic, manual, and context triggers

@@ -5,7 +5,8 @@ on:
     branches:
       - main
     paths:
-      - '**/SKILL.md' # Only trigger when SKILL.md files are modified
+      - 'SKILL.md'
+      - 'references/**'
 
 jobs:
   publish-skills:
@@ -32,11 +33,6 @@ jobs:
             exit 1
           fi
 
-          # Find all directories containing a SKILL.md and publish them
-          for dir in */; do
-            if [ -f "${dir}SKILL.md" ]; then
-              echo "🚀 Publishing skill in directory: $dir"
-              # Execute clawhub publish and catch errors without failing the whole job immediately
-              clawhub publish "$dir" --token "$CLAWHUB_TOKEN" || echo "⚠️ Failed to publish $dir"
-            fi
-          done
+          echo "🚀 Publishing attribuly-dtc-analyst bundle to ClawHub..."
+          # The current repository root is the skill bundle
+          clawhub publish . --token "$CLAWHUB_TOKEN" || echo "⚠️ Failed to publish skill bundle"

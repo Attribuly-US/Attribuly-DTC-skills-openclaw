@@ -120,7 +120,7 @@
    ```
 4. 将技能文件夹同步到您的活动配置目录：
    ```bash
-   rsync -av --exclude=".*" --exclude="*.md" --exclude="LICENSE" --exclude="restructure.py" vendor/attribuly/ ./openclaw-config/skills/
+   rsync -av --exclude=".*" --exclude="LICENSE" vendor/attribuly/ ./openclaw-config/skills/attribuly-dtc-analyst/
    ```
 
 **如何拉取后续更新：**
@@ -128,7 +128,7 @@
 
 ```bash
 git submodule update --remote --merge
-rsync -av --exclude=".*" --exclude="*.md" --exclude="LICENSE" --exclude="restructure.py" vendor/attribuly/ ./openclaw-config/skills/
+rsync -av --exclude=".*" --exclude="LICENSE" vendor/attribuly/ ./openclaw-config/skills/attribuly-dtc-analyst/
 ```
 
 ### 步骤 3：初始化 Agent 角色 (Rule & Soul)
@@ -159,4 +159,4 @@ cp vendor/attribuly/role_prompt.md ./openclaw-config/SOUL.md
 
 ## 安装后配置
 
-一旦技能文件夹成功放置在您的 `openclaw-config/skills/` 目录中（本地或云端），请查阅 [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) 以获取有关特定触发器和有效使用每个技能所需上下文的详细信息。
+一旦技能包成功放置在您的 `openclaw-config/skills/` 目录中（本地或云端），请查阅 [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) 以获取有关特定触发器和有效使用每个技能所需上下文的详细信息。

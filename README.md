@@ -119,9 +119,9 @@ If you want to keep your skills up-to-date with the latest improvements from thi
    ```bash
    mkdir -p ./openclaw-config/skills
    ```
-4. Sync the skills into your active configuration:
+4. Sync the skill bundle into your active configuration:
    ```bash
-   rsync -av --exclude=".*" --exclude="*.md" --exclude="LICENSE" --exclude="restructure.py" vendor/attribuly/ ./openclaw-config/skills/
+   rsync -av --exclude=".*" --exclude="LICENSE" vendor/attribuly/ ./openclaw-config/skills/attribuly-dtc-analyst/
    ```
 
 **How to pull future updates:**
@@ -129,7 +129,7 @@ To ensure you always have the latest skill logic, you can easily pull updates an
 
 ```bash
 git submodule update --remote --merge
-rsync -av --exclude=".*" --exclude="*.md" --exclude="LICENSE" --exclude="restructure.py" vendor/attribuly/ ./openclaw-config/skills/
+rsync -av --exclude=".*" --exclude="LICENSE" vendor/attribuly/ ./openclaw-config/skills/attribuly-dtc-analyst/
 ```
 
 ### Step 3: Initialize Agent Role (Rule & Soul)
@@ -158,4 +158,4 @@ If you do not want to run OpenClaw locally and prefer an always-on, fully manage
 
 ## Post-Installation
 
-Once the skill folders are successfully placed in your `openclaw-config/skills/` directory (locally or in the cloud), check the [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) for details on the specific triggers and required contexts to use each skill effectively.
+Once the skill bundle is successfully placed in your `openclaw-config/skills/` directory (locally or in the cloud), check the [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) for details on the specific triggers and required contexts to use each capability effectively.
