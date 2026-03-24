@@ -133,6 +133,22 @@ git submodule update --remote --merge
 rsync -av vendor/attribuly/*.md ./openclaw-config/skills/
 ```
 
+### ステップ 3: エージェントの役割（Rule & Soul）の初期化
+
+エージェントが DTC グロースパートナーの専門家として機能するように、コアアイデンティティを構成する必要があります。OpenClaw は、ワークスペースのブートストラップファイルをシステムプロンプトに自動的に注入します。
+
+**自動化メソッド (推奨):**
+役割プロンプトを直接エージェントのワークスペースに `SOUL.md` としてコピーします (ファイルが既に存在する場合は追記します):
+```bash
+cp vendor/attribuly/role_prompt.md ./openclaw-config/SOUL.md
+```
+*(特定のマルチエージェントセットアップを使用している場合は、`~/.openclaw/agents/<エージェント名>/agent.md` にコピーしてください)*
+
+**手動メソッド (チャットインターフェース):**
+1. このリポジトリにある [`role_prompt.md`](role_prompt.md) ファイルを開きます。
+2. ファイルの内容全体をコピーします。
+3. OpenClaw のチャット/ダイアログボックスに貼り付けて、エージェントのルール、魂、ペルソナを初期化します。
+
 ---
 
 ## マネージドクラウドホスティング（展開）

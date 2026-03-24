@@ -132,6 +132,22 @@ git submodule update --remote --merge
 rsync -av vendor/attribuly/*.md ./openclaw-config/skills/
 ```
 
+### 步骤 3：初始化 Agent 角色 (Rule & Soul)
+
+为了确保 Agent 表现得像一个专业的 DTC 增长伙伴，您需要配置其核心身份。OpenClaw 会自动将工作区引导文件（bootstrap files）注入到其系统提示词中。
+
+**自动化方法（推荐）：**
+直接将角色提示词复制到您的 Agent 工作区并命名为 `SOUL.md`（如果文件已存在则追加）：
+```bash
+cp vendor/attribuly/role_prompt.md ./openclaw-config/SOUL.md
+```
+*(如果您使用的是特定的多智能体设置，请将其复制到 `~/.openclaw/agents/<您的agent名称>/agent.md`)*
+
+**手动方法（通过对话框）：**
+1. 打开此仓库中的 [`role_prompt.md`](role_prompt.md) 文件。
+2. 复制文件的全部内容。
+3. 将其粘贴到您的 OpenClaw 聊天/对话框中，以初始化 Agent 的规则、灵魂和角色。
+
 ---
 
 ## 全托管云部署

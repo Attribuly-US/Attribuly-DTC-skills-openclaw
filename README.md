@@ -134,7 +134,16 @@ rsync -av vendor/attribuly/*.md ./openclaw-config/skills/
 
 ### Step 3: Initialize Agent Role (Rule & Soul)
 
-To ensure the agent behaves as an expert DTC Growth Partner, you need to configure its core identity.
+To ensure the agent behaves as an expert DTC Growth Partner, you need to configure its core identity. OpenClaw automatically injects workspace bootstrap files into its system prompt. 
+
+**Automated Method (Recommended):**
+Copy the role prompt directly into your agent's workspace as `SOUL.md` (or append to it if it exists):
+```bash
+cp vendor/attribuly/role_prompt.md ./openclaw-config/SOUL.md
+```
+*(If you are using a specific multi-agent setup, copy it to `~/.openclaw/agents/<your-agent-name>/agent.md`)*
+
+**Manual Method (Chat Interface):**
 1. Open the [`role_prompt.md`](role_prompt.md) file in this repository.
 2. Copy the entire content of the file.
 3. Paste it into your OpenClaw chat/dialog box to initialize the agent's rules, soul, and persona.
