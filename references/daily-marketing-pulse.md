@@ -1,16 +1,9 @@
-# Skill: AllyClaw Daily Marketing Pulse for Ecommerce
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `daily_marketing_pulse` |
-| **Name** | AllyClaw Daily Marketing Pulse for Ecommerce |
-| **Description** | Daily marketing snapshot for DTC brands. Monitor Shopify and WooCommerce spend, profit, and Attribuly incrementality metrics in real-time. |
-| **Version** | 1.0.0 |
-| **Category** | Marketing Analytics |
-| **Trigger** | Scheduled (Daily) or On-Demand |
-
 ---
+name: daily-marketing-pulse
+version: 1.0.0
+description: Daily marketing snapshot for DTC brands. Monitor Shopify and WooCommerce spend, profit, and Attribuly incrementality metrics in real-time.
+---
+# Skill: AllyClaw Daily Marketing Pulse for Ecommerce
 
 ## 🎯 Attribuly Unique Value Proposition
 
@@ -123,7 +116,7 @@ Provide a **quick, actionable daily snapshot** of marketing performance. Focus o
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `linear` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `goal` | `purchase` | Focus on purchase conversions |
 | `dimensions` | `["channel"]` for summary | |
 | `page_size` | `50` | Smaller for daily (faster) |
@@ -370,7 +363,7 @@ Apply anomaly detection logic and generate 3-5 bullet points.
 ### 1. Get Yesterday's Totals
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list-sum" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-17",
@@ -384,7 +377,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
 ### 2. Get Same Day Last Week
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list-sum" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
@@ -398,7 +391,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
 ### 3. Get Channel Breakdown (Yesterday)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-17",
@@ -415,7 +408,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
 ### 4. Get Campaign-Level (for anomaly investigation)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-17",

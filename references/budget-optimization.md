@@ -1,16 +1,9 @@
-# Skill: AllyClaw Ecommerce Budget Optimizer
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `budget_optimization` |
-| **Name** | AllyClaw Ecommerce Budget Optimizer |
-| **Description** | Maximize DTC profitability. Automatically reallocate budget across Meta and Google Ads using Attribuly's true ROAS for Shopify stores. |
-| **Version** | 1.0.0 |
-| **Category** | Optimization |
-| **Trigger** | On-Demand / Auto (when MER off-target or spend pacing issues) |
-
 ---
+name: budget-optimization
+version: 1.0.0
+description: Maximize DTC profitability. Automatically reallocate budget across Meta and Google Ads using Attribuly's true ROAS for Shopify stores.
+---
+# Skill: AllyClaw Ecommerce Budget Optimizer
 
 ## 🎯 Attribuly Unique Value Proposition
 
@@ -77,7 +70,7 @@ While maintaining:
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{}'
 ```
@@ -122,7 +115,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `full impact` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `goal` | Dynamic from Settings API | Use `checkout_completed` event type |
 | `lookback_period` | 14 days | Enough data for stable recommendations |
 | `min_spend_threshold` | $100 | Minimum spend to include in analysis |
@@ -332,7 +325,7 @@ If ncROAS / ROAS < 0.5:
 ### 1. Get Channel Performance (Last 14 Days)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-04",
@@ -349,7 +342,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
 ### 2. Get Campaign Performance for Reallocation
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-04",

@@ -1,16 +1,9 @@
-# Skill: AllyClaw Google Ads Analyzer for DTC
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `google_ads_performance` |
-| **Name** | AllyClaw Google Ads Analyzer for DTC |
-| **Description** | Diagnose Google Ads and PMax campaigns for your ecommerce store. Uncover true ncROAS and stop brand cannibalization with Attribuly. |
-| **Version** | 1.1.0 |
-| **Category** | Channel Performance |
-| **Trigger** | On-Demand / Auto (when Google issues detected in weekly report) |
-
 ---
+name: google-ads-performance
+version: 1.1.0
+description: Diagnose Google Ads and PMax campaigns for your ecommerce store. Uncover true ncROAS and stop brand cannibalization with Attribuly.
+---
+# Skill: AllyClaw Google Ads Analyzer for DTC
 
 ## 🎯 Attribuly Unique Value Proposition
 
@@ -128,7 +121,7 @@ Provide a deep-dive analysis of Google Ads performance at **Campaign**, **Ad Set
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `linear` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `goal` | `purchase` | Purchase conversions |
 | `page_size` | `100` | Get all records |
 | `channel_filter` | `google`, `google_ads` | Filter for Google only |
@@ -360,7 +353,7 @@ PMax campaigns require special attention with Attribuly metrics:
 # Google Ads Performance Report
 **Period:** [Current Start Date] to [Current End Date]
 **Compared to:** [Previous Start Date] to [Previous End Date]
-**Attribution Model:** Full Impact (Linear)
+**Attribution Model:** Linear
 
 ---
 
@@ -516,7 +509,7 @@ Before querying Google Ads data, retrieve the connected account ID.
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "platform_type": "google"
@@ -553,11 +546,11 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "6622546829",
-    "gaql": "SELECT search_term_view.search_term, search_term_view.status, campaign.name, campaign.id, ad_group.name, ad_group.id, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.conversions_value, metrics.ctr, metrics.average_cpc FROM search_term_view WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-17'\'' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC LIMIT 100"
+    "gaql": "SELECT search_term_view.search_term, search_term_view.status, campaign.name, campaign.id, ad_group.name, ad_group.id, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.conversions_value, metrics.ctr, metrics.average_cpc FROM search_term_view WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-16'\'' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC LIMIT 100"
   }'
 ```
 
@@ -575,11 +568,11 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "6622546829",
-    "gaql": "SELECT ad_group_criterion.keyword.text, ad_group_criterion.keyword.match_type, ad_group_criterion.quality_info.quality_score, ad_group_criterion.quality_info.creative_quality_score, ad_group_criterion.quality_info.post_click_quality_score, ad_group_criterion.quality_info.search_predicted_ctr, campaign.name, ad_group.name, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.average_cpc FROM keyword_view WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-17'\'' AND ad_group_criterion.status = '\''ENABLED'\'' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC LIMIT 100"
+    "gaql": "SELECT ad_group_criterion.keyword.text, ad_group_criterion.keyword.match_type, ad_group_criterion.quality_info.quality_score, ad_group_criterion.quality_info.creative_quality_score, ad_group_criterion.quality_info.post_click_quality_score, ad_group_criterion.quality_info.search_predicted_ctr, campaign.name, ad_group.name, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.average_cpc FROM keyword_view WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-16'\'' AND ad_group_criterion.status = '\''ENABLED'\'' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC LIMIT 100"
   }'
 ```
 
@@ -595,11 +588,11 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "6622546829",
-    "gaql": "SELECT campaign.name, campaign.id, metrics.search_impression_share, metrics.search_budget_lost_impression_share, metrics.search_rank_lost_impression_share, metrics.search_absolute_top_impression_share, metrics.search_top_impression_share, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions FROM campaign WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-17'\'' AND campaign.advertising_channel_type = '\''SEARCH'\'' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC"
+    "gaql": "SELECT campaign.name, campaign.id, metrics.search_impression_share, metrics.search_budget_lost_impression_share, metrics.search_rank_lost_impression_share, metrics.search_absolute_top_impression_share, metrics.search_top_impression_share, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions FROM campaign WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-16'\'' AND campaign.advertising_channel_type = '\''SEARCH'\'' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC"
   }'
 ```
 
@@ -615,11 +608,11 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "6622546829",
-    "gaql": "SELECT campaign.name, campaign.id, segments.device, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.conversions_value, metrics.ctr, metrics.average_cpc FROM campaign WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-17'\'' AND metrics.impressions > 0 ORDER BY campaign.id, segments.device"
+    "gaql": "SELECT campaign.name, campaign.id, segments.device, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.conversions_value, metrics.ctr, metrics.average_cpc FROM campaign WHERE segments.date BETWEEN '\''2025-03-10'\'' AND '\''2025-03-16'\'' AND metrics.impressions > 0 ORDER BY campaign.id, segments.device"
   }'
 ```
 
@@ -630,7 +623,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "6622546829",
@@ -723,11 +716,11 @@ async function queryWithRetry(queryFn, maxRetries = 3) {
 ### Get Google Campaign Performance (Current Period)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimension": "campaign",
     "model": "linear",
     "goal": "purchase",
@@ -739,11 +732,11 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
 ### Get Google Ad Set (Ad Group) Performance
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimension": "ad_set",
     "model": "linear",
     "goal": "purchase",
@@ -755,11 +748,11 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
 ### Get Google Ad Level Performance
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimension": "ad",
     "model": "linear",
     "goal": "purchase",

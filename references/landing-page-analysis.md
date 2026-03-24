@@ -1,17 +1,9 @@
-# Skill: AllyClaw Landing Page Analysis
-
-## Skill Metadata
-
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `landing_page_analysis` |
-| **Name** | AllyClaw Landing Page Analysis |
-| **Description** | Diagnose landing-page conversion loss by analyzing stage progression, engagement quality, and traffic-source fit across landing pages. |
-| **Version** | 1.0.0 |
-| **Category** | Diagnostic Skills |
-| **Trigger** | On-demand / Auto (when top-of-funnel drop-off is high) |
-
 ---
+name: landing-page-analysis
+version: 1.0.0
+description: Diagnose landing-page conversion loss by analyzing stage progression, engagement quality, and traffic-source fit across landing pages.
+---
+# Skill: AllyClaw Landing Page Analysis
 
 ## 🎯 Attribuly Unique Value Proposition
 
@@ -62,8 +54,8 @@ Provide a clear landing-page diagnostic report focused on:
 
 ### Primary APIs
 
-#### 1. Web Analytics Funnel
-**Endpoint:** `POST /{version}/api/web-analytics/funnel`  
+#### 1. Web Analytics List
+**Endpoint:** `POST /{version}/api/get/web-analysis/list`  
 **Base URL:** `https://data.api.attribuly.com`  
 **Authentication:** `ApiKey` header  
 **Purpose:** Evaluate LP progression through key funnel stages.
@@ -106,8 +98,8 @@ Provide a clear landing-page diagnostic report focused on:
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
 | `version` | `v2-4-2` | API version |
-| `start_date` | Last 14 days | Stable diagnostic window |
-| `end_date` | Today | Inclusive |
+| `start_date` | Today - 14 days | Stable diagnostic window |
+| `end_date` | Today - 1 day | Yesterday, explicitly excluding today |
 | `dimensions` | `["landing_page","channel","utm_campaign"]` | Primary diagnostic split |
 | `page_size` | `100` | Full LP ranking coverage |
 | `model` | `linear` | Attribution model |
@@ -123,14 +115,24 @@ Provide a clear landing-page diagnostic report focused on:
 - Ensure `dimensions` contains `landing_page`.
 
 ### Step 2: Fetch Landing Page Dataset
-- Call `/api/web-analytics/funnel` with landing-page-centric dimensions.
+- Call `/api/get/web-analysis/list` with landing-page-centric dimensions.
 - Continue only when `code === 1`.
 
 ### Step 3: Compute Conversion Progression
-- LP → Product View = `product_view_users / homepage_view_users`
-- Product View → ATC = `atc_users / product_view_users`
-- ATC → Purchase = `purchases / atc_users`
-- Overall LP CVR = `purchases_rate`
+For each landing page record in the dataset, apply the following logic:
+
+**URL Type Detection:**
+- Parse the `landing_page` string.
+- If the URL path contains `"/products"`, classify it as a **Product Page**.
+- Otherwise, classify it as a **Standard Landing Page**.
+
+**Progression Calculation:**
+- **LP → Product View**: 
+  - *Rule*: Skip this calculation for Product Pages (since the user is already on the product page).
+  - *Formula (Standard LP only)*: `product_view_users / homepage_view_users`
+- **Product View → ATC**: `atc_users / product_view_users`
+- **ATC → Purchase**: `purchases / atc_users`
+- **Overall LP CVR**: `purchases_rate`
 
 ### Step 4: Rank LP Performance
 - Rank LPs by worst progression rates and highest spend.
@@ -245,8 +247,8 @@ Date Range: [start] to [end]
 ### 1. Landing Page + Channel Breakdown
 
 ```bash
-curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
-  -H "ApiKey: YOUR_API_KEY" \
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2026-03-01",
@@ -258,8 +260,8 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
 ### 2. Landing Page + Source/Medium Breakdown
 
 ```bash
-curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
-  -H "ApiKey: YOUR_API_KEY" \
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2026-03-01",

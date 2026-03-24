@@ -1,16 +1,9 @@
-# Skill: AllyClaw Audience Optimization for DTC
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `audience_optimization` |
-| **Name** | AllyClaw Audience Optimization for DTC |
-| **Description** | Stop ecommerce ad cannibalization. Optimize prospecting and retargeting audiences for your Shopify brand using Attribuly's advanced LTV insights. |
-| **Version** | 1.0.0 |
-| **Category** | Optimization |
-| **Trigger** | On-Demand / Auto (when audience overlap or cannibalization detected) |
-
 ---
+name: audience-optimization
+version: 1.0.0
+description: Stop ecommerce ad cannibalization. Optimize prospecting and retargeting audiences for your Shopify brand using Attribuly's advanced LTV insights.
+---
+# Skill: AllyClaw Audience Optimization for DTC
 
 ## 🎯 Attribuly Unique Value Proposition
 
@@ -74,7 +67,7 @@ Provide **audience-level performance analysis and optimization recommendations**
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{}'
 ```
@@ -119,7 +112,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `linear` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `goal` | Dynamic from Settings API | Use `checkout_completed` event type |
 | `lookback_period` | 14 days | Enough data for audience analysis |
 | `min_spend_threshold` | $50 | Minimum spend to include audience |
@@ -412,10 +405,10 @@ If Prospecting volume drops significantly:
 ### 1. Get Ad Set Performance (Audience Level)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "start_date": "2025-03-04",
+    "start_date": "2025-03-05",
     "end_date": "2025-03-18",
     "dimensions": ["channel", "campaign", "ad_set"],
     "model": "linear",
@@ -429,10 +422,10 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
 ### 2. Get Campaign Performance
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "start_date": "2025-03-04",
+    "start_date": "2025-03-05",
     "end_date": "2025-03-18",
     "dimensions": ["channel", "campaign"],
     "model": "linear",

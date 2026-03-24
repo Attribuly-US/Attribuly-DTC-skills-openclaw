@@ -1,17 +1,9 @@
-# Skill: AllyClaw Funnel Analysis
-
-## Skill Metadata
-
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `funnel_analysis` |
-| **Name** | AllyClaw Funnel Analysis |
-| **Description** | Diagnose conversion drop-offs across Homepage → Product View → Add to Cart → Purchase, then quantify impact by channel, campaign, and landing page. |
-| **Version** | 1.0.1 |
-| **Category** | Diagnostic Skills |
-| **Trigger** | On-demand / Auto (when CVR drops > 15%) |
-
 ---
+name: funnel-analysis
+version: 1.0.1
+description: Diagnose conversion drop-offs across Homepage → Product View → Add to Cart → Purchase, then quantify impact by channel, campaign, and landing page.
+---
+# Skill: AllyClaw Funnel Analysis
 
 ## 🎯 Attribuly Unique Value Proposition
 
@@ -63,7 +55,7 @@ Deliver a practical diagnostic report with:
 ### Primary API
 
 #### 1. Web Analytics Funnel
-**Endpoint:** `POST /{version}/api/web-analytics/funnel`  
+**Endpoint:** `POST /{version}/api/get/web-analysis/list`  
 **Base URL:** `https://data.api.attribuly.com`  
 **Authentication:** `ApiKey` header  
 **Purpose:** Fetch funnel metrics with dimension breakdown.
@@ -105,8 +97,8 @@ Deliver a practical diagnostic report with:
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
 | `version` | `v2-4-2` | API version |
-| `start_date` | Last 7 days | Diagnostic default window |
-| `end_date` | Today | Inclusive |
+| `start_date` | Today - 7 days | Diagnostic default window |
+| `end_date` | Today - 1 day | Yesterday, explicitly excluding today |
 | `dimensions` | `["channel","utm_campaign","landing_page"]` | Root-cause breakdown |
 | `page_size` | `99` | Align with web analytics sample size |
 
@@ -120,7 +112,7 @@ Deliver a practical diagnostic report with:
 - Validate `dimensions` is non-empty.
 
 ### Step 2: Fetch Funnel Dataset
-- Call `/api/web-analytics/funnel` with date range + dimensions.
+- Call `/api/get/web-analysis/list` with date range + dimensions.
 - Confirm response `code === 1` before processing.
 
 ### Step 3: Calculate Stage Conversion
@@ -242,8 +234,8 @@ Date Range: [start] to [end]
 ### 1. Funnel by Channel + Landing Page
 
 ```bash
-curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
-  -H "ApiKey: YOUR_API_KEY" \
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2026-03-01",
@@ -255,8 +247,8 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
 ### 2. Funnel by Campaign
 
 ```bash
-curl -X POST "https://data.api.attribuly.com/v2-4-2/api/web-analytics/funnel" \
-  -H "ApiKey: YOUR_API_KEY" \
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2026-03-01",

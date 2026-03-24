@@ -1,16 +1,9 @@
-# Skill: AllyClaw Ecommerce Bid Strategy Optimizer
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `bid_strategy_optimization` |
-| **Name** | AllyClaw Ecommerce Bid Strategy Optimizer |
-| **Description** | Set accurate bid targets for Google and Meta Ads. Use Attribuly's first-party Shopify and WooCommerce data to optimize ecommerce CPA and ROAS. |
-| **Version** | 1.0.0 |
-| **Category** | Optimization |
-| **Trigger** | On-Demand / Auto (after budget changes or when CPA/ROAS targets missed) |
-
 ---
+name: bid-strategy-optimization
+version: 1.0.0
+description: Set accurate bid targets for Google and Meta Ads. Use Attribuly's first-party Shopify and WooCommerce data to optimize ecommerce CPA and ROAS.
+---
+# Skill: AllyClaw Ecommerce Bid Strategy Optimizer
 
 ## 🎯 Attribuly Unique Value Proposition
 
@@ -75,7 +68,7 @@ Provide **data-driven bid strategy recommendations** to:
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{}'
 ```
@@ -120,7 +113,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `linear` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `goal` | Dynamic from Settings API | Use `checkout_completed` event type |
 | `lookback_period` | 30 days | Enough data for stable targets |
 | `min_conversions` | 30 | Minimum conversions for reliable targets |
@@ -425,10 +418,10 @@ Platform tROAS Target = 3.25 × (1 - 0.4) = 1.95x ≈ 2.0x
 ### 1. Get Campaign Performance (Last 30 Days)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "start_date": "2025-02-16",
+    "start_date": "2025-02-17",
     "end_date": "2025-03-18",
     "dimensions": ["channel", "campaign"],
     "model": "linear",
@@ -442,10 +435,10 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
 ### 2. Get Channel Summary
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list-sum" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "start_date": "2025-02-16",
+    "start_date": "2025-02-17",
     "end_date": "2025-03-18",
     "dimensions": ["channel"],
     "model": "linear",

@@ -1,17 +1,9 @@
-# Skill: AllyClaw Google Creative Analysis
-
-## Skill Metadata
-
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `google_creative_analysis` |
-| **Name** | AllyClaw Google Creative Analysis |
-| **Description** | Extracts, processes, and analyzes creative performance data for Google Ads. Identifies creative fatigue, low CTRs, and poor conversion drivers by combining Google's platform metrics with Attribuly's deduplicated backend data. |
-| **Version** | 1.0.0 |
-| **Category** | Creative Analysis Skills |
-| **Trigger** | On-demand / Auto (when Google Ads CTR drops or CPA spikes) |
-
 ---
+name: google-creative-analysis
+version: 1.0.0
+description: Extracts, processes, and analyzes creative performance data for Google Ads. Identifies creative fatigue, low CTRs, and poor conversion drivers by combining Google's platform metrics with Attribuly's deduplicated backend data.
+---
+# Skill: AllyClaw Google Creative Analysis
 
 ## 🎯 Attribuly Unique Value Proposition
 
@@ -107,9 +99,9 @@ Provide a deep-dive diagnostic report on Google Ads creative performance:
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
 | `version` | `v2-4-2` | API version |
-| `start_date` | Last 14 days | Standard creative evaluation window |
-| `end_date` | Today | Inclusive |
-| `model` | `linear` | Full Impact attribution |
+| `start_date` | Today - 14 days | Standard creative evaluation window |
+| `end_date` | Today - 1 day | Yesterday, explicitly excluding today |
+| `model` | `linear` | Linear attribution |
 | `page_size` | `100` | Max records for deep analysis |
 
 ---
@@ -248,7 +240,7 @@ Date Range: [start] to [end]
 ### Fetch Granular Ad Performance for Google
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2026-03-01",

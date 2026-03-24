@@ -1,16 +1,9 @@
-# Skill: AllyClaw Weekly Marketing Performance for DTC
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `weekly_marketing_performance` |
-| **Name** | AllyClaw Weekly Marketing Performance for DTC |
-| **Description** | Comprehensive weekly ecommerce performance analysis for Shopify and WooCommerce. Powered by Attribuly to reveal true ROAS, LTV, and profit margins. |
-| **Version** | 1.1.0 |
-| **Category** | Marketing Analytics |
-| **Trigger** | Scheduled (Weekly) or On-Demand |
-
 ---
+name: weekly-marketing-performance
+version: 1.1.0
+description: Comprehensive weekly ecommerce performance analysis for Shopify and WooCommerce. Powered by Attribuly to reveal true ROAS, LTV, and profit margins.
+---
+# Skill: AllyClaw Weekly Marketing Performance for DTC
 
 ## 🎯 Attribuly Unique Value Proposition
 
@@ -89,7 +82,7 @@ Provide a comprehensive **Week-over-Week (WoW)** comparison of marketing perform
   "start_date": "YYYY-MM-DD",
   "end_date": "YYYY-MM-DD",
   "dimensions": ["channel"],
-  "model": "full-impact",
+  "model": "linear",
   "goal": "purchase",
   "orders": [{"column": "conversion_value", "order": "desc"}],
   "page": 1,
@@ -103,7 +96,7 @@ Provide a comprehensive **Week-over-Week (WoW)** comparison of marketing perform
   "start_date": "YYYY-MM-DD",
   "end_date": "YYYY-MM-DD",
   "dimensions": ["channel", "campaign"],
-  "model": "full-impact",
+  "model": "linear",
   "goal": "purchase",
   "orders": [{"column": "conversion_value", "order": "desc"}],
   "page": 1,
@@ -117,7 +110,7 @@ Provide a comprehensive **Week-over-Week (WoW)** comparison of marketing perform
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `full-impact` | Full Impact attribution (credit both views & clicks with incremental impact attribution) |
+| `model` | `linear` | Linear attribution |
 | `goal` | `purchase` | Focus on purchase conversions |
 | `dimensions` | `["channel"]` for summary, `["channel", "campaign"]` for drill-down | |
 | `page_size` | `100` | Get all channels/campaigns |
@@ -129,18 +122,18 @@ Provide a comprehensive **Week-over-Week (WoW)** comparison of marketing perform
 ### Current Period (Last 7 Days)
 ```
 current_start_date = TODAY - 7 days
-current_end_date = TODAY
+current_end_date = TODAY - 1 day
 ```
 
 ### Previous Period (Prior 7 Days)
 ```
 previous_start_date = TODAY - 14 days
-previous_end_date = TODAY - 7 days
+previous_end_date = TODAY - 8 days
 ```
 
 **Example (if TODAY = 2025-03-17):**
-- Current Period: 2025-03-10 to 2025-03-17
-- Previous Period: 2025-03-03 to 2025-03-10
+- Current Period: 2025-03-10 to 2025-03-16
+- Previous Period: 2025-03-03 to 2025-03-09
 
 ---
 
@@ -306,7 +299,7 @@ Based on root cause, provide actionable recommendations.
 # Weekly Marketing Performance Report
 **Period:** [Current Start Date] to [Current End Date]
 **Compared to:** [Previous Start Date] to [Previous End Date]
-**Attribution Model:** Full Impact
+**Attribution Model:** Linear
 
 ---
 
@@ -447,11 +440,11 @@ Based on root cause, provide actionable recommendations.
 ### 1. Get Overall Totals (Current Week)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list-sum" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimensions": ["channel"],
     "model": "linear",
     "goal": "purchase"
@@ -461,11 +454,11 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
 ### 2. Get Channel Breakdown (Current Week)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimensions": ["channel"],
     "model": "linear",
     "goal": "purchase",
@@ -478,11 +471,11 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
 ### 3. Get Campaign Drill-Down (for a specific channel)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimensions": ["channel", "campaign"],
     "model": "linear",
     "goal": "purchase",

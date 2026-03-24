@@ -1,16 +1,9 @@
-# Skill: AllyClaw Meta Ads Optimizer for Shopify
-
-## Skill Metadata
-| Field | Value |
-|-------|-------|
-| **Skill ID** | `meta_ads_performance` |
-| **Name** | AllyClaw Meta Ads Optimizer for Shopify |
-| **Description** | Optimize Meta Ads for your DTC brand. Leverage Attribuly first-party data to bypass iOS14 tracking issues on WooCommerce and Shopify. |
-| **Version** | 1.1.0 |
-| **Category** | Channel Performance |
-| **Trigger** | On-Demand / Auto (when Meta issues detected in weekly report) |
-
 ---
+name: meta-ads-performance
+version: 1.1.0
+description: Optimize Meta Ads for your DTC brand. Leverage Attribuly first-party data to bypass iOS14 tracking issues on WooCommerce and Shopify.
+---
+# Skill: AllyClaw Meta Ads Optimizer for Shopify
 
 ## 🎯 Attribuly Unique Value Proposition
 
@@ -133,7 +126,7 @@ Provide a deep-dive analysis of Meta Ads (Facebook/Instagram) performance at **C
 
 | Parameter | Default Value | Notes |
 |-----------|---------------|-------|
-| `model` | `linear` | Full Impact attribution |
+| `model` | `linear` | Linear attribution |
 | `goal` | `purchase` | Purchase conversions |
 | `page_size` | `100` | Get all records |
 | `channel_filter` | `facebook`, `meta`, `instagram` | Filter for Meta only |
@@ -411,7 +404,7 @@ ASC campaigns require special attention with Attribuly metrics:
 # Meta Ads Performance Report
 **Period:** [Current Start Date] to [Current End Date]
 **Compared to:** [Previous Start Date] to [Previous End Date]
-**Attribution Model:** Full Impact (Linear)
+**Attribution Model:** Linear
 
 ---
 
@@ -597,7 +590,7 @@ Before querying Meta Ads data, retrieve the connected account ID.
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "platform_type": "facebook"
@@ -634,7 +627,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "act_123456789",
@@ -642,7 +635,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
     "fields": ["campaign_name", "campaign_id", "adset_name", "adset_id", "ad_name", "ad_id", "impressions", "reach", "frequency", "spend", "clicks", "cpm", "cpc", "ctr"],
     "time_range": {
       "since": "2025-03-10",
-      "until": "2025-03-17"
+      "until": "2025-03-16"
     }
   }'
 ```
@@ -666,7 +659,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "act_123456789",
@@ -674,7 +667,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
     "fields": ["ad_name", "ad_id", "impressions", "reach", "video_play_actions", "video_p25_watched_actions", "video_p50_watched_actions", "video_p75_watched_actions", "video_p95_watched_actions", "video_p100_watched_actions", "video_thruplay_watched_actions", "video_avg_time_watched_actions", "video_continuous_2_sec_watched_actions", "video_30_sec_watched_actions"],
     "time_range": {
       "since": "2025-03-10",
-      "until": "2025-03-17"
+      "until": "2025-03-16"
     }
   }'
 ```
@@ -691,7 +684,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "act_123456789",
@@ -700,7 +693,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
     "breakdowns": ["publisher_platform", "platform_position"],
     "time_range": {
       "since": "2025-03-10",
-      "until": "2025-03-17"
+      "until": "2025-03-16"
     }
   }'
 ```
@@ -718,7 +711,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "act_123456789",
@@ -727,7 +720,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
     "breakdowns": ["age", "gender"],
     "time_range": {
       "since": "2025-03-10",
-      "until": "2025-03-17"
+      "until": "2025-03-16"
     }
   }'
 ```
@@ -742,7 +735,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "act_123456789",
@@ -751,7 +744,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
     "breakdowns": ["impression_device"],
     "time_range": {
       "since": "2025-03-10",
-      "until": "2025-03-17"
+      "until": "2025-03-16"
     }
   }'
 ```
@@ -846,11 +839,11 @@ async function queryWithRetry(queryFn, maxRetries = 3) {
 ### Get Meta Campaign Performance (Current Period)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimension": "campaign",
     "model": "linear",
     "goal": "purchase",
@@ -862,11 +855,11 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
 ### Get Meta Ad Set Performance
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimension": "ad_set",
     "model": "linear",
     "goal": "purchase",
@@ -878,11 +871,11 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
 ### Get Meta Ad Level Performance
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
-    "end_date": "2025-03-17",
+    "end_date": "2025-03-16",
     "dimension": "ad",
     "model": "linear",
     "goal": "purchase",

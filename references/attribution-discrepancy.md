@@ -1,3 +1,8 @@
+---
+name: attribution-discrepancy
+version: 1.0.0
+description: Identifies and diagnoses reporting discrepancies between ad platform metrics (Meta/Google), Attribuly's unified attribution, and backend store data (Shopify/WooCommerce).
+---
 # Skill: AllyClaw Attribution Discrepancy Analysis
 
 ## Skill Metadata
@@ -110,9 +115,9 @@ Deliver a clear diagnostic report that bridges the gap between ad platforms and 
 | Parameter    | Default Value | Notes                          |
 | ------------ | ------------- | ------------------------------ |
 | `version`    | `v2-4-2`      | API version                    |
-| `start_date` | Last 7 days   | Standard comparison window     |
-| `end_date`   | Today         | Inclusive                      |
-| `model`      | `linear`      | Best for measuring full impact |
+| `start_date` | Today - 7 days   | Standard comparison window     |
+| `end_date`   | Today - 1 day | Yesterday, explicitly excluding today |
+| `model`      | `linear`      | Linear attribution             |
 | `dimensions` | `["channel"]` | High-level discrepancy view    |
 
 ***
@@ -228,7 +233,7 @@ Date Range: [start] to [end]
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2026-03-01",
