@@ -2,6 +2,9 @@
 name: attribuly-dtc-analyst
 version: 1.1.0
 description: A comprehensive AI marketing partner for DTC ecommerce. Combines multiple diagnostic and optimization skills powered by Attribuly first-party data.
+requires:
+  env:
+    - ATTRIBULY_API_KEY
 ---
 
 # Skill: Attribuly DTC Analyst (Super Bundle)

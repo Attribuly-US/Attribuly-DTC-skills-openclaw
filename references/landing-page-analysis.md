@@ -248,7 +248,7 @@ Date Range: [start] to [end]
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2026-03-01",
@@ -261,7 +261,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2026-03-01",

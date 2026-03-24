@@ -123,7 +123,7 @@ This document defines all available skills, their triggers, and when to use each
 11. **Example API Calls**
     ```bash
     curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/web-analysis/list" \
-      -H "ApiKey: YOUR_API_KEY" \
+      -H "ApiKey: $ATTRIBULY_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
         "start_date": "2026-03-01",
@@ -254,7 +254,7 @@ These defaults apply to ALL skills unless overridden:
 | `page_size` | `100`         | Max records per page                                           |
 
 **Base URL:** `https://data.api.attribuly.com`
-**Authentication:** `ApiKey` header
+**Authentication:** `ApiKey` header (Read from `ATTRIBULY_API_KEY` Environment Variable / Secret Manager. NEVER ask the user for this in chat.)
 
 ***
 
@@ -270,7 +270,7 @@ These defaults apply to ALL skills unless overridden:
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{}'
 ```
@@ -355,7 +355,7 @@ const goalCode = purchaseGoal?.code || 'purchase'; // fallback to 'purchase'
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "platform_type": "google"
@@ -438,7 +438,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "6622546829",
@@ -510,7 +510,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "act_123456789",

@@ -440,7 +440,7 @@ Based on root cause, provide actionable recommendations.
 ### 1. Get Overall Totals (Current Week)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list-sum" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
@@ -454,7 +454,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
 ### 2. Get Channel Breakdown (Current Week)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
@@ -471,7 +471,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
 ### 3. Get Campaign Drill-Down (for a specific channel)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",

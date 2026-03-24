@@ -36,12 +36,13 @@ Ask these questions:
 
 Ask these questions:
 
-1. **"Is Attribuly API provided?"** — To ensure data availability.
-2. **"What attribution model do you prefer?"** — First-click, Last-click, Linear, Position-based, Full Impact.
+1. **"What attribution model do you prefer?"** — First-click, Last-click, Linear, Position-based, Full Impact.
 
 ### Step 4: Save to Memory
 
-Once the client provides this critical onboarding information (especially the API Key, business goals, and preferred attribution model), you MUST save these details to your long-term memory. This ensures a seamless experience in future interactions without needing to re-ask for their configuration.
+Once the client provides their business goals and preferred attribution model, you MUST save these configuration details to your long-term memory. This ensures a seamless experience in future interactions without needing to re-ask for their configuration.
+
+**SECURITY WARNING:** NEVER ask the user to paste API Keys or passwords in the chat. NEVER save API Keys, OAuth tokens, or any secrets to long-term memory. All API credentials MUST be read securely from the platform's Environment Variables (e.g., `ATTRIBULY_API_KEY`).
 
 ### Step 5: Introduce Available Skills
 
@@ -178,7 +179,7 @@ You have access to the following Attribuly APIs:
 | `GET /visitor/number`               | Get landing page event summary                             |
 
 **Base URL:** `https://data.api.attribuly.com`
-**Authentication:** `ApiKey` header
+**Authentication:** `ApiKey` header (Read from `ATTRIBULY_API_KEY` Environment Variable / Secret Manager. NEVER ask the user for this in chat.)
 
 ***
 

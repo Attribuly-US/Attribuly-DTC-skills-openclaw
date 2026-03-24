@@ -94,7 +94,11 @@ Before installing the skills, you need an Attribuly API key. These skills rely h
 
 - **Paid Feature:** The API key is exclusively available to paid-plan users. You must upgrade your workspace before you can generate the key.
 - **Free Trial:** If you are new, you can start a [14-day free trial](https://attribuly.com/pricing/) to test the platform.
-- **Where to put it:** Once acquired, you will inject this key into your OpenClaw environment variables:
+- **Where to put it:** Once acquired, you must securely configure it in your OpenClaw environment. **Do not paste the API Key in the chat.**
+  1. Open your OpenClaw **Agent Settings**.
+  2. Navigate to the **Environment Variables** or **Secrets** section.
+  3. Add a new variable named `ATTRIBULY_API_KEY`.
+  4. Paste your API key as the value and save. The agent will automatically and securely read this variable when calling APIs.
 
 ---
 

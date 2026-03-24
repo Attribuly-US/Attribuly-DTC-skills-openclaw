@@ -590,7 +590,7 @@ Before querying Meta Ads data, retrieve the connected account ID.
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "platform_type": "facebook"
@@ -627,7 +627,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/connection/source" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "act_123456789",
@@ -659,7 +659,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "act_123456789",
@@ -684,7 +684,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "act_123456789",
@@ -711,7 +711,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "act_123456789",
@@ -735,7 +735,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/meta-query" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "account_id": "act_123456789",
@@ -839,7 +839,7 @@ async function queryWithRetry(queryFn, maxRetries = 3) {
 ### Get Meta Campaign Performance (Current Period)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
@@ -855,7 +855,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
 ### Get Meta Ad Set Performance
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",
@@ -871,7 +871,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
 ### Get Meta Ad Level Performance
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-10",

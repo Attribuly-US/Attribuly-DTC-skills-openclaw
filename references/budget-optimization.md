@@ -70,7 +70,7 @@ While maintaining:
 
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/setting-goals" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{}'
 ```
@@ -325,7 +325,7 @@ If ncROAS / ROAS < 0.5:
 ### 1. Get Channel Performance (Last 14 Days)
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-04",
@@ -342,7 +342,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list
 ### 2. Get Campaign Performance for Reallocation
 ```bash
 curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
-  -H "ApiKey: YOUR_API_KEY" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "start_date": "2025-03-04",
