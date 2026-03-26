@@ -1,11 +1,26 @@
 **English** | [简体中文](./README.zh-CN.md) | [日本語](./README.ja.md)
 
-# AllyClaw OpenClaw Skills (Attribuly) for DTC Ecommerce
+# 🛍️ Attribuly OpenClaw Skills: AI Marketing Analytics for Shopify & WooCommerce
 
-Your specialized AI Marketing Partner for DTC ecommerce; powered by Attribuly first-party data, easy to install, and supports full cloud deployment for autonomous analysis.
+Your specialized **AI Marketing Partner for DTC Ecommerce (Shopify, WooCommerce, and more)**. Powered by Attribuly's first-party data, these OpenClaw skills provide autonomous marketing analysis, true ROAS tracking, and profit-first optimization for your online store.
+
+![GitHub stars](https://img.shields.io/github/stars/attribuly/allyclaw-skills?style=social)
+![GitHub forks](https://img.shields.io/github/forks/attribuly/allyclaw-skills?style=social)
+![Platform](https://img.shields.io/badge/Platform-Shopify%20%7C%20WooCommerce-success)
+
+> **Automated Diagnostic Flow in Action:**
+> 
+> The animation below demonstrates how our AI skills autonomously chain together to diagnose performance drops. For example, when a weekly report detects a drop in Google Ads ROAS, it automatically triggers a deep-dive, checks CTR issues, and drills down to the creative level if necessary.
+> 
+> <div align="center">
+>   <img src="./assets/workflow.gif" width="600" alt="Automated Diagnostic Flow" />
+> </div>
+
+### Why for Shopify & WooCommerce?
+Traditional ad platforms (Meta, Google) often misattribute sales. For Shopify and WooCommerce merchants, these skills use your store's real backend data to reveal your **true profit margin, customer acquisition cost (CAC), and lifetime value (LTV)**, ensuring your marketing decisions are driven by actual revenue.
 
 ### Core Capabilities:
-- **True ROI Focus** — Powered by Attribuly first-party attribution concepts (true ROAS, ncROAS, profit, margin, LTV, MER) to reduce platform over-attribution.
+- **True ROI & ROAS Focus** — Powered by Attribuly first-party attribution concepts (true ROAS, ncROAS, profit, margin, LTV, MER) to reduce Meta/Google over-attribution.
 - **Under Your Control** — Deploy locally or in the cloud. Memory and strategy remain within your secure environment.
 - **Extensible Skills** — Built-in automated triggers. Autonomously analyze funnels, pacing, creatives, and discrepancies. No lock-in.
 
@@ -87,6 +102,13 @@ See [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) for detailed triggers and usage mapp
 ---
 
 ## Installation Guide
+
+### 🚀 No-Code Setup for Shopify & WooCommerce Users
+Not a developer? No problem! You can run these AI skills without writing any code:
+1. Connect your Shopify or WooCommerce store to [Attribuly](https://attribuly.com).
+2. Grab your API Key from the Attribuly dashboard.
+3. Paste the key into your OpenClaw Agent Settings under `ATTRIBULY_API_KEY`.
+4. Ask the AI: *"Analyze my Shopify funnel drop-off for the last 7 days."*
 
 ### Step 1: Obtain Your Attribuly API Key
 
