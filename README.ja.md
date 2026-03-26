@@ -1,11 +1,26 @@
 [English](./README.md) | [简体中文](./README.zh-CN.md) | **日本語**
 
-# DTC Eコマース向け AllyClaw OpenClaw スキル (Attribuly)
+# 🛍️ Attribuly OpenClaw スキル：Shopify & WooCommerce 向け AI マーケティング分析
 
-DTC Eコマースに特化した AI マーケティング・パートナー。Attribuly のファーストパーティデータを活用し、簡単にインストール可能で、自律的な分析のための完全なクラウド展開をサポートします。
+DTC Eコマース（Shopify、WooCommerce など）に特化した **AI マーケティング・パートナー**。Attribuly のファーストパーティデータを活用し、自律的なマーケティング分析、真の ROAS トラッキング、利益優先の最適化を提供します。
+
+![GitHub stars](https://img.shields.io/github/stars/attribuly/allyclaw-skills?style=social)
+![GitHub forks](https://img.shields.io/github/forks/attribuly/allyclaw-skills?style=social)
+![Platform](https://img.shields.io/badge/Platform-Shopify%20%7C%20WooCommerce-success)
+
+> **完全自動化されたマーケティング診断ワークフロー：**
+> 
+> 以下の見本は、AI スキルが自律的に連動し、パフォーマンス低下の原因を診断する様子を示しています。たとえば、週次レポートで Google 広告の ROAS 低下が検出された場合、AI は自動的に詳細な診断をトリガーし、CTR の問題をチェックして、必要に応じてクリエイティブレベルまで掘り下げて分析します。
+> 
+> <div align="center">
+>   <img src="./assets/workflow.gif" width="600" alt="自動化された診断ワークフロー" />
+> </div>
+
+### なぜ Shopify と WooCommerce 向けなのか？
+従来の広告プラットフォーム（Meta、Google など）は、売上を誤って帰属させることがよくあります。Shopify や WooCommerce の販売者にとって、これらの AI スキルは店舗のバックエンドの実際の注文データを直接活用し、**真の利益率、顧客獲得単価（CAC）、顧客生涯価値（LTV）** を明らかにし、実際の収益に基づいたマーケティングの意思決定を可能にします。
 
 ### 主な機能:
-- **真の ROI へのフォーカス** — Attribuly のファーストパーティ・アトリビューションの概念（真の ROAS、新規顧客 ROAS (ncROAS)、利益、利益率、LTV、MER）を活用し、プラットフォームの過剰なアトリビューションを削減します。
+- **真の ROI & ROAS へのフォーカス** — Attribuly のファーストパーティ・アトリビューションの概念（真の ROAS、新規顧客 ROAS (ncROAS)、利益、利益率、LTV、MER）を活用し、Meta/Google 広告プラットフォームの過剰なアトリビューションを削減します。
 - **データコントロール** — ローカル環境またはクラウドに展開可能。メモリと戦略は安全な環境内に保持されます。
 - **拡張可能なスキル** — 自動トリガーを内蔵。ファネル、予算消化ペース、クリエイティブ、データ乖離を自律的に分析します。特定のプラットフォームに縛られません。
 
@@ -86,6 +101,13 @@ DTC Eコマースに特化した AI マーケティング・パートナー。At
 ---
 
 ## インストールガイド
+
+### 🚀 Shopify & WooCommerce ユーザー向けのノーコード設定
+コードが書けなくても問題ありません！以下の手順で、コードを書かずにこれらの AI スキルを実行できます：
+1. Shopify または WooCommerce ストアを [Attribuly](https://attribuly.com) に接続します。
+2. Attribuly ダッシュボードから API キーを取得します。
+3. OpenClaw エージェント設定の `ATTRIBULY_API_KEY` の下にキーを貼り付けます。
+4. AI に質問します： *"過去7日間の Shopify ストアのファネル離脱率を分析して。"*
 
 ### ステップ 0: Attribuly API キーの取得
 

@@ -1,11 +1,26 @@
 [English](./README.md) | **简体中文** | [日本語](./README.ja.md)
 
-# AllyClaw OpenClaw 技能库 (Attribuly) - 专为 DTC 电商打造
+# 🛍️ Attribuly OpenClaw 技能库：专为 Shopify 与 WooCommerce 打造的 AI 营销分析助手
 
-您的 DTC 电商专属 AI 营销助手；由 Attribuly 第一方数据驱动，易于安装，并支持全托管云部署以实现自动化分析。
+您的 **DTC 电商专属 AI 营销合作伙伴 (支持 Shopify, WooCommerce 等独立站平台)**。由 Attribuly 第一方数据驱动，这些 OpenClaw 技能为您提供自动化的营销诊断、真实 ROAS 追踪以及利润优先的广告优化建议。
+
+![GitHub stars](https://img.shields.io/github/stars/attribuly/allyclaw-skills?style=social)
+![GitHub forks](https://img.shields.io/github/forks/attribuly/allyclaw-skills?style=social)
+![Platform](https://img.shields.io/badge/Platform-Shopify%20%7C%20WooCommerce-success)
+
+> **全自动营销诊断工作流展示：**
+> 
+> 下面的动画展示了我们的 AI 技能是如何自动串联、逐步深挖性能问题的。例如，当每周报告检测到 Google Ads ROAS 下降时，它会自动触发深度诊断，检查点击率（CTR）问题，并在必要时进一步下钻到具体创意素材层级进行分析。
+> 
+> <div align="center">
+>   <img src="./assets/workflow.gif" width="600" alt="全自动营销诊断工作流" />
+> </div>
+
+### 为什么适合 Shopify & WooCommerce 商家？
+传统的广告平台（如 Meta、Google）经常存在数据归因偏差。对于 Shopify 和 WooCommerce 卖家，这些 AI 技能会直接打通您的店铺后台真实订单数据，为您揭示**真实的利润率、客户获取成本 (CAC) 以及用户生命周期价值 (LTV)**，让营销决策有据可依。
 
 ### 核心能力：
-- **聚焦真实 ROI** — 基于 Attribuly 第一方归因概念（真实 ROAS、新客 ROAS、利润、利润率、LTV、MER），减少广告平台的过度归因。
+- **聚焦真实 ROI 与 ROAS** — 基于 Attribuly 第一方归因概念（真实 ROAS、新客 ROAS、利润、利润率、LTV、MER），减少 Meta/Google 广告平台的过度归因。
 - **完全可控** — 支持本地或云端部署。您的记忆和策略数据始终保留在安全的专属环境中。
 - **可扩展的技能** — 内置自动化触发器。自主分析转化漏斗、预算消耗节奏、创意素材表现及数据差异。无平台绑定。
 
@@ -86,6 +101,13 @@
 ---
 
 ## 安装指南
+
+### 🚀 Shopify & WooCommerce 用户免代码快速配置指南
+不懂代码？完全没问题！您可以通过以下免代码方式运行这些 AI 技能：
+1. 将您的 Shopify 或 WooCommerce 店铺连接到 [Attribuly](https://attribuly.com)。
+2. 从 Attribuly 后台获取您的 API 密钥 (API Key)。
+3. 在您的 OpenClaw Agent 设置中，将该密钥粘贴到 `ATTRIBULY_API_KEY` 环境变量下。
+4. 直接向 AI 提问：*"帮我分析一下过去 7 天我 Shopify 店铺的漏斗流失情况。"*
 
 ### 步骤 0：获取您的 Attribuly API 密钥
 
