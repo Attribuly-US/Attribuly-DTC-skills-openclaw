@@ -82,10 +82,18 @@ Provide a deep-dive diagnostic report on Google Ads creative performance:
 | `new_order_roas` | ROAS from new customers |
 | `profit` | Calculated profit (Revenue - Spend - COGS) |
 
-#### 2. Google Ads API (Supplemental Data)
-**Endpoint:** `https://googleads.googleapis.com/v17/customers/{customer_id}/googleAds:searchStream`  
-**Authentication:** OAuth 2.0 Bearer Token & Developer Token  
-**Purpose:** Fetch missing Google-native qualitative data like Quality Score components, search term relevancy, and PMax asset performance.
+#### 2. Google Ads Query API (Supplemental Data)
+**Endpoint:** `POST /{version}/api/source/google-query`  
+**Base URL:** `https://data.api.attribuly.com`  
+**Authentication:** `ApiKey` header  
+**Purpose:** Fetch Google-native qualitative data like Quality Score components, search term relevancy, and PMax asset performance via GAQL queries.
+
+**Required Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `account_id` | string | Yes | Google Ads customer ID (obtain from Connected Sources API) |
+| `gaql` | string | Yes | Google Ads Query Language query string |
 
 **Key GAQL Resources Used:**
 - `keyword_view`: Extracts Quality Score, Ad Relevance (`creative_quality_score`), and Expected CTR.
@@ -116,9 +124,12 @@ Provide a deep-dive diagnostic report on Google Ads creative performance:
 - Call `/api/get/ad-analysis/list` with dimensions `["channel", "campaign", "ad_set", "ad_name"]`.
 - Filter strictly for `channel = 'google'`.
 
-### Step 3: Fetch Supplemental Google Data (If authorized)
-- Execute GAQL queries to pull Quality Score metrics (`creative_quality_score`) to assess ad relevance.
-- Execute GAQL queries to pull PMax asset performance (`asset_group_asset.performance_label`).
+### Step 3: Fetch Supplemental Google Data
+- First, retrieve the connected Google Ads account ID via `POST /{version}/api/get/connection/source` with `platform_type: "google"`.
+- Execute GAQL queries via `POST /{version}/api/source/google-query` to pull:
+  - Quality Score metrics (`creative_quality_score`) from `keyword_view` to assess ad relevance.
+  - PMax asset performance (`asset_group_asset.performance_label`) from `asset_group_asset`.
+  - Search term data from `search_term_view` to identify wasted spend.
 
 ### Step 4: Implement Caching (If Applicable)
 - Cache the response for 1 hour to prevent rate-limiting on repeated granular queries during the same session.
@@ -235,7 +246,7 @@ Date Range: [start] to [end]
 
 ---
 
-## Example API Call
+## Example API Calls
 
 ### Fetch Granular Ad Performance for Google
 ```bash
@@ -261,6 +272,39 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
   }'
 ```
 
+### Fetch Search Terms Data
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "6622546829",
+    "gaql": "SELECT search_term_view.search_term, search_term_view.status, campaign.name, ad_group.name, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions, metrics.ctr FROM search_term_view WHERE segments.date BETWEEN '\''2026-03-01'\'' AND '\''2026-03-14'\'' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC LIMIT 100"
+  }'
+```
+
+### Fetch Quality Score Data
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "6622546829",
+    "gaql": "SELECT ad_group_criterion.keyword.text, ad_group_criterion.quality_info.quality_score, ad_group_criterion.quality_info.creative_quality_score, ad_group_criterion.quality_info.post_click_quality_score, ad_group_criterion.quality_info.search_predicted_ctr, campaign.name, ad_group.name, metrics.impressions, metrics.clicks, metrics.cost_micros FROM keyword_view WHERE segments.date BETWEEN '\''2026-03-01'\'' AND '\''2026-03-14'\'' AND ad_group_criterion.status = '\''ENABLED'\'' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC LIMIT 100"
+  }'
+```
+
+### Fetch PMax Asset Performance
+```bash
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/source/google-query" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "6622546829",
+    "gaql": "SELECT asset_group.name, asset_group.id, asset_group_asset.asset, asset_group_asset.field_type, asset_group_asset.performance_label, asset_group_asset.status, campaign.name FROM asset_group_asset WHERE campaign.advertising_channel_type = '\''PERFORMANCE_MAX'\'' AND asset_group_asset.status = '\''ENABLED'\''"
+  }'
+```
+
 ---
 
 ## Dependencies
@@ -268,6 +312,7 @@ curl -X POST "https://data.api.attribuly.com/v2-4-2/api/get/ad-analysis/list" \
 | Dependency | Type | Purpose |
 |------------|------|---------|
 | Attribuly Data API | External API | Fetch granular ad-level metrics |
+| Attribuly Google Query API | External API | Execute GAQL queries for Quality Score, search terms, and PMax assets |
 | Caching Module | System | Temporarily store high-volume ad data to optimize performance |
 
 ---
