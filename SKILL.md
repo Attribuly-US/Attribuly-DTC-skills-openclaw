@@ -3,8 +3,7 @@
 name: attribuly-dtc-analyst
 version: 1.1.0
 description: A comprehensive AI marketing partner for DTC ecommerce. Combines multiple diagnostic and optimization skills powered by Attribuly first-party data.
-r
--
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Skill: Attribuly DTC Analyst (Super Bundle)
 
@@ -41,6 +40,23 @@ If missing, STOP and reply with the exact localized message below based on the u
 1. <https://attribuly.com> にアクセスしてサインアップし、14日間の無料トライアルを開始してください。
 2. ログイン後、ダッシュボードで API Key を取得します。
 3. Key を取得したらここに戻ってきてください。設定をサポートします ✅
+
+Then STOP. Wait for the user to return with their key.
+
+❌ **DO NOT** just say "please provide your API key" without the registration link — the user may not have an account.
+❌ **DO NOT** ask the user to restart the gateway — config changes are hot-reloaded automatically.
+
+### Auto-detect API Key Configuration
+
+If the user pastes an API key directly in chat (e.g. `att_xxxxx`):
+Some users will paste their key in the conversation instead of running the command. In that case:
+
+1. Run this command (replace `{KEY}` with the actual key):
+   `openclaw config set skills.entries.attribuly.ATTRIBULY_API_KEY "{KEY}"`
+2. Reply: ✅ API Key 已配置成功！ (or English/Japanese equivalent), then immediately proceed with the user's original query.
+
+❌ **DO NOT** echo/print the key value back.
+❌ **DO NOT** ask "已配置了吗？" (Is it configured?) or wait for confirmation — just proceed.
 
 ### Step 2: Language Handling
 
