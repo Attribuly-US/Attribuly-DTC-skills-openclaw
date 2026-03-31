@@ -139,9 +139,9 @@ Try asking the agent any of the following to trigger specific skills:
 - `customer-journey-analysis`
 - `ltv-analysis`
 
-See [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) for detailed triggers and usage mapping.
+See the Technical Reference section below for detailed triggers and usage mapping.
 
-***
+---***
 
 ## Installation Guide
 
@@ -227,4 +227,51 @@ If you do not want to run OpenClaw locally and prefer an always-on, fully manage
 
 ## Post-Installation
 
-Once the skill bundle is successfully placed in your `openclaw-config/skills/` directory (locally or in the cloud), check the [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) for details on the specific triggers and required contexts to use each capability effectively.
+Once the skill bundle is successfully placed in your `openclaw-config/skills/` directory (locally or in the cloud), refer to the **Technical Reference** section below for details on specific triggers, skill chaining logic, and global API parameters.
+
+---
+
+## Technical Reference
+
+### Skill Trigger Matrix
+
+#### Automatic Triggers
+
+| Condition | Triggered Skill | Priority |
+| :--- | :--- | :--- |
+| Monday 09:00 AM | `weekly-marketing-performance` | High |
+| Daily 09:00 AM | `daily-marketing-pulse` | Medium |
+| ROAS drops >20% | `weekly-marketing-performance` + channel drill-down | Critical |
+| CPA increases >20% | Channel-specific performance skill | High |
+| CTR drops >15% | `creative-fatigue-detector` | Medium |
+| CVR drops >15% | `funnel-analysis` | High |
+| Spend >30% over budget | `budget-optimization` | Critical |
+
+### Skill Chaining Logic
+
+When one skill detects an issue, it can trigger related skills:
+
+```text
+weekly-marketing-performance
+├── IF Google Ads issue detected → google-ads-performance
+│   └── IF CTR issue → google-creative-analysis
+├── IF Meta Ads issue detected → meta-ads-performance
+│   └── IF frequency high → meta-creative-analysis
+├── IF CVR issue detected → funnel-analysis
+│   └── IF landing page issue → landing-page-analysis
+└── IF budget inefficiency → budget-optimization
+```
+
+### Global API Parameters
+
+These defaults apply to ALL skills unless overridden:
+
+| Parameter | Default Value | Notes |
+| :--- | :--- | :--- |
+| `model` | `linear` | Linear attribution |
+| `goal` | `purchase` | Purchase conversions (use dynamic goal code from Settings API) |
+| `version` | `v2-4-2` | API version |
+| `page_size` | `100` | Max records per page |
+
+**Base URL:** `https://data.api.attribuly.com`
+**Authentication:** `ApiKey` header (Read from `ATTRIBULY_API_KEY` Environment Variable / Secret Manager. NEVER ask the user for this in chat.)

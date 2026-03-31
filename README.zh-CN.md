@@ -101,7 +101,7 @@
 - `customer-journey-analysis`
 - `ltv-analysis`
 
-有关触发条件和使用映射的详细信息，请参阅 [SKILL\_REGISTRY.md](SKILL_REGISTRY.md)。
+有关触发条件和使用映射的详细信息，请参阅底部的 **技术参考 (Technical Reference)** 章节。
 
 ---
 
@@ -186,4 +186,51 @@ cp vendor/attribuly/role_prompt.md ./openclaw-config/SOUL.md
 
 ## 安装后配置
 
-一旦技能包成功放置在您的 `openclaw-config/skills/` 目录中（本地或云端），请查阅 [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) 以获取有关特定触发器和有效使用每个技能所需上下文的详细信息。
+一旦技能包成功放置在您的 `openclaw-config/skills/` 目录中（本地或云端），请参阅下方的 **技术参考 (Technical Reference)** 以获取有关特定触发器、技能链逻辑和全局 API 参数的详细信息。
+
+---
+
+## 技术参考 (Technical Reference)
+
+### 技能触发矩阵 (Skill Trigger Matrix)
+
+#### 自动触发条件 (Automatic Triggers)
+
+| 条件 (Condition) | 触发的技能 (Triggered Skill) | 优先级 (Priority) |
+| :--- | :--- | :--- |
+| 每周一 09:00 AM | `weekly-marketing-performance` | 高 (High) |
+| 每日 09:00 AM | `daily-marketing-pulse` | 中 (Medium) |
+| ROAS 下降 >20% | `weekly-marketing-performance` + 渠道下钻 | 极高 (Critical) |
+| CPA 上升 >20% | 渠道专属业绩技能 | 高 (High) |
+| CTR 下降 >15% | `creative-fatigue-detector` | 中 (Medium) |
+| CVR 下降 >15% | `funnel-analysis` | 高 (High) |
+| 消耗超出预算 >30% | `budget-optimization` | 极高 (Critical) |
+
+### 技能链逻辑 (Skill Chaining Logic)
+
+当一个技能检测到问题时，它可以触发相关的下级技能：
+
+```text
+weekly-marketing-performance
+├── IF Google Ads issue detected → google-ads-performance
+│   └── IF CTR issue → google-creative-analysis
+├── IF Meta Ads issue detected → meta-ads-performance
+│   └── IF frequency high → meta-creative-analysis
+├── IF CVR issue detected → funnel-analysis
+│   └── IF landing page issue → landing-page-analysis
+└── IF budget inefficiency → budget-optimization
+```
+
+### 全局 API 参数 (Global API Parameters)
+
+这些默认值适用于所有技能（除非在特定技能中被覆盖）：
+
+| 参数 | 默认值 | 备注 |
+| :--- | :--- | :--- |
+| `model` | `linear` | 线性归因 (Linear attribution) |
+| `goal` | `purchase` | 购买转化 (使用 Settings API 获取的动态目标代码) |
+| `version` | `v2-4-2` | API 版本 |
+| `page_size` | `100` | 每页最大记录数 |
+
+**Base URL:** `https://data.api.attribuly.com`
+**Authentication:** `ApiKey` 请求头 (从 `ATTRIBULY_API_KEY` 环境变量读取。**绝对不要在聊天中向用户索要此密钥。**)

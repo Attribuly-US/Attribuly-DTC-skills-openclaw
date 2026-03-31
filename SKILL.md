@@ -122,3 +122,81 @@ Based on the user's intent or the specific problem detected, read the correspond
 3. **Execute:** Follow the step-by-step instructions, API calls, logic, and output formatting dictated in that specific reference file.
 4. **Chain Skills:** If the reference file suggests triggering a secondary skill (e.g., Weekly Performance detects a Google issue -> trigger Google Ads Performance), load the secondary reference file and continue the analysis.
 
+---
+
+## 🎯 Skill Trigger Matrix
+
+### Automatic Triggers
+
+| Condition              | Triggered Skill                                     | Priority |
+| ---------------------- | --------------------------------------------------- | -------- |
+| Monday 09:00 AM        | `weekly-marketing-performance`                      | High     |
+| Daily 09:00 AM         | `daily-marketing-pulse`                             | Medium   |
+| ROAS drops >20%        | `weekly-marketing-performance` + channel drill-down | Critical |
+| CPA increases >20%     | Channel-specific performance skill                  | High     |
+| CTR drops >15%         | `creative-fatigue-detector`                         | Medium   |
+| CVR drops >15%         | `funnel-analysis`                                   | High     |
+| Spend >30% over budget | `budget-optimization`                               | Critical |
+
+---
+
+## 🔗 Skill Chaining Logic
+
+When one skill detects an issue, it can trigger related skills:
+
+```text
+weekly-marketing-performance
+├── IF Google Ads issue detected → google-ads-performance
+│   └── IF CTR issue → google-creative-analysis
+├── IF Meta Ads issue detected → meta-ads-performance
+│   └── IF frequency high → meta-creative-analysis
+├── IF CVR issue detected → funnel-analysis
+│   └── IF landing page issue → landing-page-analysis
+└── IF budget inefficiency → budget-optimization
+```
+
+---
+
+## ⚙️ Default API Parameters (Global)
+
+These defaults apply to ALL skills unless overridden:
+
+| Parameter   | Default Value | Notes                                                          |
+| ----------- | ------------- | -------------------------------------------------------------- |
+| `model`     | `linear`      | Linear attribution                                             |
+| `goal`      | `purchase`    | Purchase conversions (use dynamic goal code from Settings API) |
+| `version`   | `v2-4-2`      | API version                                                    |
+| `page_size` | `100`         | Max records per page                                           |
+
+**Base URL:** `https://data.api.attribuly.com`
+**Authentication:** `ApiKey` header (Read from `ATTRIBULY_API_KEY` Environment Variable / Secret Manager. NEVER ask the user for this in chat.)
+
+---
+
+## 🌐 Global API Endpoints
+
+### 1. Conversion Goals API (Settings)
+**Purpose:** Fetch available conversion goals dynamically.
+**Endpoint:** `POST /{version}/api/get/setting-goals`
+
+### 2. Connected Sources API (Account Discovery)
+**Purpose:** Retrieve connected ad platform accounts to obtain the required `account_id` for platform-specific queries.
+**Endpoint:** `POST /{version}/api/get/connection/source`
+
+---
+
+## 🛡 Error Handling & Rate Limiting
+
+### Rate Limits
+| API Type         | Limit          | Window                      |
+| ---------------- | -------------- | --------------------------- |
+| Attribuly APIs   | 100 requests   | Per minute                  |
+| Google Query API | 1,000 requests | Per 100 seconds per account |
+| Meta Query API   | 200 calls      | Per hour per ad account     |
+
+### Data Validation Rules
+1. **Date Range**: Ensure `start_date` <= `end_date` and range <= 90 days.
+2. **Account ID**: Verify account exists via Connected Sources API before querying.
+3. **Response Code**: Always check `code === 1` before processing data.
+4. **Empty Results**: Handle empty `results` arrays gracefully.
+
