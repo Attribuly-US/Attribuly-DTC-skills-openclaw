@@ -160,7 +160,8 @@ Before installing the skills, you need an Attribuly API key. These skills rely h
 
 - **Paid Feature:** The API key is exclusively available to paid-plan users. You must upgrade your workspace before you can generate the key.
 - **Free Trial:** If you are new, you can start a [14-day free trial](https://attribuly.com/pricing/) to test the platform.
-- **How to configure:** Once acquired, simply **paste the API Key directly in the chat** with the Agent. The Agent will automatically and securely configure it for you.
+- **How to configure:** For the highest level of security, we recommend configuring your API key through the **Agent Settings UI (Environment Variables/Secrets)**. Alternatively, you can **paste the API Key directly in the chat** with the Agent, and it will automatically configure it for you.
+  - ⚠️ **Security Notice:** If you choose to configure via chat, the agent will run a local command (`openclaw config set`) to persist your key in the environment configuration. We highly recommend deleting the chat message containing your API key afterward to prevent exposure in chat histories.
 
 ***
 

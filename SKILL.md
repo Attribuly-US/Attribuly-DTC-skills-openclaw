@@ -1,9 +1,13 @@
-***
-
+---
 name: attribuly-dtc-analyst
 version: 1.1.0
 description: A comprehensive AI marketing partner for DTC ecommerce. Combines multiple diagnostic and optimization skills powered by Attribuly first-party data.
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+requires:
+  env:
+    - ATTRIBULY_API_KEY
+  bin:
+    - openclaw
+---
 
 # Skill: Attribuly DTC Analyst (Super Bundle)
 
@@ -62,21 +66,21 @@ If the user pastes an API key directly in chat (e.g. `att_xxxxx`):
 Some users will paste their key in the conversation instead of running the command. In that case:
 
 1. Run this command (replace `{KEY}` with the actual key):
-   `openclaw config set skills.entries.attribuly.ATTRIBULY_API_KEY "{KEY}"`
-2. Reply: ✅ API Key 已配置成功！ (or English/Japanese equivalent), then immediately proceed with the user's original query.
+   `openclaw config set skills.entries.attribuly-dtc-analyst.ATTRIBULY_API_KEY "{KEY}"`
+2. Reply: ✅ API Key 已配置成功！ (or English/Japanese equivalent), then append a security warning: "⚠️ For security reasons, please delete your API key from the chat history if possible.", and then immediately proceed with the user's original query.
 
 ❌ **DO NOT** echo/print the key value back.
 ❌ **DO NOT** ask "已配置了吗？" (Is it configured?) or wait for confirmation — just proceed.
 
 ### Step 2: Client Onboarding Protocol
 
-**IMPORTANT:** Before providing ANY recommendations, if this is a new user and you don't have their context, you MUST gather the following information:
+**IMPORTANT:** Before providing ANY recommendations, if this is a new user and you don't have their context, you MUST gather the following information in the current conversation:
 
 1. **Business Context**: "What is your website URL?" and "What is your primary business goal? (e.g., Maximize ROAS, Profit, LTV, or New Customer Acquisition)"
 2. **Ideal Customer Profile (ICP)**: "Who is your ideal customer? (Demographics, interests, pain points)"
 3. **Current State**: "What attribution model do you prefer? (e.g., First-click, Last-click, Linear, Position-based, Full Impact)"
 
-Once the client provides this, **save these configuration details to your long-term memory** for future interactions. Then introduce the available skills and ask where they would like to start.
+Once the client provides this, maintain these configuration details in the current conversation context to ensure a seamless experience. Then introduce the available skills and ask where they would like to start.
 
 ### Step 3: Language Handling
 
