@@ -8,6 +8,11 @@ Your specialized **AI Marketing Partner for DTC Ecommerce (Shopify, WooCommerce,
 ![GitHub forks](https://img.shields.io/github/forks/attribuly/allyclaw-skills?style=social)
 ![Platform](https://img.shields.io/badge/Platform-Shopify%20%7C%20WooCommerce-success)
 
+## 🚀 Get Started / 快速开始 / はじめに
+**Get started:** Sign up and get your API key at [https://attribuly.com](https://attribuly.com) (14-day free trial available).  
+**快速开始:** 请前往 [https://attribuly.com](https://attribuly.com) 注册获取 API Key（提供 14 天免费试用）。  
+**はじめに:** [https://attribuly.com](https://attribuly.com) でサインアップして API Key を取得してください（14日間の無料トライアルあり）。
+
 > **Automated Diagnostic Flow in Action:**
 > 
 > The animation below demonstrates how our AI skills autonomously chain together to diagnose performance drops. For example, when a weekly report detects a drop in Google Ads ROAS, it automatically triggers a deep-dive, checks CTR issues, and drills down to the creative level if necessary.
@@ -29,6 +34,31 @@ Traditional ad platforms (Meta, Google) often misattribute sales. For Shopify an
 - **Performance:** Generate 30-second daily pacing scans or deep-dive weekly executive summaries.
 - **Creative:** Evaluate Google/Meta creatives against true profitability and identify fatigue.
 - **Optimization:** Get profit-first budget reallocation and audience tuning recommendations.
+
+## 💬 Common Prompts / 常见触发词 / よくあるトリガー
+
+Try asking the agent any of the following to trigger specific skills:
+
+**English:**
+- "How did we do last week? Generate a weekly report."
+- "How's Google Ads doing?"
+- "Where are users dropping off in the funnel?"
+- "Where should I shift my spend? Optimize budget."
+- "Analyze Google creatives and check for CTR issues."
+
+**中文 (Chinese):**
+- "上周表现如何？生成每周报告。"
+- "Google广告表现如何？"
+- "用户在转化漏斗的哪里流失了？"
+- "我应该把预算转移到哪里？优化一下预算。"
+- "分析Google素材并检查点击率问题。"
+
+**日本語 (Japanese):**
+- "先週のパフォーマンスはどうだった？週次レポートを作成して。"
+- "Google広告の調子はどう？"
+- "ユーザーはファネルのどこで離脱している？"
+- "どこに予算を移すべき？予算を最適化して。"
+- "Googleクリエイティブを分析してCTRの課題を確認して。"
 
 ---
 
