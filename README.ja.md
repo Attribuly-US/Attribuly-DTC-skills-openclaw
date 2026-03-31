@@ -158,22 +158,6 @@ git submodule update --remote --merge
 rsync -av --exclude=".*" --exclude="LICENSE" vendor/attribuly/ ./openclaw-config/skills/attribuly-dtc-analyst/
 ```
 
-### ステップ 3: エージェントの役割（Rule & Soul）の初期化
-
-エージェントが DTC グロースパートナーの専門家として機能するように、コアアイデンティティを構成する必要があります。OpenClaw は、ワークスペースのブートストラップファイルをシステムプロンプトに自動的に注入します。
-
-**自動化メソッド (推奨):**
-役割プロンプトを直接エージェントのワークスペースに `SOUL.md` としてコピーします (ファイルが既に存在する場合は追記します):
-```bash
-cp vendor/attribuly/role_prompt.md ./openclaw-config/SOUL.md
-```
-*(特定のマルチエージェントセットアップを使用している場合は、`~/.openclaw/agents/<エージェント名>/agent.md` にコピーしてください)*
-
-**手動メソッド (チャットインターフェース):**
-1. このリポジトリにある [`role_prompt.md`](role_prompt.md) ファイルを開きます。
-2. ファイルの内容全体をコピーします。
-3. OpenClaw のチャット/ダイアログボックスに貼り付けて、エージェントのルール、魂、ペルソナを初期化します。
-
 ---
 
 ## マネージドクラウドホスティング（展開）
@@ -234,3 +218,28 @@ weekly-marketing-performance
 
 **Base URL:** `https://data.api.attribuly.com`
 **Authentication:** `ApiKey` ヘッダー（`ATTRIBULY_API_KEY` 環境変数から読み取ります。**チャットでユーザーにキーを絶対に要求しないでください。**）
+
+### 意思決定フレームワーク: プラットフォームデータ vs Attribuly データの比較
+
+| シナリオ | プラットフォーム ROAS | Attribuly ROAS | 診断 | アクション |
+| :--- | :--- | :--- | :--- | :--- |
+| **隠れた原石 (Hidden Gem)** | 低 (<1.5) | 高 (>2.5) | プラットフォームによって過小評価されているトップオブファネル（TOFU）の推進力 | **一時停止しないでください。**「TOFU Driver」としてタグ付けし、スケーリングを検討します。 |
+| **虚ろな勝利 (Hollow Victory)** | 高 (>3.0) | 低 (<1.5) | プラットフォームの過剰なアトリビューション（おそらくブランド指名またはリターゲティング） | **予算の上限を設定します。** インクリメンタリティ（純増効果）を調査します。 |
+| **真の勝者 (True Winner)** | 高 (>2.5) | 高 (>2.5) | 真正な高パフォーマンス | **スケールします。** 3〜5日ごとに予算を20%増やします。 |
+| **真の敗者 (True Loser)** | 低 (<1.0) | 低 (<1.0) | 非効率的な支出 | **一時停止または削減します。** クリエイティブまたはオーディエンスを刷新します。 |
+
+### 主要指標用語集 (Key Metrics Glossary)
+
+| 指標 | 計算式 | 説明 |
+| :--- | :--- | :--- |
+| **ROAS** | `conversion_value / spend` | Attribuly が追跡する広告費用対効果 |
+| **ncROAS** | `ncPurchase / spend` | 新規顧客 ROAS (New Customer ROAS) |
+| **MER** | `total_revenue / total_spend` | マーケティング効率比率 (Marketing Efficiency Ratio) |
+| **CPA** | `spend / conversions` | 顧客獲得単価 (Cost Per Acquisition) |
+| **CPC** | `spend / clicks` | クリック単価 (Cost Per Click) |
+| **CPM** | `(spend / impressions) * 1000` | 1000回インプレッションあたりのコスト |
+| **CTR** | `(clicks / impressions) * 100%` | クリック率 (Click-Through Rate) |
+| **CVR** | `(conversions / clicks) * 100%` | コンバージョン率 (Conversion Rate) |
+| **LTV** | `total_sales / unique_customers` | 顧客生涯価値 (Lifetime Value) |
+| **Net Profit** | `sales - shipping - spend - COGS - taxes - fees` | 真の純利益 (True Profit) |
+| **Net Margin** | `net_profit / sales * 100%` | 利益率 (Profit Margin) |

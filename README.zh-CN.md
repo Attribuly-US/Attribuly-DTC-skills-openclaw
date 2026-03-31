@@ -158,22 +158,6 @@ git submodule update --remote --merge
 rsync -av --exclude=".*" --exclude="LICENSE" vendor/attribuly/ ./openclaw-config/skills/attribuly-dtc-analyst/
 ```
 
-### 步骤 3：初始化 Agent 角色 (Rule & Soul)
-
-为了确保 Agent 表现得像一个专业的 DTC 增长伙伴，您需要配置其核心身份。OpenClaw 会自动将工作区引导文件（bootstrap files）注入到其系统提示词中。
-
-**自动化方法（推荐）：**
-直接将角色提示词复制到您的 Agent 工作区并命名为 `SOUL.md`（如果文件已存在则追加）：
-```bash
-cp vendor/attribuly/role_prompt.md ./openclaw-config/SOUL.md
-```
-*(如果您使用的是特定的多智能体设置，请将其复制到 `~/.openclaw/agents/<您的agent名称>/agent.md`)*
-
-**手动方法（通过对话框）：**
-1. 打开此仓库中的 [`role_prompt.md`](role_prompt.md) 文件。
-2. 复制文件的全部内容。
-3. 将其粘贴到您的 OpenClaw 聊天/对话框中，以初始化 Agent 的规则、灵魂和角色。
-
 ---
 
 ## 全托管云部署
@@ -234,3 +218,28 @@ weekly-marketing-performance
 
 **Base URL:** `https://data.api.attribuly.com`
 **Authentication:** `ApiKey` 请求头 (从 `ATTRIBULY_API_KEY` 环境变量读取。**绝对不要在聊天中向用户索要此密钥。**)
+
+### AI 决策框架：平台数据与 Attribuly 真实数据对比
+
+| 场景 | 平台 ROAS (Platform) | Attribuly ROAS | 诊断结论 | 推荐行动 |
+| :--- | :--- | :--- | :--- | :--- |
+| **被隐藏的宝石 (Hidden Gem)** | 低 (<1.5) | 高 (>2.5) | 漏斗顶部的驱动力被平台低估 | **不要暂停。** 标记为“TOFU Driver”，考虑增加预算。 |
+| **虚假的繁荣 (Hollow Victory)** | 高 (>3.0) | 低 (<1.5) | 平台过度归因（通常是品牌词或重定向） | **限制预算。** 调查其增量价值 (Incrementality)。 |
+| **真正的赢家 (True Winner)** | 高 (>2.5) | 高 (>2.5) | 真正的高绩效计划 | **扩量。** 每 3-5 天增加 20% 预算。 |
+| **真正的输家 (True Loser)** | 低 (<1.0) | 低 (<1.0) | 无效的支出 | **暂停或缩减。** 刷新素材或受众。 |
+
+### 核心指标字典 (Key Metrics Glossary)
+
+| 指标 | 计算公式 | 描述说明 |
+| :--- | :--- | :--- |
+| **ROAS** | `conversion_value / spend` | Attribuly 追踪的真实广告支出回报率 |
+| **ncROAS** | `ncPurchase / spend` | 新客 ROAS (New Customer ROAS) |
+| **MER** | `total_revenue / total_spend` | 营销效率比 (Marketing Efficiency Ratio) |
+| **CPA** | `spend / conversions` | 单次获客成本 (Cost Per Acquisition) |
+| **CPC** | `spend / clicks` | 单次点击成本 (Cost Per Click) |
+| **CPM** | `(spend / impressions) * 1000` | 千次曝光成本 (Cost Per 1000 Impressions) |
+| **CTR** | `(clicks / impressions) * 100%` | 点击率 (Click-Through Rate) |
+| **CVR** | `(conversions / clicks) * 100%` | 转化率 (Conversion Rate) |
+| **LTV** | `total_sales / unique_customers` | 用户生命周期价值 (Lifetime Value) |
+| **Net Profit** | `sales - shipping - spend - COGS - taxes - fees` | 真实净利润 (True Profit) |
+| **Net Margin** | `net_profit / sales * 100%` | 净利润率 (Profit Margin) |

@@ -198,26 +198,7 @@ git submodule update --remote --merge
 rsync -av --exclude=".*" --exclude="LICENSE" vendor/attribuly/ ./openclaw-config/skills/attribuly-dtc-analyst/
 ```
 
-### Step 3: Initialize Agent Role (Rule & Soul)
-
-To ensure the agent behaves as an expert DTC Growth Partner, you need to configure its core identity. OpenClaw automatically injects workspace bootstrap files into its system prompt.
-
-**Automated Method (Recommended):**
-Copy the role prompt directly into your agent's workspace as `SOUL.md` (or append to it if it exists):
-
-```bash
-cp vendor/attribuly/role_prompt.md ./openclaw-config/SOUL.md
-```
-
-*(If you are using a specific multi-agent setup, copy it to* *`~/.openclaw/agents/<your-agent-name>/agent.md`)*
-
-**Manual Method (Chat Interface):**
-
-1. Open the [`role_prompt.md`](role_prompt.md) file in this repository.
-2. Copy the entire content of the file.
-3. Paste it into your OpenClaw chat/dialog box to initialize the agent's rules, soul, and persona.
-
-***
+---
 
 ## Managed Cloud Hosting (Deployment)
 
@@ -275,3 +256,28 @@ These defaults apply to ALL skills unless overridden:
 
 **Base URL:** `https://data.api.attribuly.com`
 **Authentication:** `ApiKey` header (Read from `ATTRIBULY_API_KEY` Environment Variable / Secret Manager. NEVER ask the user for this in chat.)
+
+### Decision Framework: Compare Platform vs. Attribuly Metrics
+
+| Scenario | Platform ROAS | Attribuly ROAS | Diagnosis | Action |
+| :--- | :--- | :--- | :--- | :--- |
+| Hidden Gem | Low (<1.5) | High (>2.5) | Top-of-funnel driver undervalued by platform | **DO NOT PAUSE.** Tag as "TOFU Driver." Consider scaling. |
+| Hollow Victory | High (>3.0) | Low (<1.5) | Platform over-attributing (likely brand/retargeting) | **CAP BUDGET.** Investigate incrementality. |
+| True Winner | High (>2.5) | High (>2.5) | Genuine high performer | **SCALE.** Increase budget 20% every 3-5 days. |
+| True Loser | Low (<1.0) | Low (<1.0) | Inefficient spend | **PAUSE or REDUCE.** Refresh creative or audience. |
+
+### Key Metrics Glossary
+
+| Metric | Formula | Description |
+| :--- | :--- | :--- |
+| **ROAS** | `conversion_value / spend` | Attribuly-tracked Return on Ad Spend |
+| **ncROAS** | `ncPurchase / spend` | New Customer ROAS |
+| **MER** | `total_revenue / total_spend` | Marketing Efficiency Ratio |
+| **CPA** | `spend / conversions` | Cost Per Acquisition |
+| **CPC** | `spend / clicks` | Cost Per Click |
+| **CPM** | `(spend / impressions) * 1000` | Cost Per 1000 Impressions |
+| **CTR** | `(clicks / impressions) * 100%` | Click-Through Rate |
+| **CVR** | `(conversions / clicks) * 100%` | Conversion Rate |
+| **LTV** | `total_sales / unique_customers` | Lifetime Value |
+| **Net Profit** | `sales - shipping - spend - COGS - taxes - fees` | True Profit |
+| **Net Margin** | `net_profit / sales * 100%` | Profit Margin |
