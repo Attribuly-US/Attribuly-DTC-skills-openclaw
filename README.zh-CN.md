@@ -34,6 +34,11 @@
 
 ## 最新动态与更新日志
 
+**[2026-03-31] API Key 配置流程全面优化！**
+- **极简配置体验**: 新增 API Key 自动检测功能。用户现在只需在对话框中直接粘贴 API Key，Agent 便会自动执行命令完成环境变量的配置。
+- **更智能的交互逻辑**: 更新了 `SKILL.md`，加入了严格的负面约束（DO NOTs），确保 Agent 在缺少 Key 时必定提供注册链接，且不会重复索要或回显敏感信息。
+- **多语言全覆盖**: 自动配置的提示语及相关文档指南已全面适配中文、英文和日文。
+
 **[2026-03-22] v1.1.0 版本正式发布！** 
 
 ### [v1.1.0] 新增
@@ -96,7 +101,7 @@
 - `customer-journey-analysis`
 - `ltv-analysis`
 
-有关触发条件和使用映射的详细信息，请参阅 [SKILL\_REGISTRY.md](SKILL_REGISTRY.md)。
+有关触发条件和使用映射的详细信息，请参阅底部的 **技术参考 (Technical Reference)** 章节。
 
 ---
 
@@ -115,11 +120,8 @@
 
 - **付费专属功能：** API 密钥仅对付费计划用户开放。您必须升级您的工作空间才能生成密钥。
 - **免费试用：** 如果您是新用户，可以开启 [14天免费试用](https://attribuly.com/pricing/) 来体验平台功能。
-- **如何配置：** 获取密钥后，必须将其安全地配置到您的 OpenClaw 环境中。**请勿在聊天对话中直接发送 API Key。**
-  1. 打开 OpenClaw 的 **Agent 设置 (Agent Settings)**。
-  2. 找到 **环境变量 (Environment Variables)** 或 **密钥管理 (Secrets)** 部分。
-  3. 添加一个新的环境变量，命名为 `ATTRIBULY_API_KEY`。
-  4. 将您的 API 密钥粘贴为该变量的值并保存。Agent 在调用数据时会自动且安全地读取该变量。
+- **如何配置：** 为了获得最高的安全性，我们推荐您通过 OpenClaw 的 **Agent Settings UI (环境变量/Secrets)** 来配置 API 密钥。或者，您也可以**直接在聊天对话框中将 API Key 发送给 Agent**，Agent 会自动帮您完成配置。
+  - ⚠️ **安全提示：** 如果您选择通过聊天框配置，Agent 会运行本地命令 (`openclaw config set`) 将密钥持久化到环境配置中。为了防止密钥在聊天记录中泄露，我们强烈建议您在配置完成后删除包含 API Key 的那条聊天记录。
 
 ---
 
@@ -157,22 +159,6 @@ git submodule update --remote --merge
 rsync -av --exclude=".*" --exclude="LICENSE" vendor/attribuly/ ./openclaw-config/skills/attribuly-dtc-analyst/
 ```
 
-### 步骤 3：初始化 Agent 角色 (Rule & Soul)
-
-为了确保 Agent 表现得像一个专业的 DTC 增长伙伴，您需要配置其核心身份。OpenClaw 会自动将工作区引导文件（bootstrap files）注入到其系统提示词中。
-
-**自动化方法（推荐）：**
-直接将角色提示词复制到您的 Agent 工作区并命名为 `SOUL.md`（如果文件已存在则追加）：
-```bash
-cp vendor/attribuly/role_prompt.md ./openclaw-config/SOUL.md
-```
-*(如果您使用的是特定的多智能体设置，请将其复制到 `~/.openclaw/agents/<您的agent名称>/agent.md`)*
-
-**手动方法（通过对话框）：**
-1. 打开此仓库中的 [`role_prompt.md`](role_prompt.md) 文件。
-2. 复制文件的全部内容。
-3. 将其粘贴到您的 OpenClaw 聊天/对话框中，以初始化 Agent 的规则、灵魂和角色。
-
 ---
 
 ## 全托管云部署
@@ -185,4 +171,76 @@ cp vendor/attribuly/role_prompt.md ./openclaw-config/SOUL.md
 
 ## 安装后配置
 
-一旦技能包成功放置在您的 `openclaw-config/skills/` 目录中（本地或云端），请查阅 [SKILL\_REGISTRY.md](SKILL_REGISTRY.md) 以获取有关特定触发器和有效使用每个技能所需上下文的详细信息。
+一旦技能包成功放置在您的 `openclaw-config/skills/` 目录中（本地或云端），请参阅下方的 **技术参考 (Technical Reference)** 以获取有关特定触发器、技能链逻辑和全局 API 参数的详细信息。
+
+---
+
+## 技术参考 (Technical Reference)
+
+### 技能触发矩阵 (Skill Trigger Matrix)
+
+#### 自动触发条件 (Automatic Triggers)
+
+| 条件 (Condition) | 触发的技能 (Triggered Skill) | 优先级 (Priority) |
+| :--- | :--- | :--- |
+| 每周一 09:00 AM | `weekly-marketing-performance` | 高 (High) |
+| 每日 09:00 AM | `daily-marketing-pulse` | 中 (Medium) |
+| ROAS 下降 >20% | `weekly-marketing-performance` + 渠道下钻 | 极高 (Critical) |
+| CPA 上升 >20% | 渠道专属业绩技能 | 高 (High) |
+| CTR 下降 >15% | `creative-fatigue-detector` | 中 (Medium) |
+| CVR 下降 >15% | `funnel-analysis` | 高 (High) |
+| 消耗超出预算 >30% | `budget-optimization` | 极高 (Critical) |
+
+### 技能链逻辑 (Skill Chaining Logic)
+
+当一个技能检测到问题时，它可以触发相关的下级技能：
+
+```text
+weekly-marketing-performance
+├── IF Google Ads issue detected → google-ads-performance
+│   └── IF CTR issue → google-creative-analysis
+├── IF Meta Ads issue detected → meta-ads-performance
+│   └── IF frequency high → meta-creative-analysis
+├── IF CVR issue detected → funnel-analysis
+│   └── IF landing page issue → landing-page-analysis
+└── IF budget inefficiency → budget-optimization
+```
+
+### 全局 API 参数 (Global API Parameters)
+
+这些默认值适用于所有技能（除非在特定技能中被覆盖）：
+
+| 参数 | 默认值 | 备注 |
+| :--- | :--- | :--- |
+| `model` | `linear` | 线性归因 (Linear attribution) |
+| `goal` | `purchase` | 购买转化 (使用 Settings API 获取的动态目标代码) |
+| `version` | `v2-4-2` | API 版本 |
+| `page_size` | `100` | 每页最大记录数 |
+
+**Base URL:** `https://data.api.attribuly.com`
+**Authentication:** `ApiKey` 请求头 (从 `ATTRIBULY_API_KEY` 环境变量读取。**绝对不要在聊天中向用户索要此密钥。**)
+
+### AI 决策框架：平台数据与 Attribuly 真实数据对比
+
+| 场景 | 平台 ROAS (Platform) | Attribuly ROAS | 诊断结论 | 推荐行动 |
+| :--- | :--- | :--- | :--- | :--- |
+| **被隐藏的宝石 (Hidden Gem)** | 低 (<1.5) | 高 (>2.5) | 漏斗顶部的驱动力被平台低估 | **不要暂停。** 标记为“TOFU Driver”，考虑增加预算。 |
+| **虚假的繁荣 (Hollow Victory)** | 高 (>3.0) | 低 (<1.5) | 平台过度归因（通常是品牌词或重定向） | **限制预算。** 调查其增量价值 (Incrementality)。 |
+| **真正的赢家 (True Winner)** | 高 (>2.5) | 高 (>2.5) | 真正的高绩效计划 | **扩量。** 每 3-5 天增加 20% 预算。 |
+| **真正的输家 (True Loser)** | 低 (<1.0) | 低 (<1.0) | 无效的支出 | **暂停或缩减。** 刷新素材或受众。 |
+
+### 核心指标字典 (Key Metrics Glossary)
+
+| 指标 | 计算公式 | 描述说明 |
+| :--- | :--- | :--- |
+| **ROAS** | `conversion_value / spend` | Attribuly 追踪的真实广告支出回报率 |
+| **ncROAS** | `ncPurchase / spend` | 新客 ROAS (New Customer ROAS) |
+| **MER** | `total_revenue / total_spend` | 营销效率比 (Marketing Efficiency Ratio) |
+| **CPA** | `spend / conversions` | 单次获客成本 (Cost Per Acquisition) |
+| **CPC** | `spend / clicks` | 单次点击成本 (Cost Per Click) |
+| **CPM** | `(spend / impressions) * 1000` | 千次曝光成本 (Cost Per 1000 Impressions) |
+| **CTR** | `(clicks / impressions) * 100%` | 点击率 (Click-Through Rate) |
+| **CVR** | `(conversions / clicks) * 100%` | 转化率 (Conversion Rate) |
+| **LTV** | `total_sales / unique_customers` | 用户生命周期价值 (Lifetime Value) |
+| **Net Profit** | `sales - shipping - spend - COGS - taxes - fees` | 真实净利润 (True Profit) |
+| **Net Margin** | `net_profit / sales * 100%` | 净利润率 (Profit Margin) |
