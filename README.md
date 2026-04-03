@@ -2,6 +2,8 @@
 
 # 🛍️ Attribuly OpenClaw Skills: AI Marketing Analytics for Shopify & WooCommerce
 
+[Watch the video](https://youtu.be/JDat6bls5Wk?si=jgZtnRZnl39VqFj3)
+
 Your specialized **AI Marketing Partner for DTC Ecommerce (Shopify, WooCommerce, and more)**. Powered by Attribuly's first-party data, these OpenClaw skills provide autonomous marketing analysis, true ROAS tracking, and profit-first optimization for your online store.
 
 !\[GitHub stars]\(https\://img.shields.io/github/stars/attribuly/allyclaw-skills?style=social null)
