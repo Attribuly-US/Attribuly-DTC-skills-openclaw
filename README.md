@@ -137,14 +137,14 @@ There are two primary ways to install these Attribuly skills into your own OpenC
 
 Copy the prompt below into your OpenClaw interface, and the agent will install it for you:
 
-> Install these skills from <https://github.com/Alexchulee/Attribuly-DTC-skills-openclaw.git>
+> Install these skills from <https://github.com/Attribuly-US/ecommerce-dtc-skills>
 
 # Managed Cloud Hosting (Deployment)
 
 | Feature               | Local Deployment (Open Source)                            | Cloud Version (Attribuly Managed)                                                |
 | :-------------------- | :-------------------------------------------------------- | :------------------------------------------------------------------------------- |
 | **Best For**          | Geek teams, Developers                                    | DTC Merchants, Marketers, Non-technical teams                                    |
-| **Cost**              | Free                                                      | Paid Subscription (50% off first month)                                          |
+| **Cost**              | Free                                                      | $20/month (50% off first month)                                                  |
 | **Setup**             | Requires self-hosting, API config & environment tinkering | 1-minute out-of-the-box, Zero code required                                      |
 | **Maintenance**       | Manual updates, Self-maintained                           | Auto-updates, Zero maintenance                                                   |
 | **Core Advantage**    | Basic LLM invocation                                      | Intelligent multi-LLM orchestration, Operational management, Enterprise security |

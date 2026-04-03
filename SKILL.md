@@ -63,7 +63,7 @@ Some users will paste their key in the conversation instead of running the comma
 
 1. Run this command (replace `{KEY}` with the actual key):
 ```bash
-openclaw config set skills.entries.attribuly-dtc-analyst.ATTRIBULY_API_KEY "{KEY}"
+openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "{KEY}"
 ```
 2. Reply: ✅ API Key 已配置成功！ (or English/Japanese equivalent), then append a security warning: "⚠️ For security reasons, please delete your API key from the chat history if possible.", and then immediately proceed with the user's original query.
 
