@@ -38,6 +38,7 @@ If missing, STOP and reply with the exact localized message below based on the u
 1. Go to <https://attribuly.com> and sign up (14-day free trial available).
 2. After signing in, find your API Key in the dashboard.
 3. Come back with your key and I'll set it up for you ✅
+   *(Note: The agent will use `openclaw config set` to persist your key)*
 
 **For Chinese (中文) users:**
 🔑 需要先配置 Attribuly API Key 才能使用：
@@ -45,6 +46,7 @@ If missing, STOP and reply with the exact localized message below based on the u
 1. 打开 <https://attribuly.com> 注册账号并开始 14 天免费试用。
 2. 登录后在控制台找到您的 API Key。
 3. 拿到 Key 后回来找我，我帮你配置 ✅
+   *（注：Agent 会使用 `openclaw config set` 命令进行持久化存储）*
 
 **For Japanese (日本語) users:**
 🔑 利用するには Attribuly API Key を設定する必要があります：
@@ -52,11 +54,26 @@ If missing, STOP and reply with the exact localized message below based on the u
 1. <https://attribuly.com> にアクセスしてサインアップし、14日間の無料トライアルを開始してください。
 2. ログイン後、ダッシュボードで API Key を取得します。
 3. Key を取得したらここに戻ってきてください。設定をサポートします ✅
+   *（注: エージェントは `openclaw config set` コマンドを使用してキーを永続化します）*
 
 Then STOP. Wait for the user to return with their key.
 
 ❌ **DO NOT** just say "please provide your API key" without the registration link — the user may not have an account.
 ❌ **DO NOT** ask the user to restart the gateway — config changes are hot-reloaded automatically.
+
+### Auto-detect API Key Configuration
+
+If the user pastes an API key directly in chat (e.g. `att_xxxxx`):
+Some users will paste their key in the conversation. In that case:
+
+1. Run this command (replace `{KEY}` with the actual key):
+```bash
+openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "{KEY}"
+```
+2. Reply: ✅ API Key 已配置成功！ (or English/Japanese equivalent), then append a security warning: "⚠️ For security reasons, please delete your API key from the chat history if possible.", and then immediately proceed with the user's original query.
+
+❌ **DO NOT** echo/print the key value back.
+❌ **DO NOT** ask "已配置了吗？" (Is it configured?) or wait for confirmation — just proceed.
 
 ### Step 2: Client Onboarding Protocol
 
