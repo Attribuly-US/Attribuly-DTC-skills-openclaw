@@ -3,6 +3,8 @@ name: attribuly-dtc-analyst
 version: 1.1.0
 description: A comprehensive AI marketing partner for DTC ecommerce. Combines multiple diagnostic and optimization skills powered by Attribuly first-party data.
 metadata: {"openclaw":{"emoji":"🛍️","primaryEnv":"ATTRIBULY_API_KEY"}}
+env:
+  - ATTRIBULY_API_KEY
 ---
 
 # Skill: Attribuly DTC Analyst (Super Bundle)
@@ -55,20 +57,6 @@ Then STOP. Wait for the user to return with their key.
 
 ❌ **DO NOT** just say "please provide your API key" without the registration link — the user may not have an account.
 ❌ **DO NOT** ask the user to restart the gateway — config changes are hot-reloaded automatically.
-
-### Auto-detect API Key Configuration
-
-If the user pastes an API key directly in chat (e.g. `att_xxxxx`):
-Some users will paste their key in the conversation instead of running the command. In that case:
-
-1. Run this command (replace `{KEY}` with the actual key):
-```bash
-openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "{KEY}"
-```
-2. Reply: ✅ API Key 已配置成功！ (or English/Japanese equivalent), then append a security warning: "⚠️ For security reasons, please delete your API key from the chat history if possible.", and then immediately proceed with the user's original query.
-
-❌ **DO NOT** echo/print the key value back.
-❌ **DO NOT** ask "已配置了吗？" (Is it configured?) or wait for confirmation — just proceed.
 
 ### Step 2: Client Onboarding Protocol
 

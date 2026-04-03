@@ -4,10 +4,6 @@
 
 您的 **DTC 电商专属 AI 营销合作伙伴 (支持 Shopify, WooCommerce 等独立站平台)**。由 Attribuly 第一方数据驱动，这些 OpenClaw 技能为您提供自动化的营销诊断、真实 ROAS 追踪以及利润优先的广告优化建议。
 
-![GitHub stars](https://img.shields.io/github/stars/attribuly/allyclaw-skills?style=social)
-![GitHub forks](https://img.shields.io/github/forks/attribuly/allyclaw-skills?style=social)
-![Platform](https://img.shields.io/badge/Platform-Shopify%20%7C%20WooCommerce-success)
-
 > **全自动营销诊断工作流展示：**
 > 
 > 下面的动画展示了我们的 AI 技能是如何自动串联、逐步深挖性能问题的。例如，当每周报告检测到 Google Ads ROAS 下降时，它会自动触发深度诊断，检查点击率（CTR）问题，并在必要时进一步下钻到具体创意素材层级进行分析。
@@ -29,41 +25,6 @@
 - **业绩追踪:** 生成 30 秒每日消耗扫描报告或深度的每周高管摘要。
 - **创意优化:** 基于真实利润评估 Google/Meta 创意素材，并识别素材疲劳。
 - **预算调优:** 获取以利润为先的预算重分配和受众调整建议。
-
----
-
-## 最新动态与更新日志
-
-**[2026-03-31] API Key 配置流程全面优化！**
-- **极简配置体验**: 新增 API Key 自动检测功能。用户现在只需在对话框中直接粘贴 API Key，Agent 便会自动执行命令完成环境变量的配置。
-- **更智能的交互逻辑**: 更新了 `SKILL.md`，加入了严格的负面约束（DO NOTs），确保 Agent 在缺少 Key 时必定提供注册链接，且不会重复索要或回显敏感信息。
-- **多语言全覆盖**: 自动配置的提示语及相关文档指南已全面适配中文、英文和日文。
-
-**[2026-03-22] v1.1.0 版本正式发布！** 
-
-### [v1.1.0] 新增
-- **诊断分析技能套件**: 
-  - `funnel-analysis`: 全链路客户转化漏斗分析，精确定位各渠道或落地页的流失瓶颈。
-  - `landing-page-analysis`: 诊断落地页转化流失，区分流量质量问题与用户体验摩擦。
-  - `attribution-discrepancy`: 识别并诊断广告平台指标（Meta/Google）、Attribuly 统一归因和后端商店数据之间的报告差异。
-- **创意分析技能**:
-  - `google-creative-analysis`: 提取、处理并分析 Google Ads 的创意表现数据，集成了质量得分、PMax 资产数据及标准化的 A/B 测试评估协议。
-
-### [v1.1.0] 变更
-- **技能注册表更新**: 更新了 `SKILL_REGISTRY.md`，将 `funnel-analysis`, `landing-page-analysis`, `attribution-discrepancy`, 和 `google-creative-analysis` 的状态从 `🔜 Planned` 修改为 `✅ Ready`。
-- **Google Ads Performance**: 增强了深度的根本原因细分逻辑，当检测到 CTR 问题时，可直接映射触发新的 `google-creative-analysis` 技能。
-- **Weekly Marketing Performance**: 整合了漏斗健康检查，并添加了在 CVR 下降时调用新 `funnel-analysis` 技能的触发条件。
-- **Meta Ads Performance**: 更新了数据获取的 schema，以包含与新归因管道兼容的标准化参数。
-- **Google Creative Analysis 整合**: 将独立的创意分析框架（评估标准、DTC 最佳实践、仪表板架构）直接合并到 `google-creative-analysis` 技能中。
-
-### [v1.1.0] 移除
-- 从 `attribution-discrepancy` 的根本原因分析逻辑中删除了过时的“跟踪不足 (Under-tracking)”场景。
-- 删除了冗余的独立文件 `creative_analysis_framework.md`。
-
-**[首次发布] v1.0.0**
-- 首次创建 `SKILL_REGISTRY.md` 以映射用户意图与 Agent 技能。
-- 实现核心业绩分析技能 (`weekly_marketing_performance`, `daily_marketing_pulse`, `google_ads_performance`, `meta_ads_performance`)。
-- 实现核心优化技能 (`budget_optimization`, `audience_optimization`, `bid_strategy_optimization`)。
 
 ---
 
@@ -120,8 +81,7 @@
 
 - **付费专属功能：** API 密钥仅对付费计划用户开放。您必须升级您的工作空间才能生成密钥。
 - **免费试用：** 如果您是新用户，可以开启 [14天免费试用](https://attribuly.com/pricing/) 来体验平台功能。
-- **如何配置：** 为了获得最高的安全性，我们推荐您通过 OpenClaw 的 **Agent Settings UI (环境变量/Secrets)** 来配置 API 密钥。或者，您也可以**直接在聊天对话框中将 API Key 发送给 Agent**，Agent 会自动帮您完成配置。
-  - ⚠️ **安全提示：** 如果您选择通过聊天框配置，Agent 会运行本地命令 (`openclaw config set`) 将密钥持久化到环境配置中。为了防止密钥在聊天记录中泄露，我们强烈建议您在配置完成后删除包含 API Key 的那条聊天记录。
+- **如何配置：** 为了获得最高的安全性，请务必通过 OpenClaw 的 **Agent Settings UI (环境变量/Secrets)** 来配置 API 密钥。为防止密钥在聊天记录中泄露，请不要直接在聊天对话框中粘贴 API Key。
 
 ---
 
@@ -131,7 +91,7 @@
 
 将以下提示词复制到您的 OpenClaw 对话框中，Agent 将自动为您安装：
 
-> Install these skills from https\://github.com/Alexchulee/Attribuly-DTC-skills-openclaw\.git
+> Install these skills from https\://github.com/Attribuly-US/ecommerce-dtc-skills.git
 
 ### 方法 2：Git Submodule (推荐，便于更新)
 
@@ -140,7 +100,7 @@
 1. 在终端中导航到您的 OpenClaw 实例根目录。
 2. 将此仓库添加为子模块：
    ```bash
-   git submodule add https://github.com/Alexchulee/Attribuly.git vendor/attribuly
+   git submodule add https://github.com/Attribuly-US/ecommerce-dtc-skills.git vendor/attribuly
    ```
 3. 如果 `skills` 目录不存在，请先创建：
    ```bash
