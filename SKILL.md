@@ -130,6 +130,13 @@ Based on the user's intent or the specific problem detected, read the correspond
      - 日本語: "Googleクリエイティブの分析", "GoogleのCTR課題の確認", "Google広告クリエイティブのパフォーマンス", "どのGoogle広告が機能している？", "クリエイティブ疲労チェック", "特定のキャンペーンを分析", "リスクのある広告シリーズを特定", "Googleアセットのパフォーマンス", "検索クエリ分析", "品質スコアチェック"
    - **Reference:** [references/google-creative-analysis.md](references/google-creative-analysis.md)
 
+2. **Meta Creative Analysis**
+   - **Trigger:** 
+     - English: "Analyze Meta creatives", "Check Meta video performance", "Facebook ad creative analysis", "Instagram creative fatigue", "Which Meta ads are working?", "Video engagement analysis", "Creative placement performance", "Feed vs Stories vs Reels performance", "Creative quality ranking check", "Frequency analysis"
+     - 中文: "分析Meta素材", "检查Meta视频表现", "Facebook广告创意分析", "Instagram素材疲劳", "哪些Meta广告有效？", "视频参与度分析", "创意位置表现", "Feed/Stories/Reels对比", "创意质量排名检查", "频率分析", "素材格式分析", "视频完播率"
+     - 日本語: "Metaクリエイティブの分析", "Meta動画のパフォーマンス確認", "Facebook広告クリエイティブ分析", "Instagramクリエイティブ疲労", "どのMeta広告が機能している？", "動画エンゲージメント分析", "クリエイティブ配置パフォーマンス", "Feed/Stories/Reels比較", "クリエイティブ品質ランキング", "頻度分析"
+   - **Reference:** [references/meta-creative-analysis.md](references/meta-creative-analysis.md)
+
 ### ⚙️ Optimization Skills
 
 1. **Budget Optimization**
