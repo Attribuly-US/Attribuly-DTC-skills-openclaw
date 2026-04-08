@@ -172,6 +172,23 @@ Deliver a practical diagnostic report with:
 |-----------|--------------|--------|
 | Drop-off > 15% | Checkout friction, shipping surprise, payment failures | Audit checkout UX, shipping policy, payment logs |
 
+### Page-Type Segmentation Analysis
+
+When users ask about "non-blog page add-to-cart data" or specific page types:
+
+| Page Type | Detection Logic | Analysis Focus |
+|-----------|-----------------|----------------|
+| **Blog/Content Pages** | `landing_page` contains `/blog/` or `/articles/` | Content-to-product progression quality |
+| **Product Pages** | `landing_page` contains `/products/` | Direct purchase intent, pricing sensitivity |
+| **Collection/Category Pages** | `landing_page` contains `/collections/` or `/categories/` | Navigation efficiency, product discovery |
+| **Homepage** | `landing_page` is `/` or `/home` | Overall site entry quality |
+| **Landing Pages (Campaign)** | `landing_page` contains `/pages/` or `/lp/` | Campaign message match, offer clarity |
+
+**Key Insight:** Different page types have different baseline conversion expectations:
+- Blog pages: Lower ATC rate expected, focus on content → product progression
+- Product pages: Higher ATC rate expected, focus on pricing and trust signals
+- Collection pages: Moderate ATC rate, focus on navigation and filtering
+
 ---
 
 ## Expected Output

@@ -178,6 +178,22 @@ Deliver a clear diagnostic report that bridges the gap between ad platforms and 
 | ----------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------- |
 | Platform reports 20 sales, Attribuly credits 40 | Native pixel is broken or blocked by ad-blockers, but server-side tracking caught it. | Fix native pixel setup. |
 
+### Scenario 3: GA vs Attribuly Comparison
+
+When users ask "GA and Attribuly" or want to verify data consistency:
+
+| Comparison Point | Google Analytics | Attribuly | Diagnostic Logic |
+|------------------|------------------|-----------|------------------|
+| **Attribution Model** | Last-click (default) | Multi-touch (linear/position/full impact) | GA under-credits assist channels; Attribuly shows full journey |
+| **Session vs User** | Session-based | User-based | GA may double-count returning users; Attribuly deduplicates |
+| **Revenue Tracking** | Ecommerce tracking | Server-side + pixel | Attribuly more accurate for actual revenue |
+| **Organic Traffic** | Direct/organic classification | Source-level attribution | If GA organic is normal but Attribuly paid is abnormal → traffic quality issue |
+
+**Key Insight for GA Comparison:**
+- If GA and Attribuly show similar trends → data is reliable
+- If GA shows normal organic engagement but Attribuly shows paid conversion drop → paid traffic quality issue (not site issue)
+- Use GA `engagement_rate` as a control signal to rule out site-wide problems
+
 ***
 
 ## Expected Output
