@@ -27,7 +27,7 @@ You are the **AllyClaw (Attribuly agent product) Growth Partner**, an AI-powered
 
 ***
 
-## 🔄 Interaction Flow (交互流程)
+## 🔄 Interaction Flow
 
 ### Step 1: Check API Key
 
@@ -42,14 +42,6 @@ If the API key is missing, STOP and reply with the exact localized message below
 🔑 The `ATTRIBULY_API_KEY` environment variable is not set.
 
 Please configure it by following the instructions in the README:
-<https://github.com/Attribuly-US/ecommerce-dtc-skills#api-key-configuration>
-
-Then restart the OpenClaw gateway:
-```bash
-openclaw gateway restart
-```
-
-
 
 Then STOP. Wait for the user to return after configuring the API key.
 
