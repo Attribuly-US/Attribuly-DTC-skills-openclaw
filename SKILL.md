@@ -31,108 +31,30 @@ You are the **AllyClaw (Attribuly agent product) Growth Partner**, an AI-powered
 
 ### Step 1: Check API Key
 
-Before processing any query, check if the `ATTRIBULY_API_KEY` is configured. The API key can be set in two ways:
+Before processing any query, check if the `ATTRIBULY_API_KEY` environment variable is configured:
 
-**Method 1: Via OpenClaw Config (Recommended for Cloud Deployments)**
-```bash
-openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "{KEY}"
-```
-After setting via config, restart the OpenClaw gateway:
-```bash
-openclaw gateway restart
-```
-
-**Method 2: Via Environment Variable (For Local/Manual Setup)**
-```bash
-export ATTRIBULY_API_KEY="{KEY}"
-```
-
-**Verification:**
-To verify the API key is properly configured, run:
 ```bash
 openclaw config get skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY
-```
-Or check if the environment variable is set:
-```bash
-[ -n "$ATTRIBULY_API_KEY" ] && echo "API key is set" || echo "API key is missing"
 ```
 
 If the API key is missing, STOP and reply with the exact localized message below based on the user's language, then wait for the user to configure it.
 
-**For English users:**
-🔑 You need an Attribuly API Key to get started:
+🔑 The `ATTRIBULY_API_KEY` environment variable is not set.
 
-1. Go to <https://attribuly.com> and sign up (14-day free trial available).
-2. After signing in, find your API Key in settings.
-3. Configure the API key using ONE of these methods:
+Please configure it by following the instructions in the README:
+<https://github.com/Attribuly-US/ecommerce-dtc-skills#api-key-configuration>
 
-   **Option A - Via OpenClaw Config (Recommended for cloud deployments):**
-   ```bash
-   openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "att_your_actual_key_here"
-   openclaw gateway restart
-   ```
+Then restart the OpenClaw gateway:
+```bash
+openclaw gateway restart
+```
 
-   **Option B - Via Environment Variable:**
-   ```bash
-   export ATTRIBULY_API_KEY="att_your_actual_key_here"
-   ```
 
-4. Verify the configuration:
-   ```bash
-   openclaw config get skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY
-   ```
 
-**For Chinese (中文) users:**
-🔑 需要先配置 Attribuly API Key 才能使用：
-
-1. 打开 <https://attribuly.com> 注册账号并开始 14 天免费试用。
-2. 登录后在控制台找到您的 API Key。
-3. 使用以下任一方法配置 API key：
-
-   **方法 A - 通过 OpenClaw 配置（推荐用于云端部署）：**
-   ```bash
-   openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "att_your_actual_key_here"
-   openclaw gateway restart
-   ```
-
-   **方法 B - 通过环境变量：**
-   ```bash
-   export ATTRIBULY_API_KEY="att_your_actual_key_here"
-   ```
-
-4. 验证配置：
-   ```bash
-   openclaw config get skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY
-   ```
-
-**For Japanese (日本語) users:**
-🔑 利用するには Attribuly API Key を設定する必要があります：
-
-1. <https://attribuly.com> にアクセスしてサインアップし、14日間の無料トライアルを開始してください。
-2. ログイン後、ダッシュボードで API Key を取得します。
-3. 以下のいずれかの方法で API key を設定してください：
-
-   **方法 A - OpenClaw 設定経由（クラウドデプロイメント推奨）：**
-   ```bash
-   openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "att_your_actual_key_here"
-   openclaw gateway restart
-   ```
-
-   **方法 B - 環境変数経由：**
-   ```bash
-   export ATTRIBULY_API_KEY="att_your_actual_key_here"
-   ```
-
-4. 設定を確認：
-   ```bash
-   openclaw config get skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY
-   ```
-
-Then STOP. Wait for the user to return with their key.
+Then STOP. Wait for the user to return after configuring the API key.
 
 ❌ **DO NOT** just say "please provide your API key" without the registration link — the user may not have an account.
 ❌ **DO NOT** proceed without a valid API key — all API calls will fail.
-⚠️ **IMPORTANT:** For cloud deployments (Ubuntu servers, Docker, etc.), always use Method A (OpenClaw Config) and restart the gateway after configuration changes.
 
 ### Step 2: Client Onboarding Protocol
 
@@ -289,136 +211,7 @@ Based on the user's intent or the specific problem detected, read the correspond
 
 ***
 
-## 🔧 Configuration & Troubleshooting (配置与故障排除)
-
-### API Key Configuration for Cloud Deployments
-
-For cloud-based OpenClaw deployments (Ubuntu servers, Docker containers, etc.), follow these steps to ensure the API key persists across restarts:
-
-#### Step 1: Set the API Key via OpenClaw Config
-
-```bash
-openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "att_your_actual_key"
-```
-
-This command writes the API key to the OpenClaw configuration file (typically `~/.openclaw/openclaw.json`).
-
-#### Step 2: Restart the OpenClaw Gateway
-
-```bash
-openclaw gateway restart
-```
-
-**Why restart is necessary:** The OpenClaw gateway loads environment variables from the config file at startup. Without a restart, the new API key won't be available to the skill.
-
-#### Step 3: Verify the Configuration
-
-```bash
-# Check if the config was saved correctly
-openclaw config get skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY
-
-# Expected output: att_your_actual_key
-```
-
-### Common Issues & Solutions
-
-#### Issue 1: "ATTRIBULY_API_KEY environment variable is still not set"
-
-**Cause:** The gateway hasn't been restarted after setting the config, or the config wasn't saved correctly.
-
-**Solution:**
-1. Verify the config is saved:
-   ```bash
-   cat ~/.openclaw/openclaw.json | grep -A 5 "attribuly-dtc-analyst"
-   ```
-2. If the config is missing, re-run the set command
-3. Restart the gateway:
-   ```bash
-   openclaw gateway restart
-   ```
-4. Wait 10-15 seconds for the gateway to fully restart
-5. Try your query again
-
-#### Issue 2: Config is set but API calls still fail
-
-**Cause:** The API key might be incorrect or expired.
-
-**Solution:**
-1. Verify your API key in the Attribuly dashboard
-2. Re-set the config with the correct key:
-   ```bash
-   openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "att_correct_key"
-   openclaw gateway restart
-   ```
-3. Test the API key manually:
-   ```bash
-   curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list-sum" \
-     -H "ApiKey: att_your_key" \
-     -H "Content-Type: application/json" \
-     -d '{"start_date": "2025-01-01", "end_date": "2025-01-07", "dimensions": ["channel"], "model": "linear", "goal": "purchase"}'
-   ```
-
-#### Issue 3: Gateway won't restart
-
-**Cause:** The gateway process might be stuck or there's a configuration syntax error.
-
-**Solution:**
-1. Check gateway status:
-   ```bash
-   openclaw gateway status
-   ```
-2. If stuck, force kill and restart:
-   ```bash
-   pkill -f openclaw
-   openclaw gateway start
-   ```
-3. Check logs for errors:
-   ```bash
-   openclaw gateway logs
-   ```
-
-### Alternative: Direct Environment Variable Setup
-
-If the OpenClaw config method doesn't work, you can set the environment variable directly in your shell profile:
-
-#### For Ubuntu/Debian systems:
-
-```bash
-# Add to ~/.bashrc or ~/.profile
-echo 'export ATTRIBULY_API_KEY="att_your_key"' >> ~/.bashrc
-
-# Reload the profile
-source ~/.bashrc
-
-# Verify
-echo $ATTRIBULY_API_KEY
-```
-
-**Note:** This method requires the environment variable to be set in the same session where the OpenClaw gateway is running. For systemd services or Docker containers, you'll need to set the environment variable in the service configuration or Dockerfile.
-
-### For Docker Deployments
-
-If running OpenClaw in Docker, set the environment variable in your `docker-compose.yml` or `docker run` command:
-
-```yaml
-# docker-compose.yml
-services:
-  openclaw:
-    image: openclaw/openclaw:latest
-    environment:
-      - ATTRIBULY_API_KEY=att_your_key
-    # ... other config
-```
-
-Or:
-
-```bash
-docker run -e ATTRIBULY_API_KEY=att_your_key openclaw/openclaw:latest
-```
-
-***
-
-## 🔗 Skill Chaining Logic
+##  Skill Chaining Logic
 
 When one skill detects an issue, it can trigger related skills:
 

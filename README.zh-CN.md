@@ -81,7 +81,159 @@
 
 - **付费专属功能：** API 密钥仅对付费计划用户开放。您必须升级您的工作空间才能生成密钥。
 - **免费试用：** 如果您是新用户，可以开启 [14天免费试用](https://attribuly.com/pricing/) 来体验平台功能。
-- **如何配置：** 为了获得最高的安全性，请务必通过 OpenClaw 的 **Agent Settings UI (环境变量/Secrets)** 来配置 API 密钥。为防止密钥在聊天记录中泄露，请不要直接在聊天对话框中粘贴 API Key。
+- **如何获取 API 密钥：**
+  1. 访问 <https://attribuly.com> 并注册账号
+  2. 登录后，进入 Settings → API Keys
+  3. 复制您的 API 密钥（格式类似 `att_xxxxxxxxxxxx`）
+
+---
+
+## API 密钥配置
+
+获取 API 密钥后，您需要配置它以便技能可以访问 Attribuly 的 API。请选择最适合您部署环境的方法：
+
+### 方法 1：OpenClaw 配置（推荐用于云端部署）
+
+这是 Ubuntu 服务器、Docker 容器和其他云端部署的推荐方法。
+
+#### 步骤 1：设置 API 密钥
+
+在终端中运行以下命令（将 `{KEY}` 替换为您的实际 API 密钥）：
+
+```bash
+openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "att_your_actual_key"
+```
+
+此命令会将 API 密钥写入 OpenClaw 配置文件（通常位于 `~/.openclaw/openclaw.json`）。
+
+#### 步骤 2：重启 Gateway
+
+**重要：** 必须重启 gateway 才能加载新配置：
+
+```bash
+openclaw gateway restart
+```
+
+等待 10-15 秒让 gateway 完全重启。
+
+#### 步骤 3：验证配置
+
+```bash
+openclaw config get skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY
+```
+
+预期输出：`att_your_actual_key`
+
+### 方法 2：环境变量（用于本地/手动设置）
+
+对于本地开发或手动设置，您可以直接设置环境变量。
+
+#### 临时设置（仅当前会话）
+
+```bash
+export ATTRIBULY_API_KEY="att_your_actual_key"
+```
+
+#### 永久设置（Ubuntu/Debian）
+
+添加到您的 shell 配置文件：
+
+```bash
+echo 'export ATTRIBULY_API_KEY="att_your_actual_key"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+或者对于 zsh：
+
+```bash
+echo 'export ATTRIBULY_API_KEY="att_your_actual_key"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+**注意：** 对于 systemd 服务或 Docker 容器，您需要在服务配置或 Dockerfile 中设置环境变量。
+
+### 方法 3：Docker 部署
+
+如果在 Docker 中运行 OpenClaw，请在配置中设置环境变量：
+
+#### 使用 docker-compose.yml
+
+```yaml
+services:
+  openclaw:
+    image: openclaw/openclaw:latest
+    environment:
+      - ATTRIBULY_API_KEY=att_your_actual_key
+    # ... 其他配置
+```
+
+#### 使用 docker run
+
+```bash
+docker run -e ATTRIBULY_API_KEY=att_your_actual_key openclaw/openclaw:latest
+```
+
+### 验证配置
+
+配置 API 密钥后，验证其是否正常工作：
+
+```bash
+# 检查环境变量是否已设置
+[ -n "$ATTRIBULY_API_KEY" ] && echo "API key is set" || echo "API key is missing"
+
+# 使用简单的 API 调用测试 API 密钥
+curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list-sum" \
+  -H "ApiKey: $ATTRIBULY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"start_date": "2025-01-01", "end_date": "2025-01-07", "dimensions": ["channel"], "model": "linear", "goal": "purchase"}'
+```
+
+### 故障排除
+
+#### 问题："ATTRIBULY_API_KEY environment variable is still not set"
+
+**原因：** 设置配置后未重启 gateway。
+
+**解决方案：**
+1. 验证配置是否已保存：
+   ```bash
+   cat ~/.openclaw/openclaw.json | grep -A 5 "attribuly-dtc-analyst"
+   ```
+2. 如果配置缺失，重新运行设置命令
+3. 重启 gateway：
+   ```bash
+   openclaw gateway restart
+   ```
+4. 等待 10-15 秒让 gateway 完全重启
+5. 再次尝试您的查询
+
+#### 问题：API 调用因认证错误失败
+
+**原因：** API 密钥可能不正确或已过期。
+
+**解决方案：**
+1. 在 Attribuly 仪表板中验证您的 API 密钥
+2. 使用正确的密钥重新设置配置
+3. 重启 gateway
+
+#### 问题：Gateway 无法重启
+
+**原因：** Gateway 进程可能卡住或配置存在语法错误。
+
+**解决方案：**
+1. 检查 gateway 状态：
+   ```bash
+   openclaw gateway status
+   ```
+2. 如果卡住，强制终止并重启：
+   ```bash
+   pkill -f openclaw
+   openclaw gateway start
+   ```
+3. 检查日志中的错误：
+   ```bash
+   openclaw gateway logs
+   ```
 
 ---
 
