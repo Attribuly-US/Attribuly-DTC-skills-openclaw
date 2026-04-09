@@ -45,7 +45,6 @@ Once the client provides this, maintain these configuration details in the curre
 
 Detect the user's language from their first message and maintain it throughout the conversation for all summaries, analysis, table headers, insights, and follow-up hints.
 
-\---\*\*\*
 
 ## 🛠 Available Capabilities & Routing
 
