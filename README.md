@@ -4,11 +4,7 @@
 
 [Watch the video](https://youtu.be/JDat6bls5Wk?si=jgZtnRZnl39VqFj3)
 
-> **The Problem:** Meta says you made $10,000. Google claims another $8,000. But your Shopify dashboard only shows $12,000 total. They are both taking credit for the same sales, leaving you blind to your true ROAS and actual profit margins.
->
-> **The Solution:** Meet your new **AI DTC Analyst**—free, open-source, and tireless. It acts as an advanced **AI Marketing Agent** that plugs directly into your first-party backend data, cuts through the ad platform noise, and tells you exactly where your budget is bleeding.
->
-> **Take Action:** Developer teams can clone the repo and run it locally with **Claude Code E-commerce** tools, Cursor, or OpenClaw. Want it running in 60 seconds with zero configuration? Try our fully-managed Cloud Version with a 50% discount on your first month.
+<br />
 
 Your specialized **AI Marketing Partner for DTC Ecommerce (Shopify, WooCommerce, and more)**. Powered by Attribuly's first-party data, these **Shopify Data Analytics** skills provide autonomous marketing analysis, true ROAS tracking, and profit-first optimization for your online store using a robust **ChatGPT Marketing Prompt** framework and API logic.
 
@@ -65,7 +61,7 @@ graph TD
 
 ### Why for Shopify & WooCommerce?
 
-Traditional ad platforms (Meta, Google) often misattribute sales. For Shopify and WooCommerce merchants, these skills use your store's real backend data to reveal your **true profit margin, customer acquisition cost (CAC), and lifetime value (LTV)**, ensuring your marketing decisions are driven by actual revenue.
+The main challenge for AI in marketing isn't just misattribution—it's that general AI lacks the full context from the initial ad click all the way to the final purchase. Traditional ad platforms (Meta, Google) only see their own fragmented pieces of the journey. For Shopify and WooCommerce merchants, these skills bridge that gap by using your store's real backend data. This provides the AI with the complete, end-to-end customer journey needed to reveal your **true profit margin, customer acquisition cost (CAC), and lifetime value (LTV)**, ensuring its marketing diagnoses and decisions are driven by actual revenue context.
 
 ### Core Capabilities:
 
