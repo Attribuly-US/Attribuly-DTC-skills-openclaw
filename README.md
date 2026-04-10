@@ -1,24 +1,67 @@
 **English** | [简体中文](./README.zh-CN.md) | [日本語](./README.ja.md)
 
-# 🛍️ Attribuly OpenClaw Skills: AI Marketing Analytics for Shopify & WooCommerce
-
-[!\[Deploy to Attribuly Cloud\](https://img.shields.io/badge/Deploy%20to-Attribuly%20Cloud-blue?style=for-the-badge null)](https://app.attribuly.com/cherry/#/ally-claw)
+# 🛍️ Attribuly AI Marketing Skills: Universal Analyst for ChatGPT, Claude, Codex & OpenClaw
 
 [Watch the video](https://youtu.be/JDat6bls5Wk?si=jgZtnRZnl39VqFj3)
 
 > **The Problem:** Meta says you made $10,000. Google claims another $8,000. But your Shopify dashboard only shows $12,000 total. They are both taking credit for the same sales, leaving you blind to your true ROAS and actual profit margins.
 >
-> **The Solution:** Meet your new "AI Marketing Analyst"—free, open-source, and tireless. It plugs directly into your first-party backend data, cuts through the ad platform noise, and tells you exactly where your budget is bleeding.
+> **The Solution:** Meet your new **AI DTC Analyst**—free, open-source, and tireless. It acts as an advanced **AI Marketing Agent** that plugs directly into your first-party backend data, cuts through the ad platform noise, and tells you exactly where your budget is bleeding.
 >
-> **Take Action:** Developer teams can clone the repo and run it locally for free. Want it running in 60 seconds with zero configuration? Try our fully-managed Cloud Version with a 50% discount on your first month.
+> **Take Action:** Developer teams can clone the repo and run it locally with **Claude Code E-commerce** tools, Cursor, or OpenClaw. Want it running in 60 seconds with zero configuration? Try our fully-managed Cloud Version with a 50% discount on your first month.
 
-Your specialized **AI Marketing Partner for DTC Ecommerce (Shopify, WooCommerce, and more)**. Powered by Attribuly's first-party data, these OpenClaw skills provide autonomous marketing analysis, true ROAS tracking, and profit-first optimization for your online store.
+Your specialized **AI Marketing Partner for DTC Ecommerce (Shopify, WooCommerce, and more)**. Powered by Attribuly's first-party data, these **Shopify Data Analytics** skills provide autonomous marketing analysis, true ROAS tracking, and profit-first optimization for your online store using a robust **ChatGPT Marketing Prompt** framework and API logic.
 
-## 🚀 Get Started / 快速开始 / はじめに
+## 🚀 How It Works (Workflow)
 
-**Get started:** Sign up and get your API key at <https://attribuly.com> (14-day free trial available).\
-**快速开始:** 请前往 <https://attribuly.com> 注册获取 API Key（提供 14 天免费试用）。\
-**はじめに:** <https://attribuly.com> でサインアップして API Key を取得してください（14日間の無料トライアルあり）。
+```mermaid
+sequenceDiagram
+    actor User
+    participant Agent as AI Agent<br/>(Claude/ChatGPT/Cursor)
+    participant Local as Local Files<br/>(SKILL.md & references)
+    participant API as Attribuly Data API
+
+    User->>Agent: "Analyze last week's Google Ads ROAS"
+    Agent->>Local: Read skill prompts & logic
+    Agent->>API: Request real Shopify/WooCommerce data<br/>(using ATTRIBULY_API_KEY)
+    API-->>Agent: Return true conversion metrics
+    Agent->>Agent: Apply decision framework
+    Agent-->>User: Provide actionable optimization recommendations
+```
+
+### Autonomous Diagnostics & Skill Chaining
+
+By setting up scheduled tasks (daily/weekly) or metric alerts, the skills can autonomously chain together to perform deep root-cause analysis:
+
+```mermaid
+graph TD
+    %% Triggers
+    T_Weekly[🗓️ Weekly Schedule<br/>Mon 09:00 AM] --> S_Weekly(weekly-marketing-performance)
+    T_Daily[⏱️ Daily Schedule<br/>09:00 AM] --> S_Daily(daily-marketing-pulse)
+    
+    %% Core Analysis
+    S_Weekly -->|Google ROAS Drops| D_Google(google-ads-performance)
+    S_Weekly -->|Meta CPA Rises| D_Meta(meta-ads-performance)
+    S_Weekly -->|CVR Drops| D_Funnel(funnel-analysis)
+    
+    %% Deep Dive
+    D_Google -->|CTR Issue| R_GoogleCreative(google-creative-analysis)
+    D_Meta -->|High Frequency| R_MetaCreative(meta-creative-analysis)
+    D_Funnel -->|High Bounce Rate| R_Landing(landing-page-analysis)
+    
+    %% Optimization
+    D_Google -->|Spend Inefficiency| O_Budget(budget-optimization)
+    D_Meta -->|Spend Inefficiency| O_Budget
+    
+    %% Styling
+    classDef trigger fill:#e1f5fe,stroke:#311b92,stroke-width:2px;
+    classDef core fill:#fff3e0,stroke:#e65100,stroke-width:2px;
+    classDef deep fill:#f3e5f5,stroke:#4a148c,stroke-width:2px;
+    
+    class T_Weekly,T_Daily trigger;
+    class S_Weekly,S_Daily core;
+    class D_Google,D_Meta,D_Funnel,R_GoogleCreative,R_MetaCreative,R_Landing,O_Budget deep;
+```
 
 ### Why for Shopify & WooCommerce?
 
@@ -26,12 +69,10 @@ Traditional ad platforms (Meta, Google) often misattribute sales. For Shopify an
 
 ### Core Capabilities:
 
-<div align="center">
-  <img src="./assets/weekly-report-workflow.jpeg" width="600" alt="Skill Workflow" />
-</div>
+<br />
 
 - **True ROI & ROAS Focus** — Powered by Attribuly first-party attribution concepts (true ROAS, ncROAS, profit, margin, LTV, MER) to reduce Meta/Google over-attribution.
-- **Under Your Control** — Deploy locally or in the cloud. Memory and strategy remain within your secure environment.
+- **Universal Compatibility** — Works with any AI agent capable of file reading and API calls (ChatGPT, Claude Code, Cursor, Trae, OpenClaw).
 - **Extensible Skills** — Built-in automated triggers. Autonomously analyze funnels, pacing, creatives, and discrepancies. No lock-in.
 
 ### What you can do:
@@ -74,9 +115,9 @@ Try asking the agent any of the following to trigger specific skills:
 ## Table of Contents
 
 - [Available Skills](#available-skills)
-- [Installation Guide](#installation-guide)
+- [How to Use with Other AI Agents (Installation)](#how-to-use-with-other-ai-agents-installation)
 - [Managed Cloud Hosting (Deployment)](#managed-cloud-hosting-deployment)
-- [Post-Installation](#post-installation)
+- [Technical Reference](#technical-reference)
 
 ***
 
@@ -95,11 +136,11 @@ Try asking the agent any of the following to trigger specific skills:
 - `landing-page-analysis` — Isolate traffic quality vs UX friction on landing pages
 - `attribution-discrepancy` — Quantify and diagnose reporting gaps between ad networks and backend
 - `google-creative-analysis` — Integrate Quality Score, PMax assets, and standardized evaluation rubrics for Google Ads
+- `meta-creative-analysis` — Analyze video engagement, creative placement performance, and detect creative fatigue for Meta Ads
 
 ### 🔜 Coming Soon (Planned)
 
 - `tiktok-ads-performance`
-- `meta-creative-analysis`
 - `creative-fatigue-detector`
 - `product-performance`
 - `customer-journey-analysis`
@@ -109,188 +150,63 @@ See the Technical Reference section below for detailed triggers and usage mappin
 
 \---\*\*\*
 
-## Installation Guide
+## How to Use with Other AI Agents (Installation)
 
-### 🚀 No-Code Setup for Shopify & WooCommerce Users
+This repository contains structured prompts (`SKILL.md`) and logic definitions (`references/`). **Any LLM tool capable of file reading and API requests can use these skills natively.**
 
-Not a developer? No problem! You can run these AI skills without writing any code:
+### ⚠️ Prerequisite: Attribuly API Key (Required)
 
-1. Connect your Shopify or WooCommerce store to [Attribuly](https://attribuly.com).
-2. Grab your API Key from the Attribuly dashboard.
-3. Paste the key into your Agent Settings
-4. Ask the AI: *"Analyze my Shopify funnel drop-off for the last 7 days."*
+Before installing the skills, you need an Attribuly API key. These skills rely heavily on Attribuly-exclusive metrics (like `new_order_roas` and true profit) to function autonomously. Regular AI models lack access to your real order data; our API bridges this gap.
 
-### Step 1: Obtain Your Attribuly API Key
-
-Before installing the skills, you need an Attribuly API key. These skills rely heavily on Attribuly-exclusive metrics (like `new_order_roas` and true profit) to function autonomously.
-
-- **Paid Feature:** The API key is exclusively available to paid-plan users. You must upgrade your workspace before you can generate the key.
-- **Free Trial:** If you are new, you can start a [14-day free trial](https://attribuly.com/pricing/) to test the platform.
+- **Data Privacy**: When running this via a local agent (like Claude Code or Cursor), your data analysis happens entirely on your local machine. The API only fetches aggregated metrics, ensuring your core business data remains secure and private.
 - **How to get your API key:**
-  1. Go to <https://attribuly.com> and sign up
-  2. After signing in, navigate to Settings → API Keys
-  3. Copy your API key (it should look like `att_xxxxxxxxxxxx`)
+  1. Connect your Shopify or WooCommerce store to [Attribuly](https://attribuly.com) (14-day free trial available).
+  2. Navigate to Settings → API Keys in your dashboard.
+  3. Copy your API key (it should look like `att_xxxxxxxxxxxx`).
 
-***
+### Option 1: CLI AI Agents (Claude Code, Cursor, Trae, Codex)
 
-## API Key Configuration
-
-After obtaining your API key, you need to configure it so the skills can access Attribuly's API. Choose the method that best fits your deployment:
-
-### Method 1: OpenClaw Config (Recommended for Cloud Deployments)
-
-This is the recommended method for Ubuntu servers, Docker containers, and other cloud deployments.
-
-#### Step 1: Set the API Key
-
-Run this command in your terminal (replace `{KEY}` with your actual API key):
-
-```bash
-openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "att_your_actual_key"
-```
-
-This command writes the API key to the OpenClaw configuration file (typically `~/.openclaw/openclaw.json`).
-
-#### Step 2: Restart the Gateway
-
-**Important:** The gateway must be restarted to load the new configuration:
-
-```bash
-openclaw gateway restart
-```
-
-Wait 10-15 seconds for the gateway to fully restart.
-
-#### Step 3: Verify the Configuration
-
-```bash
-openclaw config get skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY
-```
-
-Expected output: `att_your_actual_key`
-
-### Method 2: Environment Variable (For Local/Manual Setup)
-
-For local development or manual setups, you can set the environment variable directly.
-
-#### Temporary (Current Session Only)
-
-```bash
-export ATTRIBULY_API_KEY="att_your_actual_key"
-```
-
-#### Permanent (Ubuntu/Debian)
-
-Add to your shell profile:
-
-```bash
-echo 'export ATTRIBULY_API_KEY="att_your_actual_key"' >> ~/.bashrc
-source ~/.bashrc
-```
-
-Or for zsh:
-
-```bash
-echo 'export ATTRIBULY_API_KEY="att_your_actual_key"' >> ~/.zshrc
-source ~/.zshrc
-```
-
-**Note:** For systemd services or Docker containers, you'll need to set the environment variable in the service configuration or Dockerfile.
-
-### Method 3: Docker Deployment
-
-If running OpenClaw in Docker, set the environment variable in your configuration:
-
-#### Using docker-compose.yml
-
-```yaml
-services:
-  openclaw:
-    image: openclaw/openclaw:latest
-    environment:
-      - ATTRIBULY_API_KEY=att_your_actual_key
-    # ... other config
-```
-
-#### Using docker run
-
-```bash
-docker run -e ATTRIBULY_API_KEY=att_your_actual_key openclaw/openclaw:latest
-```
-
-### Verification
-
-After configuring the API key, verify it's working:
-
-```bash
-# Check if the environment variable is set
-[ -n "$ATTRIBULY_API_KEY" ] && echo "API key is set" || echo "API key is missing"
-
-# Test the API key with a simple API call
-curl -X POST "https://data.api.attribuly.com/v2-4-2/api/all-attribution/get-list-sum" \
-  -H "ApiKey: $ATTRIBULY_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"start_date": "2025-01-01", "end_date": "2025-01-07", "dimensions": ["channel"], "model": "linear", "goal": "purchase"}'
-```
-
-### Troubleshooting
-
-#### Issue: "ATTRIBULY_API_KEY environment variable is still not set"
-
-**Cause:** The gateway hasn't been restarted after setting the config.
-
-**Solution:**
-1. Verify the config is saved:
+1. **Clone the repository:**
    ```bash
-   cat ~/.openclaw/openclaw.json | grep -A 5 "attribuly-dtc-analyst"
+   git clone https://github.com/Attribuly-US/ecommerce-dtc-skills.git
+   cd ecommerce-dtc-skills
    ```
-2. If the config is missing, re-run the set command
-3. Restart the gateway:
+2. **Set your API Key as an environment variable:**
+   ```bash
+   export ATTRIBULY_API_KEY="att_your_actual_key"
+   ```
+3. **Run your agent in the directory and prompt it:**
+   ```bash
+   claude -p "Read SKILL.md and generate a weekly marketing report for my store"
+   ```
+
+### Option 2: ChatGPT (Custom GPTs / Web)
+
+1. Download the `references/` directory and upload the Markdown files as a **Knowledge Base** to your Custom GPT.
+2. Copy the system prompt instructions from `SKILL.md` into your GPT's **Instructions** field.
+3. Configure an **Action** using the Attribuly API endpoints described in the references, and authenticate with your API Key in the Action settings.
+
+### Option 3: OpenClaw (Native Support)
+
+For OpenClaw users, you can deploy it directly via the terminal:
+
+1. **Set the API Key:**
+   ```bash
+   openclaw config set skills.entries.attribuly-dtc-analyst.env.ATTRIBULY_API_KEY "att_your_actual_key"
+   ```
+2. **Restart the Gateway:**
    ```bash
    openclaw gateway restart
    ```
-4. Wait 10-15 seconds for the gateway to fully restart
-5. Try your query again
-
-#### Issue: API calls fail with authentication error
-
-**Cause:** The API key might be incorrect or expired.
-
-**Solution:**
-1. Verify your API key in the Attribuly dashboard
-2. Re-set the config with the correct key
-3. Restart the gateway
-
-#### Issue: Gateway won't restart
-
-**Cause:** The gateway process might be stuck or there's a configuration syntax error.
-
-**Solution:**
-1. Check gateway status:
+3. **Install via ClawHub:**
+   OpenClaw users can directly install the skill using the `clawhub` command:
    ```bash
-   openclaw gateway status
-   ```
-2. If stuck, force kill and restart:
-   ```bash
-   pkill -f openclaw
-   openclaw gateway start
-   ```
-3. Check logs for errors:
-   ```bash
-   openclaw gateway logs
+   openclaw install https://clawhub.ai/alexchulee/attribuly
    ```
 
 ***
 
-There are two primary ways to install these Attribuly skills into your own OpenClaw environment. Choose the method that best fits your workflow.
-
-### Step 2: Install via chat (Quick Start)
-
-Copy the prompt below into your OpenClaw interface, and the agent will install it for you:
-
-> Install these skills from <https://github.com/Attribuly-US/ecommerce-dtc-skills>
-
-# Managed Cloud Hosting (Deployment)
+# Managed Cloud Hosting (AllyClaw)
 
 | Feature               | Local Deployment (Open Source)                            | Cloud Version (Attribuly Managed)                                                |
 | :-------------------- | :-------------------------------------------------------- | :------------------------------------------------------------------------------- |
@@ -303,10 +219,6 @@ Copy the prompt below into your OpenClaw interface, and the agent will install i
 
 If you want to eliminate technical hassles and focus entirely on your marketing data, we highly recommend clicking the **Deploy to Attribuly Cloud** button at the top to start your cloud trial.
 
-## Post-Installation
-
-Once the skill bundle is successfully placed in your `openclaw-config/skills/` directory (locally or in the cloud), refer to the **Technical Reference** section below for details on specific triggers, skill chaining logic, and global API parameters.
-
 ***
 
 ## Technical Reference
@@ -314,6 +226,8 @@ Once the skill bundle is successfully placed in your `openclaw-config/skills/` d
 ### Skill Trigger Matrix
 
 #### Automatic Triggers
+
+> **Note on Automation:** To achieve these automatic triggers, you must manually create scheduled tasks (such as cron jobs) or use the scheduling feature within your chosen AI agent platform to execute the corresponding prompts at the specified times or when specific metric thresholds are crossed.
 
 | Condition              | Triggered Skill                                     | Priority |
 | :--------------------- | :-------------------------------------------------- | :------- |
@@ -324,21 +238,6 @@ Once the skill bundle is successfully placed in your `openclaw-config/skills/` d
 | CTR drops >15%         | `creative-fatigue-detector`                         | Medium   |
 | CVR drops >15%         | `funnel-analysis`                                   | High     |
 | Spend >30% over budget | `budget-optimization`                               | Critical |
-
-### Skill Chaining Logic
-
-When one skill detects an issue, it can trigger related skills:
-
-```text
-weekly-marketing-performance
-├── IF Google Ads issue detected → google-ads-performance
-│   └── IF CTR issue → google-creative-analysis
-├── IF Meta Ads issue detected → meta-ads-performance
-│   └── IF frequency high → meta-creative-analysis
-├── IF CVR issue detected → funnel-analysis
-│   └── IF landing page issue → landing-page-analysis
-└── IF budget inefficiency → budget-optimization
-```
 
 ### Global API Parameters
 
