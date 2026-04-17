@@ -2,7 +2,7 @@
 
 # 🛍️ Attribuly AI Marketing Skills: Universal Analyst for ChatGPT, Claude, Codex & OpenClaw
 
-[Watch the video](https://youtu.be/JDat6bls5Wk?si=jgZtnRZnl39VqFj3)
+<video src="https://6vfrj6gujshhc8ix.public.blob.vercel-storage.com/Easily%20connect%20Claude%20with%20AllyClaw.mp4" controls="controls" width="100%"></video>
 
 <br />
 

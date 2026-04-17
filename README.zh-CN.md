@@ -2,6 +2,8 @@
 
 # 🛍️ Attribuly AI 营销分析技能库：支持 ChatGPT, Claude, Codex 与 OpenClaw 的通用电商助手
 
+<video src="https://6vfrj6gujshhc8ix.public.blob.vercel-storage.com/Easily%20connect%20Claude%20with%20AllyClaw.mp4" controls="controls" width="100%"></video>
+
 您的 **DTC 电商专属 AI 营销合作伙伴 (支持 Shopify, WooCommerce 等独立站平台)**。由 Attribuly 第一方数据驱动，这些 **AI 营销 Agent** 技能为您提供自动化的营销诊断、真实 ROAS 追踪以及利润优先的广告优化建议。通过 **ChatGPT 营销提示词**框架和 API 逻辑，打造强大的 **Shopify 数据分析**体验。
 
 ## 🚀 工作原理 (Workflow)

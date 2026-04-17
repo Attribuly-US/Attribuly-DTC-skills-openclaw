@@ -2,6 +2,8 @@
 
 # 🛍️ Attribuly AI マーケティング分析スキル：ChatGPT, Claude, Codex & OpenClaw 向けユニバーサルアナリスト
 
+<video src="https://6vfrj6gujshhc8ix.public.blob.vercel-storage.com/Easily%20connect%20Claude%20with%20AllyClaw.mp4" controls="controls" width="100%"></video>
+
 DTC Eコマース（Shopify、WooCommerce など）に特化した **AI マーケティング・パートナー**。Attribuly のファーストパーティデータを活用し、これらの **AI マーケティング Agent** スキルは、自律的なマーケティング分析、真の ROAS トラッキング、利益優先の最適化を提供します。**ChatGPT マーケティングプロンプト** フレームワークと API ロジックを使用し、強力な **Shopify データ分析** 体験を構築します。
 
 ## 🚀 動作原理 (Workflow)
