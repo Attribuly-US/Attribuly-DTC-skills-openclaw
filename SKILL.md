@@ -1,13 +1,27 @@
 ---
 name: attribuly-dtc-analyst
-version: 1.1.0
-description: A comprehensive AI marketing partner for DTC ecommerce. Combines multiple diagnostic and optimization skills powered by Attribuly first-party data.
+version: 1.2.0
+description: A comprehensive AI marketing partner for DTC ecommerce. Combines multiple diagnostic and optimization skills powered by Attribuly first-party data. Also supports direct MySQL and ClickHouse database connections.
 metadata:
   openclaw:
     emoji: "🛍️"
     primaryEnv: "ATTRIBULY_API_KEY"
 env:
   - ATTRIBULY_API_KEY
+  # MySQL direct database connection (optional)
+  - MYSQL_HOST
+  - MYSQL_PORT
+  - MYSQL_USER
+  - MYSQL_PASSWORD
+  - MYSQL_DATABASE
+  - MYSQL_SSL
+  # ClickHouse direct database connection (optional)
+  - CLICKHOUSE_HOST
+  - CLICKHOUSE_PORT
+  - CLICKHOUSE_USER
+  - CLICKHOUSE_PASSWORD
+  - CLICKHOUSE_DATABASE
+  - CLICKHOUSE_SECURE
 homepage: "https://attribuly.com"
 source: "https://github.com/Attribuly-US/ecommerce-dtc-skills"
 ---
@@ -40,6 +54,17 @@ You are the **AllyClaw (Attribuly agent product) Growth Partner**, an AI-powered
 3. **Current State**: "What attribution model do you prefer? (e.g., First-click, Last-click, Linear, Position-based, Full Impact)"
 
 Once the client provides this, maintain these configuration details in the current conversation context to ensure a seamless experience. Then introduce the available skills and ask where they would like to start.
+
+### Step 1b: Database Connection Detection
+
+**After onboarding, check for custom database access:**
+
+- If `MYSQL_HOST` and `MYSQL_USER` and `MYSQL_DATABASE` are set → activate **MySQL Database Connector** mode for order/customer/product data.
+- If `CLICKHOUSE_HOST` and `CLICKHOUSE_USER` and `CLICKHOUSE_DATABASE` are set → activate **ClickHouse Database Connector** mode for event/analytics/ad-spend data.
+- If both are set → use MySQL for transactional data (orders, customers, products) and ClickHouse for event data (pageviews, funnels, sessions, ad spend).
+- If neither is set → default to Attribuly API for all data.
+
+When a database connector is first activated, run schema discovery (Step 2 of the connector reference) and confirm the table/field mapping with the user before proceeding with analysis.
 
 ### Step 2: Language Handling
 
@@ -142,11 +167,31 @@ Based on the user's intent or the specific problem detected, read the correspond
      - 日本語: "MetaとShopifyの数字が合わないのはなぜ？", "アトリビューションのギャップを分析", "プラットフォームとAttribulyの違い", "データの一貫性チェック", "GAとAttribulyの比較", "アトリビューションモデルの比較", "データ精度の検証"
    - **Reference:** [references/attribution-discrepancy.md](references/attribution-discrepancy.md)
 
+### 🗄️ Custom Database Skills
+
+1. **MySQL Database Connector**
+   - **Trigger:**
+     - English: "Connect to my MySQL database", "Query my MySQL", "Read from MySQL", "Access my database", "My orders are in MySQL", "Use my own database", "Show tables in MySQL", "MySQL schema discovery", "Custom database query"
+     - 中文: "连接我的MySQL数据库", "查询我的MySQL", "读取MySQL数据", "访问我的数据库", "我的订单在MySQL里", "用我自己的数据库", "显示MySQL表结构", "MySQL schema查询", "自定义数据库", "查询自有数据库"
+     - 日本語: "MySQLに接続する", "MySQLを照会する", "MySQLからデータを読む", "自分のデータベースにアクセス", "MySQLのテーブル一覧", "カスタムデータベース"
+   - **When to use:** Customer has set `MYSQL_HOST` / `MYSQL_USER` / `MYSQL_PASSWORD` / `MYSQL_DATABASE` environment variables, or explicitly requests to use their own MySQL/MariaDB/Aurora database.
+   - **Data available:** Orders, customers, products, ad spend (if imported), UTM attribution stored in relational tables.
+   - **Reference:** [references/mysql-database-connector.md](references/mysql-database-connector.md)
+
+2. **ClickHouse Database Connector**
+   - **Trigger:**
+     - English: "Connect to my ClickHouse", "Query ClickHouse", "ClickHouse analytics", "My events are in ClickHouse", "Read from ClickHouse", "ClickHouse schema", "ClickHouse ad spend table", "Event stream analysis", "Raw event data", "High-volume analytics data"
+     - 中文: "连接ClickHouse", "查询ClickHouse", "ClickHouse分析", "我的事件数据在ClickHouse", "读取ClickHouse数据", "ClickHouse表结构", "ClickHouse广告花费", "事件流分析", "原始事件数据", "大数据量分析", "ClickHouse漏斗"
+     - 日本語: "ClickHouseに接続", "ClickHouseを照会", "ClickHouse分析", "ClickHouseのイベントデータ", "ClickHouseのスキーマ", "イベントストリーム分析"
+   - **When to use:** Customer has set `CLICKHOUSE_HOST` / `CLICKHOUSE_USER` / `CLICKHOUSE_PASSWORD` / `CLICKHOUSE_DATABASE` environment variables, or explicitly requests to use their ClickHouse analytics store.
+   - **Data available:** Raw events (pageview / add_to_cart / purchase), sessions, ad spend aggregated by day/campaign, attribution paths.
+   - **Reference:** [references/clickhouse-database-connector.md](references/clickhouse-database-connector.md)
+
 ***
 
 ## 🧠 General Operating Rules & Decision Framework
 
-1. **Determine Intent:** Read the user's prompt carefully to identify which of the 11 capabilities is needed.
+1. **Determine Intent:** Read the user's prompt carefully to identify which of the 13 capabilities is needed.
 2. **Read Reference:** Immediately use your file reading capability to load the exact `references/[skill-name].md` file listed above.
 3. **Execute:** Follow the step-by-step instructions, API calls, logic, and output formatting dictated in that specific reference file.
 4. **Chain Skills:** If the reference file suggests triggering a secondary skill (e.g., Weekly Performance detects a Google issue -> trigger Google Ads Performance), load the secondary reference file and continue the analysis.
@@ -198,6 +243,16 @@ weekly-marketing-performance
 ├── IF CVR issue detected → funnel-analysis
 │   └── IF landing page issue → landing-page-analysis
 └── IF budget inefficiency → budget-optimization
+
+mysql-database-connector  (when MYSQL_* env vars are present)
+├── Orders / LTV data → feeds into weekly-marketing-performance
+├── UTM channel data → feeds into funnel-analysis
+└── Ad spend table (if present) → feeds into budget-optimization
+
+clickhouse-database-connector  (when CLICKHOUSE_* env vars are present)
+├── Event stream → feeds into funnel-analysis + landing-page-analysis
+├── Ad spend table → feeds into google-ads-performance / meta-ads-performance
+└── Attribution paths → feeds into attribution-discrepancy
 ```
 
 ***
