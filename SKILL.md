@@ -14,6 +14,7 @@ env:
   - MYSQL_USER
   - MYSQL_PASSWORD
   - MYSQL_DATABASE
+  - MYSQL_ALLOWED_TABLES   # comma-separated list of accessible tables/views
   - MYSQL_SSL
   # ClickHouse direct database connection (optional)
   - CLICKHOUSE_HOST
@@ -21,6 +22,7 @@ env:
   - CLICKHOUSE_USER
   - CLICKHOUSE_PASSWORD
   - CLICKHOUSE_DATABASE
+  - CLICKHOUSE_ALLOWED_TABLES   # comma-separated list of accessible tables/views
   - CLICKHOUSE_SECURE
 homepage: "https://attribuly.com"
 source: "https://github.com/Attribuly-US/ecommerce-dtc-skills"
@@ -60,7 +62,9 @@ Once the client provides this, maintain these configuration details in the curre
 **After onboarding, check for custom database access:**
 
 - If `MYSQL_HOST` and `MYSQL_USER` and `MYSQL_DATABASE` are set → activate **MySQL Database Connector** mode for order/customer/product data.
+  - The account is read-only and limited to the tables listed in `MYSQL_ALLOWED_TABLES`. Never query any table not in that list.
 - If `CLICKHOUSE_HOST` and `CLICKHOUSE_USER` and `CLICKHOUSE_DATABASE` are set → activate **ClickHouse Database Connector** mode for event/analytics/ad-spend data.
+  - The account is read-only and limited to the tables listed in `CLICKHOUSE_ALLOWED_TABLES`. Never query `system.*` tables unless explicitly noted in the connector reference.
 - If both are set → use MySQL for transactional data (orders, customers, products) and ClickHouse for event data (pageviews, funnels, sessions, ad spend).
 - If neither is set → default to Attribuly API for all data.
 

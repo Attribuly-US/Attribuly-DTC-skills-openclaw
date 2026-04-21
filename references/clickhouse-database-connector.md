@@ -1,7 +1,7 @@
 ---
 name: clickhouse-database-connector
-version: 1.0.0
-description: Connect to a customer's ClickHouse database, auto-discover analytics event tables and fields, and query attribution/funnel/ad-spend data for marketing analysis.
+version: 1.1.0
+description: Connect to a customer's read-only ClickHouse database. Works with restricted accounts that only have SELECT privilege on specific views or tables.
 ---
 # Skill: ClickHouse Database Connector for DTC Ecommerce
 
@@ -17,12 +17,15 @@ Enable OpenClaw to read directly from the customer's ClickHouse or ClickHouse-co
 |----------|----------|---------|-------------|
 | `CLICKHOUSE_HOST` | ✅ Yes | — | ClickHouse host (IP or domain) |
 | `CLICKHOUSE_PORT` | Optional | `8123` | HTTP interface port (use `9000` for native TCP) |
-| `CLICKHOUSE_USER` | ✅ Yes | `default` | ClickHouse username |
+| `CLICKHOUSE_USER` | ✅ Yes | `default` | ClickHouse username (read-only account) |
 | `CLICKHOUSE_PASSWORD` | ✅ Yes | — | ClickHouse password (store as secret, never log) |
 | `CLICKHOUSE_DATABASE` | ✅ Yes | `default` | Target database/schema name |
+| `CLICKHOUSE_ALLOWED_TABLES` | ✅ Yes | — | Comma-separated list of table/view names this account can access. Example: `events,ad_spend_daily,sessions_agg` |
 | `CLICKHOUSE_PROTOCOL` | Optional | `http` | `http` or `https` |
 | `CLICKHOUSE_SECURE` | Optional | `false` | Enable TLS (`true` / `false`) |
 | `CLICKHOUSE_TIMEOUT` | Optional | `30` | Query timeout in seconds |
+
+**Access Model:** The database account is read-only and scoped to the tables/views listed in `CLICKHOUSE_ALLOWED_TABLES`. `system.tables` and `system.columns` require admin/read privilege and are typically **not accessible** for restricted accounts — use `DESCRIBE TABLE` on each declared table instead.
 
 **Security Note:** Never echo or expose `CLICKHOUSE_PASSWORD` in any output or log. All queries MUST use parameterized placeholders — never interpolate user-provided strings directly into query text.
 
@@ -37,371 +40,114 @@ SELECT 1 AS ping;
 -- Confirm correct database
 SELECT currentDatabase() AS current_db;
 
--- Check ClickHouse version
+-- Check ClickHouse version (does not require elevated privilege)
 SELECT version() AS ch_version;
 ```
 
 If the connection fails, report the failing variable name (never the value) and guide the user to check firewall rules (ClickHouse typically requires port 8123 to be open) and credentials.
 
----
-
-## 🗺️ Step 2: Schema Discovery
-
-### 2.1 List All Tables with Row Counts and Sizes
-
-```sql
-SELECT
-  database,
-  name                                                          AS table_name,
-  engine,
-  formatReadableSize(total_bytes)                               AS size,
-  total_rows,
-  toDate(metadata_modification_time)                            AS last_modified
-FROM system.tables
-WHERE database = currentDatabase()
-  AND engine NOT IN ('View', 'MaterializedView', 'Dictionary')
-ORDER BY total_rows DESC;
-```
-
-### 2.2 Inspect All Columns in a Table
-
-```sql
-SELECT
-  name                  AS column_name,
-  type                  AS data_type,
-  default_kind,
-  default_expression,
-  comment
-FROM system.columns
-WHERE database = currentDatabase()
-  AND table = '{table_name}'
-ORDER BY position;
-```
-
-### 2.3 Auto-Detect Analytics & Marketing Table Candidates
-
-```sql
-SELECT
-  name         AS table_name,
-  total_rows,
-  engine
-FROM system.tables
-WHERE database = currentDatabase()
-  AND (
-    name LIKE '%event%'    OR name LIKE '%pageview%'  OR name LIKE '%page_view%' OR
-    name LIKE '%session%'  OR name LIKE '%visit%'     OR
-    name LIKE '%click%'    OR name LIKE '%impression%' OR
-    name LIKE '%conversion%' OR name LIKE '%purchase%' OR name LIKE '%order%' OR
-    name LIKE '%ad_spend%' OR name LIKE '%spend%'     OR name LIKE '%campaign%' OR
-    name LIKE '%attribution%' OR name LIKE '%funnel%' OR
-    name LIKE '%customer%' OR name LIKE '%user%'
-  )
-ORDER BY total_rows DESC;
-```
-
-### 2.4 Check Partitioning Keys (Important for Date Filtering Performance)
-
-```sql
-SELECT
-  table,
-  partition_key,
-  sorting_key,
-  primary_key
-FROM system.tables
-WHERE database = currentDatabase()
-  AND name = '{table_name}';
-```
-
-**Always use the partition/sorting key in WHERE clauses for performance.**
+**Important:** Also check that `CLICKHOUSE_ALLOWED_TABLES` is set. If it is empty or unset, halt and ask: _"Please set CLICKHOUSE_ALLOWED_TABLES to the comma-separated names of the tables or views your database account can access (e.g., `events,ad_spend_daily`)."_
 
 ---
 
-## 📐 Step 3: Schema Mapping
+## 🗺️ Step 2: Schema Discovery (Restricted-Access Mode)
 
-### Events / Raw Analytics Table
+**The account is read-only and scoped. `system.tables` and `system.columns` require elevated system privileges and will typically raise a permission error for restricted users. Do NOT use them.**
 
-| Canonical Field | Common ClickHouse Column Names |
-|-----------------|---------------------------------|
-| `event_id` | `event_id`, `id`, `uuid` |
-| `event_type` | `event_type`, `event_name`, `action`, `type` |
-| `user_id` | `user_id`, `visitor_id`, `anonymous_id`, `distinct_id` |
-| `session_id` | `session_id`, `visit_id` |
-| `event_time` | `event_time`, `timestamp`, `created_at`, `ts`, `event_at` |
-| `page_url` | `page_url`, `url`, `page`, `current_url` |
-| `referrer` | `referrer`, `referral_url`, `ref` |
-| `utm_source` | `utm_source`, `source` |
-| `utm_medium` | `utm_medium`, `medium` |
-| `utm_campaign` | `utm_campaign`, `campaign` |
-| `utm_content` | `utm_content`, `ad_content` |
-| `utm_term` | `utm_term`, `keyword` |
-| `device_type` | `device_type`, `device`, `platform` |
-| `country` | `country`, `country_code`, `geo_country` |
-| `city` | `city`, `geo_city` |
-| `properties` | `properties`, `event_data`, `metadata` (JSON column) |
+Instead, use the table list in `CLICKHOUSE_ALLOWED_TABLES` and call `DESCRIBE TABLE` on each name directly.
 
-### Ad Spend / Marketing Cost Table
+### 2.1 Verify Each Declared Table is Accessible
 
-| Canonical Field | Common ClickHouse Column Names |
-|-----------------|---------------------------------|
-| `spend_date` | `date`, `report_date`, `day`, `spend_date` |
-| `platform` | `platform`, `channel`, `source`, `ad_network` |
-| `account_id` | `account_id`, `ad_account_id` |
-| `campaign_id` | `campaign_id` |
-| `campaign_name` | `campaign_name`, `campaign` |
-| `ad_set_id` | `ad_set_id`, `adset_id`, `ad_group_id` |
-| `ad_set_name` | `ad_set_name`, `adset_name`, `ad_group_name` |
-| `ad_id` | `ad_id`, `creative_id` |
-| `ad_name` | `ad_name`, `creative_name` |
-| `spend` | `spend`, `cost`, `amount_spent` |
-| `impressions` | `impressions`, `views`, `reach` |
-| `clicks` | `clicks`, `link_clicks` |
-| `platform_conversions` | `conversions`, `reported_purchases` |
-| `platform_revenue` | `reported_revenue`, `conversion_value` |
+For each table name `T` in `CLICKHOUSE_ALLOWED_TABLES`, run:
 
-### Sessions / Aggregated Visits Table
+```sql
+-- Replace {T} with each table/view name from CLICKHOUSE_ALLOWED_TABLES
+DESCRIBE TABLE {T};
+```
 
-| Canonical Field | Common ClickHouse Column Names |
-|-----------------|---------------------------------|
-| `session_id` | `session_id`, `visit_id` |
-| `user_id` | `user_id`, `visitor_id` |
-| `session_start` | `session_start`, `started_at`, `first_event_time` |
-| `session_end` | `session_end`, `ended_at`, `last_event_time` |
-| `session_duration` | `duration`, `session_duration_seconds` |
-| `utm_source` | `utm_source`, `source` |
-| `utm_medium` | `utm_medium`, `medium` |
-| `utm_campaign` | `utm_campaign`, `campaign_name` |
-| `landing_page` | `landing_page`, `entry_page`, `first_url` |
-| `page_views` | `page_views`, `pageview_count` |
-| `is_conversion` | `is_conversion`, `converted`, `has_purchase` |
-| `revenue` | `revenue`, `order_revenue`, `purchase_value` |
+This returns column names, types, default expressions, and comments without requiring any `system.*` privilege. If a table raises a permission error or does not exist, report it to the user and remove it from the working table list.
 
-### Attribution / Conversion Table
+### 2.2 Inspect Partitioning / Sorting Key (Optional)
 
-| Canonical Field | Common ClickHouse Column Names |
-|-----------------|---------------------------------|
-| `conversion_id` | `conversion_id`, `order_id`, `purchase_id` |
-| `user_id` | `user_id`, `customer_id` |
-| `conversion_time` | `conversion_time`, `converted_at`, `purchase_time` |
-| `revenue` | `revenue`, `order_value`, `gmv` |
-| `channel` | `channel`, `attribution_channel`, `last_click_channel` |
-| `campaign` | `campaign`, `attribution_campaign` |
-| `model` | `model`, `attribution_model` |
-| `attribution_credit` | `credit`, `attribution_weight`, `fractional_value` |
-| `is_new_customer` | `is_new_customer`, `is_new`, `new_visitor_flag` |
+For MergeTree-family tables, knowing the sorting key is critical for query performance. The partition key is stored in `system.tables`, but restricted accounts typically cannot access `system.*`.
+
+If `system.tables` is inaccessible, ask the user directly: _"What is the partition/date column for table `{T}`? (e.g., `toYYYYMM(event_time)` or just `event_time`)"_. This is needed for efficient date-range filtering.
 
 ---
 
-## 📊 Step 4: Core Analysis Queries
+## 📐 Step 3: Actual Table & Field Definitions
 
-### Q1: Daily Pageview & Session Funnel
+> **This section must be filled in by the skill owner before deployment.**
+> Run `DESCRIBE TABLE {T}` for each table in `CLICKHOUSE_ALLOWED_TABLES`, confirm with the customer, then record the real table names and column names below.
+> Do NOT guess or infer column names. Only use what is explicitly declared here.
 
-```sql
-SELECT
-  toDate({event_time_col})                                       AS report_date,
-  countIf({event_type_col} = 'pageview')                        AS pageviews,
-  uniqIf({session_id_col}, {event_type_col} = 'pageview')       AS sessions,
-  uniqIf({session_id_col}, {event_type_col} = 'product_view')   AS product_view_sessions,
-  uniqIf({session_id_col}, {event_type_col} = 'add_to_cart')    AS add_to_cart_sessions,
-  uniqIf({session_id_col}, {event_type_col} = 'checkout_start') AS checkout_sessions,
-  uniqIf({session_id_col}, {event_type_col} = 'purchase')       AS purchase_sessions,
-  round(
-    uniqIf({session_id_col}, {event_type_col} = 'purchase')
-    / nullIf(uniqIf({session_id_col}, {event_type_col} = 'pageview'), 0) * 100,
-    2
-  )                                                              AS overall_cvr_pct
-FROM {events_table}
-WHERE toDate({event_time_col}) BETWEEN '{start_date}' AND '{end_date}'
-GROUP BY report_date
-ORDER BY report_date ASC;
+### Accessible Tables
+
+*(To be filled in once the customer's database structure is confirmed)*
+
+```
+# Format:
+# canonical_role  |  actual_table_name  |  description
+# --------------------------------------------------------
+# events          |  ???                |  ???  (raw event stream)
+# ad_spend        |  ???                |  ???  (platform spend by day)
+# sessions        |  ???                |  ???  (aggregated session data)
+# attribution     |  ???                |  ???  (conversion/attribution records)
 ```
 
-### Q2: UTM Channel Attribution (Sessions & Conversions)
+### Field Mapping
 
-```sql
-SELECT
-  ifNull({utm_source_col}, 'direct')                            AS utm_source,
-  ifNull({utm_medium_col}, 'none')                              AS utm_medium,
-  ifNull({utm_campaign_col}, 'none')                            AS utm_campaign,
-  uniq({session_id_col})                                        AS sessions,
-  uniqIf({session_id_col}, {event_type_col} = 'purchase')       AS converting_sessions,
-  round(
-    uniqIf({session_id_col}, {event_type_col} = 'purchase')
-    / nullIf(uniq({session_id_col}), 0) * 100,
-    2
-  )                                                             AS cvr_pct,
-  sumIf({revenue_col}, {event_type_col} = 'purchase')           AS total_revenue
-FROM {events_table}
-WHERE toDate({event_time_col}) BETWEEN '{start_date}' AND '{end_date}'
-GROUP BY utm_source, utm_medium, utm_campaign
-ORDER BY total_revenue DESC
-LIMIT 50;
+*(To be filled in for each table above. Map each canonical field name used in Step 4 queries to the real column name.)*
+
+```json
+{
+  "events_table": "<real_table_name>",
+  "ad_spend_table": "<real_table_name_or_null>",
+  "sessions_table": "<real_table_name_or_null>",
+  "attribution_table": "<real_table_name_or_null>",
+  "partition_key": "<e.g. toYYYYMM(event_time)>",
+  "field_map": {
+    "event_time": "<real_column>",
+    "event_type": "<real_column>",
+    "user_id": "<real_column>",
+    "session_id": "<real_column_or_null>",
+    "utm_source": "<real_column_or_null>",
+    "utm_medium": "<real_column_or_null>",
+    "utm_campaign": "<real_column_or_null>",
+    "revenue": "<real_column_or_null>",
+    "spend_date": "<real_column_or_null>",
+    "spend": "<real_column_or_null>",
+    "platform": "<real_column_or_null>"
+  }
+}
 ```
 
-### Q3: Ad Spend vs. Attributed Revenue (ROAS Calculation)
+**Until this section is filled in, OpenClaw MUST NOT attempt to construct queries. Instead it should say:** _"I need the actual table and column definitions before I can query your database. Please provide the output of `DESCRIBE TABLE <table>` for each table in your allowed list, or ask the skill owner to complete Step 3 of this reference."_
 
-```sql
-SELECT
-  s.platform                                                     AS platform,
-  s.campaign_name                                                AS campaign_name,
-  round(sum(s.spend), 2)                                        AS total_spend,
-  round(sum(e.revenue), 2)                                      AS attributed_revenue,
-  round(sum(e.revenue) / nullIf(sum(s.spend), 0), 2)           AS roas,
-  round(sum(s.spend) / nullIf(sum(e.conversions), 0), 2)       AS cpa
-FROM (
-  SELECT
-    platform,
-    campaign_name,
-    sum({spend_col})        AS spend,
-    {spend_date_col}        AS report_date
-  FROM {ad_spend_table}
-  WHERE {spend_date_col} BETWEEN '{start_date}' AND '{end_date}'
-  GROUP BY platform, campaign_name, report_date
-) s
-LEFT JOIN (
-  SELECT
-    ifNull({utm_campaign_col}, 'unknown')                       AS campaign_name,
-    toDate({event_time_col})                                    AS report_date,
-    sumIf({revenue_col}, {event_type_col} = 'purchase')        AS revenue,
-    uniqIf({session_id_col}, {event_type_col} = 'purchase')    AS conversions
-  FROM {events_table}
-  WHERE toDate({event_time_col}) BETWEEN '{start_date}' AND '{end_date}'
-  GROUP BY campaign_name, report_date
-) e ON s.campaign_name = e.campaign_name AND s.report_date = e.report_date
-GROUP BY platform, campaign_name
-ORDER BY total_spend DESC;
-```
+---
 
-### Q4: New vs. Returning User Sessions
+## 📊 Step 4: Analysis Queries
 
-```sql
-WITH user_first_session AS (
-  SELECT
-    {user_id_col}           AS user_id,
-    min(toDate({event_time_col})) AS first_seen_date
-  FROM {events_table}
-  GROUP BY {user_id_col}
-)
-SELECT
-  toDate(e.{event_time_col})                                    AS report_date,
-  countIf(e.{event_type_col} = 'purchase')                     AS total_purchases,
-  countIf(
-    e.{event_type_col} = 'purchase'
-    AND toDate(e.{event_time_col}) = ufs.first_seen_date
-  )                                                             AS new_user_purchases,
-  countIf(
-    e.{event_type_col} = 'purchase'
-    AND toDate(e.{event_time_col}) > ufs.first_seen_date
-  )                                                             AS returning_user_purchases,
-  round(sumIf({revenue_col}, e.{event_type_col} = 'purchase' AND toDate(e.{event_time_col}) = ufs.first_seen_date), 2) AS new_user_revenue,
-  round(sumIf({revenue_col}, e.{event_type_col} = 'purchase' AND toDate(e.{event_time_col}) > ufs.first_seen_date), 2) AS returning_user_revenue
-FROM {events_table} e
-JOIN user_first_session ufs ON e.{user_id_col} = ufs.user_id
-WHERE toDate(e.{event_time_col}) BETWEEN '{start_date}' AND '{end_date}'
-GROUP BY report_date
-ORDER BY report_date ASC;
-```
+> **This section must be filled in by the skill owner after Step 3 is complete.**
+> All queries must use the exact real table and column names confirmed in Step 3.
+> Do NOT write queries here using placeholder names like `{events_table}` or `{event_time_col}`.
 
-### Q5: Funnel Stage Drop-off by Channel
-
-```sql
-SELECT
-  ifNull({utm_source_col}, 'direct')                                  AS utm_source,
-  uniq({session_id_col})                                               AS sessions,
-  uniqIf({session_id_col}, {event_type_col} = 'product_view')         AS to_product_view,
-  uniqIf({session_id_col}, {event_type_col} = 'add_to_cart')          AS to_add_to_cart,
-  uniqIf({session_id_col}, {event_type_col} = 'checkout_start')       AS to_checkout,
-  uniqIf({session_id_col}, {event_type_col} = 'purchase')             AS to_purchase,
-  round(uniqIf({session_id_col}, {event_type_col} = 'product_view')   / nullIf(uniq({session_id_col}), 0) * 100, 1) AS pv_rate,
-  round(uniqIf({session_id_col}, {event_type_col} = 'add_to_cart')    / nullIf(uniqIf({session_id_col}, {event_type_col} = 'product_view'), 0) * 100, 1) AS atc_rate,
-  round(uniqIf({session_id_col}, {event_type_col} = 'checkout_start') / nullIf(uniqIf({session_id_col}, {event_type_col} = 'add_to_cart'), 0) * 100, 1) AS checkout_rate,
-  round(uniqIf({session_id_col}, {event_type_col} = 'purchase')       / nullIf(uniqIf({session_id_col}, {event_type_col} = 'checkout_start'), 0) * 100, 1) AS purchase_rate
-FROM {events_table}
-WHERE toDate({event_time_col}) BETWEEN '{start_date}' AND '{end_date}'
-GROUP BY utm_source
-ORDER BY sessions DESC
-LIMIT 20;
-```
-
-### Q6: Platform Ad Spend WoW Comparison
-
-```sql
-SELECT
-  platform,
-  campaign_name,
-  round(sumIf({spend_col}, toDate({spend_date_col}) BETWEEN '{prev_start}' AND '{prev_end}'), 2) AS prev_spend,
-  round(sumIf({spend_col}, toDate({spend_date_col}) BETWEEN '{curr_start}' AND '{curr_end}'), 2) AS curr_spend,
-  round(
-    (sumIf({spend_col}, toDate({spend_date_col}) BETWEEN '{curr_start}' AND '{curr_end}')
-    - sumIf({spend_col}, toDate({spend_date_col}) BETWEEN '{prev_start}' AND '{prev_end}'))
-    / nullIf(sumIf({spend_col}, toDate({spend_date_col}) BETWEEN '{prev_start}' AND '{prev_end}'), 0) * 100,
-    1
-  ) AS spend_change_pct,
-  round(sumIf({impressions_col}, toDate({spend_date_col}) BETWEEN '{curr_start}' AND '{curr_end}'), 0) AS curr_impressions,
-  round(sumIf({clicks_col}, toDate({spend_date_col}) BETWEEN '{curr_start}' AND '{curr_end}'), 0)      AS curr_clicks
-FROM {ad_spend_table}
-WHERE toDate({spend_date_col}) BETWEEN '{prev_start}' AND '{curr_end}'
-GROUP BY platform, campaign_name
-ORDER BY curr_spend DESC
-LIMIT 50;
-```
-
-### Q7: Landing Page Performance
-
-```sql
-SELECT
-  {landing_page_col}                                           AS landing_page,
-  uniq({session_id_col})                                       AS sessions,
-  uniqIf({session_id_col}, {event_type_col} = 'add_to_cart')  AS atc_sessions,
-  uniqIf({session_id_col}, {event_type_col} = 'purchase')     AS purchase_sessions,
-  round(uniqIf({session_id_col}, {event_type_col} = 'purchase') / nullIf(uniq({session_id_col}), 0) * 100, 2) AS cvr_pct,
-  round(sumIf({revenue_col}, {event_type_col} = 'purchase'), 2) AS revenue
-FROM {events_table}
-WHERE toDate({event_time_col}) BETWEEN '{start_date}' AND '{end_date}'
-  AND {landing_page_col} IS NOT NULL
-GROUP BY landing_page
-ORDER BY sessions DESC
-LIMIT 30;
-```
+*(To be filled in once Step 3 field mapping is confirmed)*
 
 ---
 
 ## 🔄 Step 5: Schema Mapping Confirmation Flow
 
-1. **Run Step 2 discovery queries** to list all tables and columns.
-2. **Present the match table** to the customer:
-
-```
-Detected Tables:
-✅ events_raw         → mapped as [events_table]       (1.2B rows)
-✅ ad_spend_daily     → mapped as [ad_spend_table]     (450K rows)
-✅ sessions_agg       → mapped as [sessions_table]     (80M rows)
-❓ conversions_v2     → unclear, please confirm purpose
-```
-
-3. **Confirm partition key** for the primary events table — this is critical for query performance in ClickHouse.
-4. **Persist mapping** in conversation context:
-
-```json
-{
-  "events_table": "events_raw",
-  "ad_spend_table": "ad_spend_daily",
-  "sessions_table": "sessions_agg",
-  "attribution_table": null,
-  "partition_key": "toYYYYMM(event_time)",
-  "field_map": {
-    "event_time": "event_time",
-    "event_type": "event_name",
-    "user_id": "visitor_id",
-    "session_id": "session_id",
-    "utm_source": "utm_source",
-    "utm_campaign": "utm_campaign",
-    "revenue": "order_revenue",
-    "spend_date": "date",
-    "spend": "cost",
-    "platform": "ad_network"
-  }
-}
-```
+1. **Read `CLICKHOUSE_ALLOWED_TABLES`** — this is the authoritative list of accessible tables/views.
+2. **Run `DESCRIBE TABLE {T}`** for each table to read its actual columns.
+3. **Attempt partition key query** from Step 2.2 — if it fails, ask the user for the date/partition column.
+4. **Check Step 3** — if Step 3 is already filled in with real table and field definitions, use those directly and proceed to Step 4.
+5. **If Step 3 is not yet filled in**, present the raw `DESCRIBE TABLE` output to the user and ask them to confirm:
+   - Which table serves which role (events / ad_spend / sessions / attribution)
+   - Which column maps to each canonical field used in Step 4 queries
+   - What the partition/date column is for each table
+6. **Do not guess or infer** column mappings from names. Always confirm with the user.
+7. Once confirmed, ask the skill owner to record the mappings in Step 3 for future sessions.
 
 ---
 
@@ -412,26 +158,18 @@ Detected Tables:
 3. **Prefer `countIf()` and `sumIf()`** over sub-queries for conditional aggregation.
 4. **Avoid `JOIN` on large event tables**: Prefer pre-aggregated tables when available.
 5. **Use `LIMIT` on exploratory queries**: Always add `LIMIT 1000` when doing schema discovery.
-6. **Check `system.query_log`** if a query is unexpectedly slow:
-
-```sql
-SELECT query, read_rows, read_bytes, query_duration_ms
-FROM system.query_log
-WHERE type = 'QueryFinish'
-  AND event_date = today()
-ORDER BY query_duration_ms DESC
-LIMIT 10;
-```
+6. **Slow query diagnosis**: If a query is unexpectedly slow, ask the user to check `system.query_log` on their end — restricted accounts cannot access it directly.
 
 ---
 
 ## ⚠️ Query Safety Rules
 
-1. **Read-Only Only**: Only `SELECT` statements are permitted. Never execute mutations (`ALTER TABLE ... UPDATE/DELETE`), `DROP`, `TRUNCATE`, or `INSERT`.
-2. **Mandatory date filter**: Every query against event tables MUST include a date range filter on the partition key column.
-3. **Max rows guard**: Add `LIMIT 1000000` to any query that might return unbounded rows.
-4. **No credential exposure**: Never output `CLICKHOUSE_PASSWORD` or connection strings in any response.
-5. **Validate date inputs**: Ensure all date parameters match `YYYY-MM-DD` format before building queries.
+1. **Read-Only by account**: The database account only has `SELECT` privilege. Do not attempt mutations (`ALTER TABLE ... UPDATE/DELETE`), `DROP`, `TRUNCATE`, or `INSERT` — they will be rejected and must never be generated.
+2. **Scope to allowed tables only**: Only query tables/views listed in `CLICKHOUSE_ALLOWED_TABLES`. Never query other tables, `system.*`, or `information_schema.*` beyond what is explicitly noted above.
+3. **Mandatory date filter**: Every query against event/spend tables MUST include a date range filter on the partition key column.
+4. **Max rows guard**: Add `LIMIT 1000000` to any query that might return unbounded rows.
+5. **No credential exposure**: Never output `CLICKHOUSE_PASSWORD` or connection strings in any response.
+6. **Validate date inputs**: Ensure all date parameters match `YYYY-MM-DD` format before building queries.
 
 ---
 
