@@ -75,54 +75,18 @@ If `system.tables` is inaccessible, ask the user directly: _"What is the partiti
 
 ---
 
-## 📐 Step 3: Actual Table & Field Definitions
+## 📐 Step 3: Schema Reference
 
-> **This section must be filled in by the skill owner before deployment.**
-> Run `DESCRIBE TABLE {T}` for each table in `CLICKHOUSE_ALLOWED_TABLES`, confirm with the customer, then record the real table names and column names below.
-> Do NOT guess or infer column names. Only use what is explicitly declared here.
+All table and column definitions are declared in a **dedicated schema file**:
 
-### Accessible Tables
+**→ [references/clickhouse-schema.md](clickhouse-schema.md)**
 
-*(To be filled in once the customer's database structure is confirmed)*
+OpenClaw MUST load and read `clickhouse-schema.md` before constructing any query.
 
-```
-# Format:
-# canonical_role  |  actual_table_name  |  description
-# --------------------------------------------------------
-# events          |  ???                |  ???  (raw event stream)
-# ad_spend        |  ???                |  ???  (platform spend by day)
-# sessions        |  ???                |  ???  (aggregated session data)
-# attribution     |  ???                |  ???  (conversion/attribution records)
-```
-
-### Field Mapping
-
-*(To be filled in for each table above. Map each canonical field name used in Step 4 queries to the real column name.)*
-
-```json
-{
-  "events_table": "<real_table_name>",
-  "ad_spend_table": "<real_table_name_or_null>",
-  "sessions_table": "<real_table_name_or_null>",
-  "attribution_table": "<real_table_name_or_null>",
-  "partition_key": "<e.g. toYYYYMM(event_time)>",
-  "field_map": {
-    "event_time": "<real_column>",
-    "event_type": "<real_column>",
-    "user_id": "<real_column>",
-    "session_id": "<real_column_or_null>",
-    "utm_source": "<real_column_or_null>",
-    "utm_medium": "<real_column_or_null>",
-    "utm_campaign": "<real_column_or_null>",
-    "revenue": "<real_column_or_null>",
-    "spend_date": "<real_column_or_null>",
-    "spend": "<real_column_or_null>",
-    "platform": "<real_column_or_null>"
-  }
-}
-```
-
-**Until this section is filled in, OpenClaw MUST NOT attempt to construct queries. Instead it should say:** _"I need the actual table and column definitions before I can query your database. Please provide the output of `DESCRIBE TABLE <table>` for each table in your allowed list, or ask the skill owner to complete Step 3 of this reference."_
+- If `clickhouse-schema.md` contains no declared tables yet (still shows `???` placeholders), halt and say: _"The ClickHouse schema has not been configured yet. Please ask the skill owner to fill in `references/clickhouse-schema.md` with the real table and column definitions before proceeding."_
+- Use only table names and column names found in that file. Never guess.
+- Respect the `partition_key`, `sorting_key`, and `nullable` annotations when building WHERE clauses and aggregations.
+- Use `enum_values` for any event-type or status column to know valid filter values.
 
 ---
 
@@ -138,16 +102,17 @@ If `system.tables` is inaccessible, ask the user directly: _"What is the partiti
 
 ## 🔄 Step 5: Schema Mapping Confirmation Flow
 
+When first accessing a customer's database:
+
 1. **Read `CLICKHOUSE_ALLOWED_TABLES`** — this is the authoritative list of accessible tables/views.
-2. **Run `DESCRIBE TABLE {T}`** for each table to read its actual columns.
-3. **Attempt partition key query** from Step 2.2 — if it fails, ask the user for the date/partition column.
-4. **Check Step 3** — if Step 3 is already filled in with real table and field definitions, use those directly and proceed to Step 4.
-5. **If Step 3 is not yet filled in**, present the raw `DESCRIBE TABLE` output to the user and ask them to confirm:
-   - Which table serves which role (events / ad_spend / sessions / attribution)
-   - Which column maps to each canonical field used in Step 4 queries
-   - What the partition/date column is for each table
-6. **Do not guess or infer** column mappings from names. Always confirm with the user.
-7. Once confirmed, ask the skill owner to record the mappings in Step 3 for future sessions.
+2. **Load `clickhouse-schema.md`** — check if tables are already declared.
+3. **If `clickhouse-schema.md` is complete**, use it directly and proceed to Step 4.
+4. **If `clickhouse-schema.md` is not yet filled in**:
+   a. Run `DESCRIBE TABLE {T}` for each table in `CLICKHOUSE_ALLOWED_TABLES`.
+   b. Ask the user for the partition/date column for each table (cannot be read without `system.*` access).
+   c. Present the column list to the user and ask them to confirm the role of each table and the purpose of key columns.
+   d. Do not guess or infer. Ask the skill owner to record the confirmed mapping into `clickhouse-schema.md`.
+5. **Do not proceed to query construction** until `clickhouse-schema.md` is filled in.
 
 ---
 

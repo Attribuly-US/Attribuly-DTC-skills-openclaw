@@ -73,51 +73,17 @@ For views, `DESCRIBE` may omit comments. As a fallback, try querying `informatio
 
 ---
 
-## 📐 Step 3: Actual Table & Field Definitions
+## 📐 Step 3: Schema Reference
 
-> **This section must be filled in by the skill owner before deployment.**
-> Run `DESCRIBE {T}` for each table in `MYSQL_ALLOWED_TABLES`, confirm with the customer, then record the real table names and column names below.
-> Do NOT guess or infer column names. Only use what is explicitly declared here.
+All table and column definitions are declared in a **dedicated schema file**:
 
-### Accessible Tables
+**→ [references/mysql-schema.md](mysql-schema.md)**
 
-*(To be filled in once the customer's database structure is confirmed)*
+OpenClaw MUST load and read `mysql-schema.md` before constructing any query.
 
-```
-# Format:
-# canonical_role  |  actual_table_name  |  description
-# --------------------------------------------------------
-# orders          |  ???                |  ???
-# customers       |  ???                |  ???
-# order_items     |  ???                |  ???
-# ad_spend        |  ???                |  ???
-```
-
-### Field Mapping
-
-*(To be filled in for each table above. Map each canonical field name used in Step 4 queries to the real column name.)*
-
-```json
-{
-  "orders_table": "<real_table_name>",
-  "order_items_table": "<real_table_name_or_null>",
-  "customers_table": "<real_table_name_or_null>",
-  "ad_spend_table": "<real_table_name_or_null>",
-  "field_map": {
-    "order_id": "<real_column>",
-    "customer_id": "<real_column>",
-    "created_at": "<real_column>",
-    "revenue": "<real_column>",
-    "status": "<real_column>",
-    "utm_source": "<real_column_or_null>",
-    "utm_medium": "<real_column_or_null>",
-    "utm_campaign": "<real_column_or_null>",
-    "cogs": "<real_column_or_null>"
-  }
-}
-```
-
-**Until this section is filled in, OpenClaw MUST NOT attempt to construct queries. Instead it should say:** _"I need the actual table and column definitions before I can query your database. Please provide the output of `DESCRIBE <table>` for each table in your allowed list, or ask the skill owner to complete Step 3 of this reference."_
+- If `mysql-schema.md` contains no declared tables yet (still shows `???` placeholders), halt and say: _"The MySQL schema has not been configured yet. Please ask the skill owner to fill in `references/mysql-schema.md` with the real table and column definitions before proceeding."_
+- Use only table names and column names found in that file. Never guess.
+- Respect the `date_key`, `pk`, and `nullable` annotations when building WHERE clauses and aggregations.
 
 ---
 
@@ -136,13 +102,13 @@ For views, `DESCRIBE` may omit comments. As a fallback, try querying `informatio
 When first accessing a customer's database:
 
 1. **Read `MYSQL_ALLOWED_TABLES`** — this is the authoritative list of accessible tables/views.
-2. **Run `DESCRIBE {T}`** for each table to read its actual columns.
-3. **Check Step 3** — if Step 3 is already filled in with real table and field definitions, use those directly and proceed to Step 4.
-4. **If Step 3 is not yet filled in**, present the raw `DESCRIBE` output to the user and ask them to confirm:
-   - Which table serves which role (orders / customers / order_items / ad_spend)
-   - Which column maps to each canonical field used in Step 4 queries
-5. **Do not guess or infer** column mappings from names. Always confirm with the user.
-6. Once confirmed, ask the skill owner to record the mappings in Step 3 for future sessions.
+2. **Load `mysql-schema.md`** — check if tables are already declared.
+3. **If `mysql-schema.md` is complete**, use it directly and proceed to Step 4.
+4. **If `mysql-schema.md` is not yet filled in**:
+   a. Run `DESCRIBE {T}` for each table in `MYSQL_ALLOWED_TABLES`.
+   b. Present the column list to the user and ask them to confirm the role of each table and the purpose of key columns.
+   c. Do not guess or infer. Ask the skill owner to record the confirmed mapping into `mysql-schema.md`.
+5. **Do not proceed to query construction** until `mysql-schema.md` is filled in.
 
 ---
 

@@ -181,6 +181,7 @@ Based on the user's intent or the specific problem detected, read the correspond
    - **When to use:** Customer has set `MYSQL_HOST` / `MYSQL_USER` / `MYSQL_PASSWORD` / `MYSQL_DATABASE` environment variables, or explicitly requests to use their own MySQL/MariaDB/Aurora database.
    - **Data available:** Orders, customers, products, ad spend (if imported), UTM attribution stored in relational tables.
    - **Reference:** [references/mysql-database-connector.md](references/mysql-database-connector.md)
+   - **Schema:** [references/mysql-schema.md](references/mysql-schema.md) — load this file alongside the connector to get actual table and column names before writing any SQL.
 
 2. **ClickHouse Database Connector**
    - **Trigger:**
@@ -190,6 +191,7 @@ Based on the user's intent or the specific problem detected, read the correspond
    - **When to use:** Customer has set `CLICKHOUSE_HOST` / `CLICKHOUSE_USER` / `CLICKHOUSE_PASSWORD` / `CLICKHOUSE_DATABASE` environment variables, or explicitly requests to use their ClickHouse analytics store.
    - **Data available:** Raw events (pageview / add_to_cart / purchase), sessions, ad spend aggregated by day/campaign, attribution paths.
    - **Reference:** [references/clickhouse-database-connector.md](references/clickhouse-database-connector.md)
+   - **Schema:** [references/clickhouse-schema.md](references/clickhouse-schema.md) — load this file alongside the connector to get actual table and column names before writing any SQL.
 
 ***
 
