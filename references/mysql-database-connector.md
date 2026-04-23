@@ -89,11 +89,28 @@ OpenClaw MUST load and read `mysql-schema.md` before constructing any query.
 
 ## 📊 Step 4: Analysis Queries
 
-> **This section must be filled in by the skill owner after Step 3 is complete.**
-> All queries must use the exact real table and column names confirmed in Step 3.
-> Do NOT write queries here using placeholder names like `{orders_table}` or `{created_at_col}`.
+Use only the views and columns declared in [references/mysql-schema.md](mysql-schema.md).
 
-*(To be filled in once Step 3 field mapping is confirmed)*
+### 4.1 Routing Rule: When To Use MySQL vs ClickHouse
+
+MySQL is the customer-facing dimension, detail, and configuration layer. ClickHouse is the customer-facing fact and attribution layer.
+
+For questions such as:
+
+- which campaigns produced orders
+- which products were actually sold by each campaign
+- what touchpoints or paths led to each order
+- campaign-level attributed order or revenue analysis
+
+OpenClaw SHOULD prefer the ClickHouse connector first, because those analyses depend on event facts, attribution paths, and order-product arrays already modeled in ClickHouse.
+
+Use the MySQL connector only when the task needs business detail that is not present in ClickHouse, such as:
+
+- supplementary order-item attributes from `analytics_order_items`
+- product or variant dimension lookups from `analytics_products` or `analytics_variants`
+- CRM or configuration metadata from `analytics_crm_*`, `analytics_conversion_*`, or exclusion views
+
+If the user asks a campaign-to-product question and the needed fields are available in ClickHouse, do not start from MySQL.
 
 ---
 
@@ -120,6 +137,7 @@ When first accessing a customer's database:
 4. **LIMIT on exploratory queries**: Add `LIMIT 1000` to any schema-level or sample query.
 5. **No raw credential exposure**: Never output connection strings, passwords, or API keys.
 6. **Parameterized inputs**: All date ranges and filter values from user input must be validated as proper `YYYY-MM-DD` strings before interpolation.
+7. **Do not use MySQL as the default attribution engine**: If the request is fundamentally about campaign attribution, conversion paths, or campaign-to-product outcomes, route to ClickHouse first and use MySQL only as a secondary lookup layer when a required business field is missing there.
 
 ---
 

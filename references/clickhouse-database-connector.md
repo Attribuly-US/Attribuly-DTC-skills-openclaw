@@ -92,11 +92,108 @@ OpenClaw MUST load and read `clickhouse-schema.md` before constructing any query
 
 ## 📊 Step 4: Analysis Queries
 
-> **This section must be filled in by the skill owner after Step 3 is complete.**
-> All queries must use the exact real table and column names confirmed in Step 3.
-> Do NOT write queries here using placeholder names like `{events_table}` or `{event_time_col}`.
+Use only the tables and columns declared in [references/clickhouse-schema.md](clickhouse-schema.md).
 
-*(To be filled in once Step 3 field mapping is confirmed)*
+### 4.1 Campaigns That Produced Orders and Which Products Were Sold
+
+Use `v4_event_paths` as the default table for this question. It already carries:
+
+- conversion-side order identifiers such as `effect_checkout_order_id` and `effect_checkout_order_name`
+- cause-side campaign fields such as `cause_campaign`, `cause_platform`, `cause_source`, and `cause_medium`
+- order-item arrays such as `effect_shop_items_products`, `effect_shop_items_products_name`, `effect_shop_items_quantity`, and `effect_shop_items_sale`
+
+This means the query can stay inside ClickHouse and does not need to join MySQL external tables for the common case.
+
+#### Query: each campaign with actual sold products
+
+```sql
+SELECT
+   cause_platform,
+   cause_campaign,
+   product_id,
+   product_name,
+   sum(quantity) AS units_sold,
+   round(sum(item_sales), 2) AS product_revenue,
+   uniqExact(effect_checkout_order_id) AS order_count
+FROM
+(
+   SELECT
+      cause_platform,
+      cause_campaign,
+      effect_checkout_order_id,
+      tupleElement(item, 1) AS product_id,
+      tupleElement(item, 2) AS product_name,
+      toUInt64(tupleElement(item, 3)) AS quantity,
+      toDecimal64(tupleElement(item, 4), 2) AS item_sales
+   FROM v4_event_paths
+   ARRAY JOIN arrayZip(
+      effect_shop_items_products,
+      effect_shop_items_products_name,
+      effect_shop_items_quantity,
+      effect_shop_items_sale
+   ) AS item
+   WHERE effect_created_datetime >= toDateTime('2026-04-01 00:00:00')
+     AND effect_created_datetime < toDateTime('2026-05-01 00:00:00')
+     AND effect_checkout_order_id != ''
+     AND cause_campaign != ''
+)
+GROUP BY
+   cause_platform,
+   cause_campaign,
+   product_id,
+   product_name
+ORDER BY product_revenue DESC
+LIMIT 1000;
+```
+
+#### Query: campaign to order to item detail
+
+```sql
+SELECT
+   cause_platform,
+   cause_campaign,
+   effect_checkout_order_id AS order_id,
+   effect_checkout_order_name AS order_name,
+   product_id,
+   product_name,
+   quantity,
+   round(item_sales, 2) AS item_sales,
+   effect_created_datetime AS order_created_at
+FROM
+(
+   SELECT
+      cause_platform,
+      cause_campaign,
+      effect_checkout_order_id,
+      effect_checkout_order_name,
+      effect_created_datetime,
+      tupleElement(item, 1) AS product_id,
+      tupleElement(item, 2) AS product_name,
+      toUInt64(tupleElement(item, 3)) AS quantity,
+      toDecimal64(tupleElement(item, 4), 2) AS item_sales
+   FROM v4_event_paths
+   ARRAY JOIN arrayZip(
+      effect_shop_items_products,
+      effect_shop_items_products_name,
+      effect_shop_items_quantity,
+      effect_shop_items_sale
+   ) AS item
+   WHERE effect_created_datetime >= toDateTime('2026-04-01 00:00:00')
+     AND effect_created_datetime < toDateTime('2026-05-01 00:00:00')
+     AND effect_checkout_order_id != ''
+     AND cause_campaign = 'Spring Sale'
+)
+ORDER BY order_created_at DESC, order_id, product_name
+LIMIT 1000;
+```
+
+#### Rules for this analysis
+
+1. Always filter `effect_created_datetime` with a bounded time range.
+2. Use `ARRAY JOIN arrayZip(...)` so product ID, product name, quantity, and item sales stay positionally aligned.
+3. Filter empty `effect_checkout_order_id` and empty `cause_campaign` unless the user explicitly wants unattributed or unnamed campaigns.
+4. If one order appears multiple times because multiple touchpoints are preserved in the path table, clarify attribution logic before aggregating. For default reporting, prefer filtering to the attribution flavor the business wants, or deduplicate by `effect_checkout_order_id` plus `product_id` when appropriate.
+5. Only fall back to joining MySQL-backed external tables when the needed item-level field is missing from `v4_event_paths`.
 
 ---
 
