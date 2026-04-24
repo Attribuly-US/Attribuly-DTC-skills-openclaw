@@ -171,34 +171,27 @@ Based on the user's intent or the specific problem detected, read the correspond
      - 日本語: "MetaとShopifyの数字が合わないのはなぜ？", "アトリビューションのギャップを分析", "プラットフォームとAttribulyの違い", "データの一貫性チェック", "GAとAttribulyの比較", "アトリビューションモデルの比較", "データ精度の検証"
    - **Reference:** [references/attribution-discrepancy.md](references/attribution-discrepancy.md)
 
-### 🗄️ Custom Database Skills
+### 🗄️ Customer Data Query (Auto Router)
 
-1. **MySQL Database Connector**
+1. **Customer Database Query Router**
    - **Trigger:**
-     - English: "Connect to my MySQL database", "Query my MySQL", "Read from MySQL", "Access my database", "My orders are in MySQL", "Use my own database", "Show tables in MySQL", "MySQL schema discovery", "Custom database query"
-     - 中文: "连接我的MySQL数据库", "查询我的MySQL", "读取MySQL数据", "访问我的数据库", "我的订单在MySQL里", "用我自己的数据库", "显示MySQL表结构", "MySQL schema查询", "自定义数据库", "查询自有数据库"
-     - 日本語: "MySQLに接続する", "MySQLを照会する", "MySQLからデータを読む", "自分のデータベースにアクセス", "MySQLのテーブル一覧", "カスタムデータベース"
-   - **When to use:** Customer has set `MYSQL_HOST` / `MYSQL_USER` / `MYSQL_PASSWORD` / `MYSQL_DATABASE` environment variables, or explicitly requests to use their own MySQL/MariaDB/Aurora database.
-   - **Data available:** Orders, customers, products, ad spend (if imported), UTM attribution stored in relational tables.
-   - **Reference:** [references/mysql-database-connector.md](references/mysql-database-connector.md)
-   - **Schema:** [references/mysql-schema.md](references/mysql-schema.md) — load this file alongside the connector to get actual table and column names before writing any SQL.
-
-2. **ClickHouse Database Connector**
-   - **Trigger:**
-     - English: "Connect to my ClickHouse", "Query ClickHouse", "ClickHouse analytics", "My events are in ClickHouse", "Read from ClickHouse", "ClickHouse schema", "ClickHouse ad spend table", "Event stream analysis", "Raw event data", "High-volume analytics data"
-     - 中文: "连接ClickHouse", "查询ClickHouse", "ClickHouse分析", "我的事件数据在ClickHouse", "读取ClickHouse数据", "ClickHouse表结构", "ClickHouse广告花费", "事件流分析", "原始事件数据", "大数据量分析", "ClickHouse漏斗"
-     - 日本語: "ClickHouseに接続", "ClickHouseを照会", "ClickHouse分析", "ClickHouseのイベントデータ", "ClickHouseのスキーマ", "イベントストリーム分析"
-   - **When to use:** Customer has set `CLICKHOUSE_HOST` / `CLICKHOUSE_USER` / `CLICKHOUSE_PASSWORD` / `CLICKHOUSE_DATABASE` environment variables, or explicitly requests to use their ClickHouse analytics store.
-   - **Data available:** Raw events (pageview / add_to_cart / purchase), sessions, ad spend aggregated by day/campaign, attribution paths.
-   - **Reference:** [references/clickhouse-database-connector.md](references/clickhouse-database-connector.md)
-   - **Schema:** [references/clickhouse-schema.md](references/clickhouse-schema.md) — load this file alongside the connector to get actual table and column names before writing any SQL.
+     - English: "Query my own data", "Use my database", "Pull order data", "Order details", "Customer list", "Product sales", "Campaign to product revenue", "Attribution path detail", "Custom query by schema"
+     - 中文: "用自有数据回答", "查询自有数据库", "按字段写查询", "查订单/订单明细", "查客户/产品", "统计商品销量/销售额", "按活动/渠道/UTM统计成交", "归因路径明细", "按schema自定义查询"
+     - 日本語: "自分のデータを照会", "自分のDBを使う", "注文データを抽出", "注文明細", "顧客一覧", "商品売上", "キャンペーン別売上", "アトリビューション経路", "スキーマに基づくカスタム照会"
+   - **When to use:** When the business question requires fields or joins not available via platform APIs. Database connections are pre-provisioned; do not ask the user to “connect” or specify which database. Always select tables and fields by reading schema declarations first.
+   - **How it works:** Load both schema files, map the question to required fields and grain, then route to the data source whose schema covers those fields (ClickHouse for events/paths, MySQL for dimensions/detail). Only cross-source join when a required field is missing in the primary source.
+   - **References:**
+     - [data-sources/mysql-schema.md](data-sources/mysql-schema.md)
+     - [data-sources/clickhouse-schema.md](data-sources/clickhouse-schema.md)
+     - [data-sources/mysql-database-connector.md](data-sources/mysql-database-connector.md)
+     - [data-sources/clickhouse-database-connector.md](data-sources/clickhouse-database-connector.md)
 
 ***
 
 ## 🧠 General Operating Rules & Decision Framework
 
 1. **Determine Intent:** Read the user's prompt carefully to identify which of the 13 capabilities is needed.
-2. **Read Reference:** Immediately use your file reading capability to load the exact `references/[skill-name].md` file listed above.
+2. **Read Reference:** Immediately load the exact markdown file linked under the selected skill (typically in `references/` or `data-sources/`).
 3. **Execute:** Follow the step-by-step instructions, API calls, logic, and output formatting dictated in that specific reference file.
 4. **Chain Skills:** If the reference file suggests triggering a secondary skill (e.g., Weekly Performance detects a Google issue -> trigger Google Ads Performance), load the secondary reference file and continue the analysis.
 
@@ -250,12 +243,9 @@ weekly-marketing-performance
 │   └── IF landing page issue → landing-page-analysis
 └── IF budget inefficiency → budget-optimization
 
-mysql-database-connector  (when MYSQL_* env vars are present)
+customer-database-query-router  (when customer db connections are provisioned)
 ├── Orders / LTV data → feeds into weekly-marketing-performance
 ├── UTM channel data → feeds into funnel-analysis
-└── Ad spend table (if present) → feeds into budget-optimization
-
-clickhouse-database-connector  (when CLICKHOUSE_* env vars are present)
 ├── Event stream → feeds into funnel-analysis + landing-page-analysis
 ├── Ad spend table → feeds into google-ads-performance / meta-ads-performance
 └── Attribution paths → feeds into attribution-discrepancy
@@ -327,4 +317,3 @@ These defaults apply to ALL skills unless overridden:
 | **LTV**        | `total_sales / unique_customers`                 | Lifetime Value                       |
 | **Net Profit** | `sales - shipping - spend - COGS - taxes - fees` | True Profit                          |
 | **Net Margin** | `net_profit / sales * 100%`                      | Profit Margin                        |
-

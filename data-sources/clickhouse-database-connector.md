@@ -13,6 +13,8 @@ Enable OpenClaw to read directly from the customer's ClickHouse or ClickHouse-co
 
 ## 🔐 Environment Variables (Connection Setup)
 
+This connector expects the following environment variables to be pre-provisioned in the runtime. Do not ask the end user to provide database credentials in chat.
+
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `CLICKHOUSE_HOST` | ✅ Yes | — | ClickHouse host (IP or domain) |
@@ -24,7 +26,7 @@ Enable OpenClaw to read directly from the customer's ClickHouse or ClickHouse-co
 | `CLICKHOUSE_SECURE` | Optional | `false` | Enable TLS (`true` / `false`) |
 | `CLICKHOUSE_TIMEOUT` | Optional | `30` | Query timeout in seconds |
 
-**Access Model:** The database account is read-only and should only have `SELECT` on the tables/views declared in `references/clickhouse-schema.md`. `system.tables` and `system.columns` require admin/read privilege and are typically **not accessible** for restricted accounts — use `DESCRIBE TABLE` on each declared table instead.
+**Access Model:** The database account is read-only and should only have `SELECT` on the tables/views declared in `data-sources/clickhouse-schema.md`. `system.tables` and `system.columns` require admin/read privilege and are typically **not accessible** for restricted accounts — use `DESCRIBE TABLE` on each declared table instead.
 
 **Security Note:** Never echo or expose `CLICKHOUSE_PASSWORD` in any output or log. All queries MUST use parameterized placeholders — never interpolate user-provided strings directly into query text.
 
@@ -43,7 +45,7 @@ SELECT currentDatabase() AS current_db;
 SELECT version() AS ch_version;
 ```
 
-If the connection fails, report the failing variable name (never the value) and guide the user to check firewall rules (ClickHouse typically requires port 8123 to be open) and credentials.
+If the connection fails, report the failing variable name (never the value) and ask the skill owner to verify firewall rules (ClickHouse typically requires port 8123 to be open) and credentials.
 
 ---
 
@@ -51,14 +53,14 @@ If the connection fails, report the failing variable name (never the value) and 
 
 **The account is read-only and scoped. `system.tables` and `system.columns` require elevated system privileges and will typically raise a permission error for restricted users. Do NOT use them.**
 
-Instead, load `references/clickhouse-schema.md`, extract the declared table names, and call `DESCRIBE TABLE` on each one directly.
+Instead, load `data-sources/clickhouse-schema.md`, extract the declared table names, and call `DESCRIBE TABLE` on each one directly.
 
 ### 2.1 Verify Each Declared Table is Accessible
 
-For each declared table name `T` in `references/clickhouse-schema.md`, run:
+For each declared table name `T` in `data-sources/clickhouse-schema.md`, run:
 
 ```sql
--- Replace {T} with each table/view name declared in references/clickhouse-schema.md
+-- Replace {T} with each table/view name declared in data-sources/clickhouse-schema.md
 DESCRIBE TABLE {T};
 ```
 
@@ -68,7 +70,7 @@ This returns column names, types, default expressions, and comments without requ
 
 For MergeTree-family tables, knowing the sorting key is critical for query performance. The partition key is stored in `system.tables`, but restricted accounts typically cannot access `system.*`.
 
-If `system.tables` is inaccessible, ask the user directly: _"What is the partition/date column for table `{T}`? (e.g., `toYYYYMM(event_time)` or just `event_time`)"_. This is needed for efficient date-range filtering.
+If `system.tables` is inaccessible, ask the skill owner directly: _"What is the partition/date column for table `{T}`? (e.g., `toYYYYMM(event_time)` or just `event_time`)"_. This is needed for efficient date-range filtering.
 
 ---
 
@@ -76,11 +78,11 @@ If `system.tables` is inaccessible, ask the user directly: _"What is the partiti
 
 All table and column definitions are declared in a **dedicated schema file**:
 
-**→ [references/clickhouse-schema.md](clickhouse-schema.md)**
+**→ [data-sources/clickhouse-schema.md](clickhouse-schema.md)**
 
 OpenClaw MUST load and read `clickhouse-schema.md` before constructing any query.
 
-- If `clickhouse-schema.md` contains no declared tables yet (still shows `???` placeholders), halt and say: _"The ClickHouse schema has not been configured yet. Please ask the skill owner to fill in `references/clickhouse-schema.md` with the real table and column definitions before proceeding."_
+- If `clickhouse-schema.md` contains no declared tables yet (still shows `???` placeholders), halt and say: _"The ClickHouse schema has not been configured yet. Please ask the skill owner to fill in `data-sources/clickhouse-schema.md` with the real table and column definitions before proceeding."_
 - Use only table names and column names found in that file. Never guess.
 - Respect the `partition_key`, `sorting_key`, and `nullable` annotations when building WHERE clauses and aggregations.
 - Use `enum_values` for any event-type or status column to know valid filter values.
@@ -89,7 +91,7 @@ OpenClaw MUST load and read `clickhouse-schema.md` before constructing any query
 
 ## 📊 Step 4: Analysis Queries
 
-Use only the tables and columns declared in [references/clickhouse-schema.md](clickhouse-schema.md).
+Use only the tables and columns declared in [data-sources/clickhouse-schema.md](clickhouse-schema.md).
 
 ### 4.1 Campaigns That Produced Orders and Which Products Were Sold
 
@@ -223,7 +225,7 @@ When first accessing a customer's database:
 ## ⚠️ Query Safety Rules
 
 1. **Read-Only by account**: The database account only has `SELECT` privilege. Do not attempt mutations (`ALTER TABLE ... UPDATE/DELETE`), `DROP`, `TRUNCATE`, or `INSERT` — they will be rejected and must never be generated.
-2. **Scope to declared schema only**: Only query tables/views listed in `references/clickhouse-schema.md`. Never query other tables, `system.*`, or `information_schema.*` beyond what is explicitly noted above.
+2. **Scope to declared schema only**: Only query tables/views listed in `data-sources/clickhouse-schema.md`. Never query other tables, `system.*`, or `information_schema.*` beyond what is explicitly noted above.
 3. **Mandatory date filter**: Every query against event/spend tables MUST include a date range filter on the partition key column.
 4. **Max rows guard**: Add `LIMIT 1000000` to any query that might return unbounded rows.
 5. **No credential exposure**: Never output `CLICKHOUSE_PASSWORD` or connection strings in any response.

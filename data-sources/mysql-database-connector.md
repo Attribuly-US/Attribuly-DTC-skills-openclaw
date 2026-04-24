@@ -13,7 +13,7 @@ Enable OpenClaw to read directly from the customer's own MySQL database instead 
 
 ## 🔐 Environment Variables (Connection Setup)
 
-When this skill is activated, the following environment variables MUST be configured by the customer:
+This connector expects the following environment variables to be pre-provisioned in the runtime. Do not ask the end user to provide database credentials in chat.
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
@@ -25,7 +25,7 @@ When this skill is activated, the following environment variables MUST be config
 | `MYSQL_SSL` | Optional | `false` | Enable SSL/TLS (`true` / `false`) |
 | `MYSQL_TIMEZONE` | Optional | `UTC` | Timezone for timestamp parsing |
 
-**Access Model:** The database account is read-only and should only have `SELECT` on the views declared in `references/mysql-schema.md`. Schema enumeration via `information_schema` may return partial or no results depending on the account's GRANT scope — always use the schema file as the source of truth.
+**Access Model:** The database account is read-only and should only have `SELECT` on the views declared in `data-sources/mysql-schema.md`. Schema enumeration via `information_schema` may return partial or no results depending on the account's GRANT scope — always use the schema file as the source of truth.
 
 **Security Note:** Never echo or expose `MYSQL_PASSWORD` in any output, log, or response. All queries MUST use parameterized placeholders — never interpolate user-provided strings directly into SQL.
 
@@ -43,7 +43,7 @@ SELECT 1 AS ping;
 SELECT DATABASE() AS current_db;
 ```
 
-If the connection fails, output a clear error message with the failing variable name (but never the credential value) and ask the user to verify their configuration.
+If the connection fails, output a clear error message with the failing variable name (but never the credential value) and ask the skill owner to verify the runtime configuration.
 
 ---
 
@@ -51,14 +51,14 @@ If the connection fails, output a clear error message with the failing variable 
 
 **The account is read-only and scoped. Do NOT attempt to enumerate `information_schema` broadly — it may fail or return empty results for restricted users.**
 
-Instead, load `references/mysql-schema.md`, extract the declared view names, and call `DESCRIBE` on each one directly.
+Instead, load `data-sources/mysql-schema.md`, extract the declared view names, and call `DESCRIBE` on each one directly.
 
 ### 2.1 Verify Each Declared Table is Accessible
 
-For each declared table name `T` in `references/mysql-schema.md`, run:
+For each declared table name `T` in `data-sources/mysql-schema.md`, run:
 
 ```sql
--- Replace {T} with each table/view name declared in references/mysql-schema.md
+-- Replace {T} with each table/view name declared in data-sources/mysql-schema.md
 DESCRIBE {T};
 ```
 
@@ -74,11 +74,11 @@ For views, `DESCRIBE` may omit comments. As a fallback, try querying `informatio
 
 All table and column definitions are declared in a **dedicated schema file**:
 
-**→ [references/mysql-schema.md](mysql-schema.md)**
+**→ [data-sources/mysql-schema.md](mysql-schema.md)**
 
 OpenClaw MUST load and read `mysql-schema.md` before constructing any query.
 
-- If `mysql-schema.md` contains no declared tables yet (still shows `???` placeholders), halt and say: _"The MySQL schema has not been configured yet. Please ask the skill owner to fill in `references/mysql-schema.md` with the real table and column definitions before proceeding."_
+- If `mysql-schema.md` contains no declared tables yet (still shows `???` placeholders), halt and say: _"The MySQL schema has not been configured yet. Please ask the skill owner to fill in `data-sources/mysql-schema.md` with the real table and column definitions before proceeding."_
 - Use only table names and column names found in that file. Never guess.
 - Respect the `date_key`, `pk`, and `nullable` annotations when building WHERE clauses and aggregations.
 
@@ -86,7 +86,7 @@ OpenClaw MUST load and read `mysql-schema.md` before constructing any query.
 
 ## 📊 Step 4: Analysis Queries
 
-Use only the views and columns declared in [references/mysql-schema.md](mysql-schema.md).
+Use only the views and columns declared in [data-sources/mysql-schema.md](mysql-schema.md).
 
 ### 4.1 Routing Rule: When To Use MySQL vs ClickHouse
 
@@ -128,7 +128,7 @@ When first accessing a customer's database:
 ## ⚠️ Query Safety Rules
 
 1. **Read-Only by account**: The database account only has `SELECT` privilege. Do not attempt `INSERT`, `UPDATE`, `DELETE`, `DROP`, `ALTER`, or `TRUNCATE` — they will be rejected and must never be generated.
-2. **Scope to declared schema only**: Only query tables/views listed in `references/mysql-schema.md`. Never try to query tables not in that file, even if the user requests it.
+2. **Scope to declared schema only**: Only query tables/views listed in `data-sources/mysql-schema.md`. Never try to query tables not in that file, even if the user requests it.
 3. **Always use date filters**: Every query against a data table must include a `WHERE` clause with a date range on an indexed column to prevent full-table scans.
 4. **LIMIT on exploratory queries**: Add `LIMIT 1000` to any schema-level or sample query.
 5. **No raw credential exposure**: Never output connection strings, passwords, or API keys.
