@@ -22,11 +22,10 @@ When this skill is activated, the following environment variables MUST be config
 | `MYSQL_USER` | ✅ Yes | — | Database username (read-only account) |
 | `MYSQL_PASSWORD` | ✅ Yes | — | Database password (store as secret, never log) |
 | `MYSQL_DATABASE` | ✅ Yes | — | Target database name |
-| `MYSQL_ALLOWED_TABLES` | ✅ Yes | — | Comma-separated list of table/view names this account can access. Example: `v_orders,v_customers,v_ad_spend` |
 | `MYSQL_SSL` | Optional | `false` | Enable SSL/TLS (`true` / `false`) |
 | `MYSQL_TIMEZONE` | Optional | `UTC` | Timezone for timestamp parsing |
 
-**Access Model:** The database account is read-only and scoped to the tables/views listed in `MYSQL_ALLOWED_TABLES`. Only `SELECT` is permitted. Schema enumeration via `information_schema` may return partial or no results depending on the account's GRANT scope — always use the declared table list as the source of truth.
+**Access Model:** The database account is read-only and should only have `SELECT` on the views declared in `references/mysql-schema.md`. Schema enumeration via `information_schema` may return partial or no results depending on the account's GRANT scope — always use the schema file as the source of truth.
 
 **Security Note:** Never echo or expose `MYSQL_PASSWORD` in any output, log, or response. All queries MUST use parameterized placeholders — never interpolate user-provided strings directly into SQL.
 
@@ -46,22 +45,20 @@ SELECT DATABASE() AS current_db;
 
 If the connection fails, output a clear error message with the failing variable name (but never the credential value) and ask the user to verify their configuration.
 
-**Important:** Also check that `MYSQL_ALLOWED_TABLES` is set. If it is empty or unset, halt and ask the user: _"Please set MYSQL_ALLOWED_TABLES to the comma-separated names of the tables or views your database account can access (e.g., `v_orders,v_customers`)."_
-
 ---
 
 ## 🗺️ Step 2: Schema Discovery (Restricted-Access Mode)
 
 **The account is read-only and scoped. Do NOT attempt to enumerate `information_schema` broadly — it may fail or return empty results for restricted users.**
 
-Instead, use the table list in `MYSQL_ALLOWED_TABLES` and call `DESCRIBE` on each name directly.
+Instead, load `references/mysql-schema.md`, extract the declared view names, and call `DESCRIBE` on each one directly.
 
 ### 2.1 Verify Each Declared Table is Accessible
 
-For each table name `T` in `MYSQL_ALLOWED_TABLES`, run:
+For each declared table name `T` in `references/mysql-schema.md`, run:
 
 ```sql
--- Replace {T} with each table/view name from MYSQL_ALLOWED_TABLES
+-- Replace {T} with each table/view name declared in references/mysql-schema.md
 DESCRIBE {T};
 ```
 
@@ -118,21 +115,20 @@ If the user asks a campaign-to-product question and the needed fields are availa
 
 When first accessing a customer's database:
 
-1. **Read `MYSQL_ALLOWED_TABLES`** — this is the authoritative list of accessible tables/views.
-2. **Load `mysql-schema.md`** — check if tables are already declared.
-3. **If `mysql-schema.md` is complete**, use it directly and proceed to Step 4.
-4. **If `mysql-schema.md` is not yet filled in**:
-   a. Run `DESCRIBE {T}` for each table in `MYSQL_ALLOWED_TABLES`.
+1. **Load `mysql-schema.md`** — this is the authoritative list of accessible tables/views.
+2. **If `mysql-schema.md` is complete**, use it directly and proceed to Step 4.
+3. **If `mysql-schema.md` is not yet filled in**:
+   a. Ask the skill owner to fill in the schema file first, or provide the exact view names that should be declared there.
    b. Present the column list to the user and ask them to confirm the role of each table and the purpose of key columns.
    c. Do not guess or infer. Ask the skill owner to record the confirmed mapping into `mysql-schema.md`.
-5. **Do not proceed to query construction** until `mysql-schema.md` is filled in.
+4. **Do not proceed to query construction** until `mysql-schema.md` is filled in.
 
 ---
 
 ## ⚠️ Query Safety Rules
 
 1. **Read-Only by account**: The database account only has `SELECT` privilege. Do not attempt `INSERT`, `UPDATE`, `DELETE`, `DROP`, `ALTER`, or `TRUNCATE` — they will be rejected and must never be generated.
-2. **Scope to allowed tables only**: Only query tables/views listed in `MYSQL_ALLOWED_TABLES`. Never try to query tables not in that list, even if the user requests it.
+2. **Scope to declared schema only**: Only query tables/views listed in `references/mysql-schema.md`. Never try to query tables not in that file, even if the user requests it.
 3. **Always use date filters**: Every query against a data table must include a `WHERE` clause with a date range on an indexed column to prevent full-table scans.
 4. **LIMIT on exploratory queries**: Add `LIMIT 1000` to any schema-level or sample query.
 5. **No raw credential exposure**: Never output connection strings, passwords, or API keys.

@@ -20,12 +20,11 @@ Enable OpenClaw to read directly from the customer's ClickHouse or ClickHouse-co
 | `CLICKHOUSE_USER` | ✅ Yes | `default` | ClickHouse username (read-only account) |
 | `CLICKHOUSE_PASSWORD` | ✅ Yes | — | ClickHouse password (store as secret, never log) |
 | `CLICKHOUSE_DATABASE` | ✅ Yes | `default` | Target database/schema name |
-| `CLICKHOUSE_ALLOWED_TABLES` | ✅ Yes | — | Comma-separated list of table/view names this account can access. Example: `events,ad_spend_daily,sessions_agg` |
 | `CLICKHOUSE_PROTOCOL` | Optional | `http` | `http` or `https` |
 | `CLICKHOUSE_SECURE` | Optional | `false` | Enable TLS (`true` / `false`) |
 | `CLICKHOUSE_TIMEOUT` | Optional | `30` | Query timeout in seconds |
 
-**Access Model:** The database account is read-only and scoped to the tables/views listed in `CLICKHOUSE_ALLOWED_TABLES`. `system.tables` and `system.columns` require admin/read privilege and are typically **not accessible** for restricted accounts — use `DESCRIBE TABLE` on each declared table instead.
+**Access Model:** The database account is read-only and should only have `SELECT` on the tables/views declared in `references/clickhouse-schema.md`. `system.tables` and `system.columns` require admin/read privilege and are typically **not accessible** for restricted accounts — use `DESCRIBE TABLE` on each declared table instead.
 
 **Security Note:** Never echo or expose `CLICKHOUSE_PASSWORD` in any output or log. All queries MUST use parameterized placeholders — never interpolate user-provided strings directly into query text.
 
@@ -46,22 +45,20 @@ SELECT version() AS ch_version;
 
 If the connection fails, report the failing variable name (never the value) and guide the user to check firewall rules (ClickHouse typically requires port 8123 to be open) and credentials.
 
-**Important:** Also check that `CLICKHOUSE_ALLOWED_TABLES` is set. If it is empty or unset, halt and ask: _"Please set CLICKHOUSE_ALLOWED_TABLES to the comma-separated names of the tables or views your database account can access (e.g., `events,ad_spend_daily`)."_
-
 ---
 
 ## 🗺️ Step 2: Schema Discovery (Restricted-Access Mode)
 
 **The account is read-only and scoped. `system.tables` and `system.columns` require elevated system privileges and will typically raise a permission error for restricted users. Do NOT use them.**
 
-Instead, use the table list in `CLICKHOUSE_ALLOWED_TABLES` and call `DESCRIBE TABLE` on each name directly.
+Instead, load `references/clickhouse-schema.md`, extract the declared table names, and call `DESCRIBE TABLE` on each one directly.
 
 ### 2.1 Verify Each Declared Table is Accessible
 
-For each table name `T` in `CLICKHOUSE_ALLOWED_TABLES`, run:
+For each declared table name `T` in `references/clickhouse-schema.md`, run:
 
 ```sql
--- Replace {T} with each table/view name from CLICKHOUSE_ALLOWED_TABLES
+-- Replace {T} with each table/view name declared in references/clickhouse-schema.md
 DESCRIBE TABLE {T};
 ```
 
@@ -201,15 +198,14 @@ LIMIT 1000;
 
 When first accessing a customer's database:
 
-1. **Read `CLICKHOUSE_ALLOWED_TABLES`** — this is the authoritative list of accessible tables/views.
-2. **Load `clickhouse-schema.md`** — check if tables are already declared.
-3. **If `clickhouse-schema.md` is complete**, use it directly and proceed to Step 4.
-4. **If `clickhouse-schema.md` is not yet filled in**:
-   a. Run `DESCRIBE TABLE {T}` for each table in `CLICKHOUSE_ALLOWED_TABLES`.
+1. **Load `clickhouse-schema.md`** — this is the authoritative list of accessible tables/views.
+2. **If `clickhouse-schema.md` is complete**, use it directly and proceed to Step 4.
+3. **If `clickhouse-schema.md` is not yet filled in**:
+   a. Ask the skill owner to fill in the schema file first, or provide the exact table names that should be declared there.
    b. Ask the user for the partition/date column for each table (cannot be read without `system.*` access).
    c. Present the column list to the user and ask them to confirm the role of each table and the purpose of key columns.
    d. Do not guess or infer. Ask the skill owner to record the confirmed mapping into `clickhouse-schema.md`.
-5. **Do not proceed to query construction** until `clickhouse-schema.md` is filled in.
+4. **Do not proceed to query construction** until `clickhouse-schema.md` is filled in.
 
 ---
 
@@ -227,7 +223,7 @@ When first accessing a customer's database:
 ## ⚠️ Query Safety Rules
 
 1. **Read-Only by account**: The database account only has `SELECT` privilege. Do not attempt mutations (`ALTER TABLE ... UPDATE/DELETE`), `DROP`, `TRUNCATE`, or `INSERT` — they will be rejected and must never be generated.
-2. **Scope to allowed tables only**: Only query tables/views listed in `CLICKHOUSE_ALLOWED_TABLES`. Never query other tables, `system.*`, or `information_schema.*` beyond what is explicitly noted above.
+2. **Scope to declared schema only**: Only query tables/views listed in `references/clickhouse-schema.md`. Never query other tables, `system.*`, or `information_schema.*` beyond what is explicitly noted above.
 3. **Mandatory date filter**: Every query against event/spend tables MUST include a date range filter on the partition key column.
 4. **Max rows guard**: Add `LIMIT 1000000` to any query that might return unbounded rows.
 5. **No credential exposure**: Never output `CLICKHOUSE_PASSWORD` or connection strings in any response.
