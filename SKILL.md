@@ -175,11 +175,34 @@ Based on the user's intent or the specific problem detected, read the correspond
 
 1. **Customer Database Query Router**
    - **Trigger:**
-     - English: "Query my own data", "Use my database", "Pull order data", "Order details", "Customer list", "Product sales", "Campaign to product revenue", "Attribution path detail", "Custom query by schema"
-     - 中文: "用自有数据回答", "查询自有数据库", "按字段写查询", "查订单/订单明细", "查客户/产品", "统计商品销量/销售额", "按活动/渠道/UTM统计成交", "归因路径明细", "按schema自定义查询"
-     - 日本語: "自分のデータを照会", "自分のDBを使う", "注文データを抽出", "注文明細", "顧客一覧", "商品売上", "キャンペーン別売上", "アトリビューション経路", "スキーマに基づくカスタム照会"
+     - English: "UTM performance report", "Breakdown by UTM campaign/source/medium", "Channel performance breakdown", "Which campaigns drove orders/revenue", "ROAS/CPA by campaign/ad set/ad", "Attribution path detail", "Touchpoints leading to purchase", "Products sold by a specific ad (ranked by units sold)", "Customers acquired by an ad ranked by LTV", "Custom breakdown using my fields"
+     - 中文: "按UTM看投放效果", "UTM campaign/source/medium 报表", "按渠道拆解成交/销售额", "哪个活动/广告系列带来成交", "按campaign/广告组/广告拆解ROAS/CPA", "看归因路径/触点明细", "导出归因订单明细", "统计某个广告带来的产品销售量排行", "某个广告带来的客户名单按LTV排序", "用自有字段自定义拆解口径"
+     - 日本語: "UTM別パフォーマンス", "UTM（campaign/source/medium）内訳", "チャネル別の売上・注文", "どのキャンペーンが売上/注文を作ったか", "キャンペーン/広告セット/広告別ROAS・CPA", "アトリビューション経路の明細", "購入までのタッチポイント", "特定の広告が売った商品の販売数ランキング", "広告経由の顧客リストをLTV順に並べる", "自社項目でカスタム内訳"
    - **When to use:** When the business question requires fields or joins not available via platform APIs. Database connections are pre-provisioned; do not ask the user to “connect” or specify which database. Always select tables and fields by reading schema declarations first.
    - **How it works:** Load both schema files, map the question to required fields and grain, then route to the data source whose schema covers those fields (ClickHouse for events/paths, MySQL for dimensions/detail). Only cross-source join when a required field is missing in the primary source.
+   - **Execution Protocol (Mandatory):**
+     1. Load schema files first: `data-sources/mysql-schema.md` and `data-sources/clickhouse-schema.md`.
+     2. Translate the user prompt into: required metrics, required dimensions, entity grain, and required time window.
+        - If the user does not provide a time range, default to last 30 days and state the assumption.
+     3. Resolve fields from schema only: pick candidate tables that contain the required columns; never guess column names.
+     4. Choose a primary data source by field coverage and grain:
+        - ClickHouse first: event stream, sessions, funnels, attribution paths, campaign touchpoints, high-volume behavior facts.
+        - MySQL first: order and item detail, customer and product dimensions, refund/payment objects, business configuration and lookup tables.
+     5. Query strategy:
+        - Prefer single-source queries.
+        - If a required field is missing, run a second query against the other source using stable join keys only (e.g., `order_id`, `customer_id`, `product_id`, `variant_id`), then join in memory.
+     6. Safety and performance:
+        - Every fact query must include a bounded date range filter using the schema-marked date/partition column.
+        - Add `LIMIT 1000` for exploratory samples and guard unbounded outputs.
+   - **Routing Matrix (Field-First):**
+     - Event / Funnel / Session questions → ClickHouse (`role: events/sessions`)
+     - Attribution / Path / Touchpoint questions → ClickHouse (`role: attribution`, prefer `v4_event_paths`)
+     - Order / Order-item / Refund / Transaction questions → MySQL (`role: orders/order_items`)
+     - Customer profile / LTV / Tags / CRM dimension questions → MySQL (`role: customers`)
+     - Product / Variant / Inventory / Cost dimension questions → MySQL (`role: other`, product/variant/inventory views)
+     - Campaign→Sold Products analysis:
+       - Prefer ClickHouse if product arrays/fields already exist in attribution/path tables.
+       - Use MySQL only for extra product attributes not present in ClickHouse.
    - **References:**
      - [data-sources/mysql-schema.md](data-sources/mysql-schema.md)
      - [data-sources/clickhouse-schema.md](data-sources/clickhouse-schema.md)
