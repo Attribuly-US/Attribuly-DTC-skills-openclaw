@@ -18,7 +18,7 @@ This connector expects the following environment variables to be pre-provisioned
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `CLICKHOUSE_HOST` | ✅ Yes | — | ClickHouse host (IP or domain) |
-| `CLICKHOUSE_PORT` | Optional | `8123` | HTTP interface port (use `9000` for native TCP) |
+| `CLICKHOUSE_PORT` | ✅ Yes | `9000` | Native TCP port |
 | `CLICKHOUSE_USER` | ✅ Yes | `default` | ClickHouse username (read-only account) |
 | `CLICKHOUSE_PASSWORD` | ✅ Yes | — | ClickHouse password (store as secret, never log) |
 | `CLICKHOUSE_DATABASE` | ✅ Yes | `default` | Target database/schema name |
@@ -45,7 +45,7 @@ SELECT currentDatabase() AS current_db;
 SELECT version() AS ch_version;
 ```
 
-If the connection fails, report the failing variable name (never the value) and ask the skill owner to verify firewall rules (ClickHouse typically requires port 8123 to be open) and credentials.
+If the connection fails, report the failing variable name (never the value) and ask the skill owner to verify firewall rules (ClickHouse typically requires port 9000 to be open) and credentials.
 
 ---
 
