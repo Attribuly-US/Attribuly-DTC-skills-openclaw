@@ -2,12 +2,20 @@
 name: mysql-database-connector
 version: 1.1.0
 description: Connect to a customer's read-only MySQL database. Works with restricted accounts that only have SELECT privilege on specific views or tables.
+runtime_scope: allyclaw_hosted_only
 ---
 # Skill: MySQL Database Connector for DTC Ecommerce
 
 ## 🎯 Purpose
 
 Enable OpenClaw to read directly from the customer's own MySQL database instead of (or in addition to) platform APIs. Supports Shopify MySQL exports, WooCommerce, custom ecommerce backends, and any MySQL-compatible database (MariaDB, PlanetScale, TiDB, AWS Aurora, etc.).
+
+## 🌐 Runtime Availability
+
+This skill is available only in AllyClaw (Attribuly hosted agent) runtime because it requires private network/database access.
+
+- Allowed runtime: AllyClaw hosted agent only.
+- Not available in public third-party agents (for example Claude) due to network access limits.
 
 ---
 

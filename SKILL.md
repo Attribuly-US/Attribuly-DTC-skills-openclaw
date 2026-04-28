@@ -178,6 +178,7 @@ Based on the user's intent or the specific problem detected, read the correspond
      - English: "UTM performance report", "Breakdown by UTM campaign/source/medium", "Channel performance breakdown", "Which campaigns drove orders/revenue", "ROAS/CPA by campaign/ad set/ad", "Attribution path detail", "Touchpoints leading to purchase", "Products sold by a specific ad (ranked by units sold)", "Customers acquired by an ad ranked by LTV", "Custom breakdown using my fields"
      - 中文: "按UTM看投放效果", "UTM campaign/source/medium 报表", "按渠道拆解成交/销售额", "哪个活动/广告系列带来成交", "按campaign/广告组/广告拆解ROAS/CPA", "看归因路径/触点明细", "导出归因订单明细", "统计某个广告带来的产品销售量排行", "某个广告带来的客户名单按LTV排序", "用自有字段自定义拆解口径"
      - 日本語: "UTM別パフォーマンス", "UTM（campaign/source/medium）内訳", "チャネル別の売上・注文", "どのキャンペーンが売上/注文を作ったか", "キャンペーン/広告セット/広告別ROAS・CPA", "アトリビューション経路の明細", "購入までのタッチポイント", "特定の広告が売った商品の販売数ランキング", "広告経由の顧客リストをLTV順に並べる", "自社項目でカスタム内訳"
+   - **Runtime scope:** `data-sources/*` references are AllyClaw (Attribuly hosted agent) only. Do not use these connectors in public third-party agents (for example Claude) because they cannot access private network databases.
    - **When to use:** When the business question requires fields or joins not available via platform APIs. Database connections are pre-provisioned; do not ask the user to “connect” or specify which database. Always select tables and fields by reading schema declarations first.
    - **How it works:** Load both schema files, map the question to required fields and grain, then route to the data source whose schema covers those fields (ClickHouse for events/paths, MySQL for dimensions/detail). Only cross-source join when a required field is missing in the primary source.
    - **Execution Protocol (Mandatory):**
@@ -223,6 +224,7 @@ Based on the user's intent or the specific problem detected, read the correspond
 - **Safety First**: Never recommend spending more than the approved budget cap.
 - **Verification**: Always compare platform data against Attribuly data before making drastic cuts.
 - **Context Aware**: Remember client-specific goals and constraints.
+- **Runtime Gating**: If current runtime is not AllyClaw hosted, do not load or execute any `data-sources/*` skill. Fallback to API-based references in `references/*`, and if required fields are unavailable, ask for exported data instead of attempting database access.
 - **Human-in-the-Loop**: All budget changes require human approval before execution.
 
 ### Decision Framework: Compare Platform vs. Attribuly Metrics

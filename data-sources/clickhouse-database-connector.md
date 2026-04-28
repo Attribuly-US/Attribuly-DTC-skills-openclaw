@@ -2,12 +2,20 @@
 name: clickhouse-database-connector
 version: 1.1.0
 description: Connect to a customer's read-only ClickHouse database. Works with restricted accounts that only have SELECT privilege on specific views or tables.
+runtime_scope: allyclaw_hosted_only
 ---
 # Skill: ClickHouse Database Connector for DTC Ecommerce
 
 ## 🎯 Purpose
 
 Enable OpenClaw to read directly from the customer's ClickHouse or ClickHouse-compatible (ByteHouse, Tencent CKafka, Alibaba ApsaraDB for ClickHouse) analytics database. ClickHouse is typically used for high-volume event streams, ad spend imports, and pre-aggregated attribution data.
+
+## 🌐 Runtime Availability
+
+This skill is available only in AllyClaw (Attribuly hosted agent) runtime because it requires private network/database access.
+
+- Allowed runtime: AllyClaw hosted agent only.
+- Not available in public third-party agents (for example Claude) due to network access limits.
 
 ---
 

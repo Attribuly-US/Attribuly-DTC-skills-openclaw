@@ -2,6 +2,7 @@
 name: mysql-schema
 version: 1.1.0
 description: Declares the customer-facing MySQL analytics views approved for read-only access. OpenClaw reads this file to construct all SQL queries.
+runtime_scope: allyclaw_hosted_only
 ---
 
 # MySQL Schema Declaration
